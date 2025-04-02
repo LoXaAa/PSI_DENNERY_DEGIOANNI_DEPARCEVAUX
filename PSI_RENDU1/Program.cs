@@ -89,5 +89,112 @@
             GrapheVisualisation.GenererImageGraphe(graphe, imagePath);
 
         }
+        static void Interface()
+        {
+            bool continuer = true;
+            while (continuer)
+            {
+                Titre();
+                Console.WriteLine("\tMENU");
+                Console.WriteLine("\nVeuillez vous connecter à votre compte:");
+                Console.WriteLine("1: Connecter vous à un compte existant");
+                Console.WriteLine("2: Créer un compte");
+                Console.WriteLine("3: Quitter l'application\n");
+                int idCompte;
+                bool acces = false;
+                int option = SaisieOption();
+                switch (option)
+                {
+                    case 1:
+                        Console.WriteLine("Vous avez choisi de vous connecter à un compte existant");
+                        Console.WriteLine("Veuillez entrer votre identifiant :");
+                        idCompte = SaisNombre();
+                        acces = Database.ConnexionCompte(idCompte);
+                        ChoixCuisinierClient(idCompte, acces);
+                        break;
+                    case 2:
+                        Console.WriteLine("Vous avez choisi de créer un compte");
+                        idCompte = Database.CreationCompte();
+                        acces = true;
+                        ChoixCuisinierClient(idCompte, acces);
+                        break;
+                    case 3:
+                        Console.WriteLine("Vous avez choisi de quitter l'application");
+                        continuer = false;
+                        break;
+                    default:
+                        Console.WriteLine("Option invalide");
+                        break;
+                }
+            }
+        }
+        static void ChoixCuisinierClient(int idCompte, bool acces)
+        {
+            Titre();
+            if (!acces)
+            {
+                Console.WriteLine("Vous n'avez pas accès à votre compte");
+                return;
+            }
+            while (acces)
+            {
+                Console.WriteLine("Voulez-vous consulter votre compte en tant que :\n\t1-Cuisinier \n\t2-Client \n\t3-Quitter");
+                int option = SaisieOption();
+                switch (option)
+                {
+                    case 1:
+                        Console.WriteLine("Vous avez choisi de consulter votre compte en tant que cuisinier");
+                        Database.ConnexionCuisinier(idCompte);
+                        break;
+                    case 2:
+                        Console.WriteLine("Vous avez choisi de consulter votre compte en tant que client");
+                        Database.ConnexionClient(idCompte);
+                        break;
+                    case 3:
+                        Console.WriteLine("Vous avez choisi de quitter ");
+                        acces = false;
+                        break;
+                    default:
+                        Console.WriteLine("Option invalide");
+                        break;
+                }
+
+            }
+        }
+        public static void Titre()
+        {
+            Console.Clear();
+            Console.WriteLine("Liv'in Paris\n");
+        }
+        static int SaisieOption()
+        {
+            Console.WriteLine("Veuillez choisir une des options proposées en saississant le numéro qu'il lui est associé");
+            int nb;
+            do
+            {
+                string result = Console.ReadLine();
+                if (int.TryParse(result, out nb) && nb >= 0)
+                {
+                    return nb;
+                }
+                Console.WriteLine("Veuillez saisir un des chiffres proposés");
+            } while (true);
+        }
+        public static int SaisNombre()
+        {
+            int nb;
+            do
+            {
+                Console.WriteLine("Veuillez écrire un nombre strictement positif :");
+                string result = Console.ReadLine();
+                if (int.TryParse(result, out nb) && nb >= 1)
+                {
+                    return nb;
+                }
+                Console.WriteLine("Entrée invalide. Veuillez entrer un nombre strictement positif.");
+            } while (true);
+        }
     }
+    
+    
 }

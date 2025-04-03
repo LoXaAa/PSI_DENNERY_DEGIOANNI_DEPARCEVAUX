@@ -9,71 +9,91 @@ using System.IO;
 
 namespace PSI_RENDU1
 {
- 
+
     public class Graphe
     {
-        #region Constructeur + propriété
         private Dictionary<int, Noeud> noeuds;
         private List<Lien> liens;
-        private Random random;
 
         public Graphe()
         {
             noeuds = new Dictionary<int, Noeud>();
             liens = new List<Lien>();
-            random = new Random();
         }
 
-        public List<Lien>Liens
-        {
-            get => liens; 
-        }
-
-        public Dictionary<int,Noeud> Noeuds
-        {
-            get => noeuds;
-        }
-        #endregion
-
-        #region Méthodes
-
-        #region Ajout Lien
-        /// <summary>
-        /// Ajout d'un lien au Graphe
-        /// </summary>
-        /// <param name="idDestination">l'id du noeud de destination</param>
-        /// <param name="idSource">L'id du neoud de départ</param>
-        /// <param name="poids">le poids du lien</param>
         public void AjouterLien(int idSource, int idDestination, double poids)
         {
             if (!noeuds.ContainsKey(idSource))
                 noeuds[idSource] = new Noeud(idSource);
+
             if (!noeuds.ContainsKey(idDestination))
                 noeuds[idDestination] = new Noeud(idDestination);
 
             var lien = new Lien(noeuds[idSource], noeuds[idDestination], poids);
             noeuds[idSource].Liens.Add(lien);
-            noeuds[idDestination].Liens.Add(lien); 
+            noeuds[idDestination].Liens.Add(lien);
             liens.Add(lien);
         }
-        #endregion
-        #region Affichage Graphe
-        /// <summary>
-        /// Affichage du graphe sous forme de noeud/poids
-        /// </summary>
+
+        public void ChargerDepuisCSV(string cheminFichier)
+        {
+            Console.WriteLine($"Lecture du fichier CSV : {cheminFichier}");
+
+            if (!File.Exists(cheminFichier))
+            {
+                Console.WriteLine("Erreur : Fichier introuvable !");
+                return;
+            }
+
+            using (var reader = new StreamReader(cheminFichier))
+            {
+                string ligne;
+                bool premiereLigne = true;
+
+                while ((ligne = reader.ReadLine()) != null)
+                {
+                    if (premiereLigne) // Ignorer l'en-tête
+                    {
+                        premiereLigne = false;
+                        continue;
+                    }
+
+                    string[] champs = ligne.Split(';'); // Modifier si séparateur différent (ex: `,`)
+
+                    if (champs.Length < 8) continue; // Vérification du bon format
+
+                    int idStation = int.Parse(champs[0]);
+                    string nomStation = champs[2];
+                    double longitude = double.Parse(champs[3], CultureInfo.InvariantCulture);
+                    double latitude = double.Parse(champs[4], CultureInfo.InvariantCulture);
+                    int tempsTrajet = string.IsNullOrWhiteSpace(champs[7]) ? 0 : int.Parse(champs[7]);
+
+                    if (!noeuds.ContainsKey(idStation))
+                        noeuds[idStation] = new Noeud(idStation, nomStation, longitude, latitude);
+
+                    if (tempsTrajet > 0 && idStation > 1)
+                    {
+                        int idStationPrecedente = idStation - 1;
+                        AjouterLien(idStationPrecedente, idStation, tempsTrajet);
+                    }
+                }
+            }
+        }
+
         public void AfficherGraphe()
         {
             foreach (var noeud in noeuds.Values)
             {
-                Console.Write($"Noeud {noeud.Id} : ");
+                Console.Write($"Station {noeud.Id} ({noeud.Nom}) : ");
                 foreach (var lien in noeud.Liens)
                 {
-                    Console.Write($" -> {lien.Destination.Id} (Poids: {lien.Poids}) ");
+                    Console.Write($" -> {lien.Destination.Nom} (Temps: {lien.Poids} min) ");
                 }
                 Console.WriteLine();
             }
         }
-        #endregion
+    
+
         #region Chargement Fichier
         /// <summary>
         /// Lecture du fichier
@@ -128,6 +148,10 @@ namespace PSI_RENDU1
             }
 
             HashSet<(int, int)> liensAjoutes = new HashSet<(int, int)>();
+
+            Random random = new Random();
+
+
             while (liensAjoutes.Count < nombreLiens)
             {
                 int source = random.Next(nombreSommets);
@@ -354,6 +378,109 @@ namespace PSI_RENDU1
         }
         #endregion
 
+
+        #region Dijkstra
+        public (Dictionary<int, double> distances, Dictionary<int, int?> precedent) Dijkstra(int source)
+        {
+            var distances = new Dictionary<int, double>();
+            var precedent = new Dictionary<int, int?>();
+            var priorityQueue = new SortedSet<(double distance, int noeud)>();
+
+            // Initialisation des distances à l'infini
+            foreach (var noeud in noeuds.Keys)
+            {
+                distances[noeud] = double.PositiveInfinity;
+                precedent[noeud] = null;
+            }
+
+            // La distance au point de départ est de 0
+            distances[source] = 0;
+            priorityQueue.Add((0, source));
+
+            while (priorityQueue.Count > 0)
+            {
+                // Extraction du nœud avec la plus petite distance
+                var (currentDistance, currentNode) = priorityQueue.Min;
+                priorityQueue.Remove(priorityQueue.Min);
+
+                foreach (var lien in noeuds[currentNode].Liens)
+                {
+                    int voisin = lien.Destination.Id;
+                    double nouvelleDistance = currentDistance + lien.Poids;
+
+                    if (nouvelleDistance < distances[voisin])
+                    {
+                        // Mise à jour de la distance minimale
+                        priorityQueue.Remove((distances[voisin], voisin));
+                        distances[voisin] = nouvelleDistance;
+                        precedent[voisin] = currentNode;
+                        priorityQueue.Add((nouvelleDistance, voisin));
+                    }
+                }
+            }
+
+            return (distances, precedent);
+        }
+
+
         #endregion
+
+        #region Bellman-Ford
+        public (Dictionary<int, double> distances, Dictionary<int, int?> precedent) BellmanFord(int source)
+        {
+            var distances = new Dictionary<int, double>();
+            var precedent = new Dictionary<int, int?>();
+
+            // Initialisation : distance infinie pour tous sauf le sommet source
+            foreach (var noeud in noeuds.Keys)
+            {
+                distances[noeud] = double.PositiveInfinity;
+                precedent[noeud] = null;
+            }
+            distances[source] = 0;
+
+            int nombreSommets = noeuds.Count;
+
+            // Relaxation des arêtes (nombreSommets - 1) fois
+            for (int i = 0; i < nombreSommets - 1; i++)
+            {
+                foreach (var noeud in noeuds.Values)
+                {
+                    foreach (var lien in noeud.Liens)
+                    {
+                        int u = noeud.Id;
+                        int v = lien.Destination.Id;
+                        double poids = lien.Poids;
+
+                        if (distances[u] != double.PositiveInfinity && distances[u] + poids < distances[v])
+                        {
+                            distances[v] = distances[u] + poids;
+                            precedent[v] = u;
+                        }
+                    }
+                }
+            }
+
+            // Vérification de la présence d'un cycle de poids négatif
+            foreach (var noeud in noeuds.Values)
+            {
+                foreach (var lien in noeud.Liens)
+                {
+                    int u = noeud.Id;
+                    int v = lien.Destination.Id;
+                    double poids = lien.Poids;
+
+                    if (distances[u] != double.PositiveInfinity && distances[u] + poids < distances[v])
+                    {
+                        throw new InvalidOperationException("Le graphe contient un cycle de poids négatif.");
+                    }
+                }
+            }
+
+            return (distances, precedent);
+        }
+        #endregion
+
+
     }
 }

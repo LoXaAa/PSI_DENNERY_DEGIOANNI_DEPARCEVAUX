@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace PSI_RENDU1
 {
-    
+
     public class Lien
     {
-        #region Constructeur
         public Noeud Source { get; }
         public Noeud Destination { get; }
         public double Poids { get; }
@@ -20,7 +19,6 @@ namespace PSI_RENDU1
             Destination = destination;
             Poids = poids;
         }
-        #endregion
     }
 
 }

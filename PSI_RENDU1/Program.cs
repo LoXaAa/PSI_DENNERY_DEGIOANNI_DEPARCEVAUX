@@ -4,13 +4,10 @@
     using System.IO;
     using PSI_RENDU1;
 
-
     internal class Program
     {
         static void Main()
         {
-
-
             Graphe graphe = new Graphe();
 
             Console.WriteLine("Voulez-vous :\n1. Charger le graphe karaté\n2. Générer un graphe aléatoire ?");
@@ -19,7 +16,7 @@
 
             if (choix == "1")
             {
-                string cheminFichier = Path.Combine(Directory.GetCurrentDirectory(), "soc-karate.txt");
+                string cheminFichier = Path.Combine(Directory.GetCurrentDirectory(), "../../../MetroParis(5)");
 
                 if (!File.Exists(cheminFichier))
                 {
@@ -34,7 +31,7 @@
                 Console.Write("Combien de sommets pour le graphe ?");
                 int nombreSommets = int.Parse(Console.ReadLine());
 
-                Console.Write("Combien d'arrêtes pour le graphe ?");
+                Console.Write("Combien d'arêtes pour le graphe ?");
                 int nombreAretes = int.Parse(Console.ReadLine());
 
                 graphe.GenererGrapheAleatoire(nombreSommets, nombreAretes);
@@ -88,7 +85,66 @@
             string imagePath = "graphe.png";
             GrapheVisualisation.GenererImageGraphe(graphe, imagePath);
 
+            // Sélection de l'algorithme de plus court chemin
+            Console.WriteLine("\nVoulez-vous exécuter un algorithme de plus court chemin ?");
+            Console.WriteLine("1. Dijkstra");
+            Console.WriteLine("2. Bellman-Ford");
+            Console.Write("Entrez 1 ou 2 : ");
+            string choixAlgo = Console.ReadLine();
+
+            if (choixAlgo == "1")
+            {
+                ExecuterDijkstra(graphe);
+            }
+            else if (choixAlgo == "2")
+            {
+                ExecuterBellmanFord(graphe);
+            }
+            else
+            {
+                Console.WriteLine("Choix invalide");
+            }
+
+            Graphe metroGraphe = new Graphe();
+            metroGraphe.ChargerDepuisCSV("MetroParis(5).xlsx");
+            metroGraphe.AfficherGraphe();
         }
+
+        static void ExecuterDijkstra(Graphe graphe)
+        {
+            Console.Write("\nEntrez le sommet de départ pour Dijkstra : ");
+            int sommetDepart = int.Parse(Console.ReadLine());
+
+            var (distances, precedent) = graphe.Dijkstra(sommetDepart);
+
+            Console.WriteLine("\nDistances minimales depuis le sommet " + sommetDepart + " (Dijkstra) :");
+            foreach (var kvp in distances)
+            {
+                Console.WriteLine($"Vers {kvp.Key} : {kvp.Value}");
+            }
+        }
+
+        static void ExecuterBellmanFord(Graphe graphe)
+        {
+            Console.Write("\nEntrez le sommet de départ pour Bellman-Ford : ");
+            int sommetDepart = int.Parse(Console.ReadLine());
+
+            try
+            {
+                var (distances, precedent) = graphe.BellmanFord(sommetDepart);
+
+                Console.WriteLine("\nDistances minimales depuis le sommet " + sommetDepart + " (Bellman-Ford) :");
+                foreach (var kvp in distances)
+                {
+                    Console.WriteLine($"Vers {kvp.Key} : {kvp.Value}");
+                }
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine("\nErreur : " + ex.Message);
+            }
+        }
+
         static void Interface()
         {
             bool continuer = true;
@@ -128,6 +184,7 @@
                 }
             }
         }
+
         static void ChoixCuisinierClient(int idCompte, bool acces)
         {
             Titre();
@@ -158,14 +215,15 @@
                         Console.WriteLine("Option invalide");
                         break;
                 }
-
             }
         }
+
         public static void Titre()
         {
             Console.Clear();
             Console.WriteLine("Liv'in Paris\n");
         }
+
         static int SaisieOption()
         {
             Console.WriteLine("Veuillez choisir une des options proposées en saississant le numéro qu'il lui est associé");
@@ -180,6 +238,7 @@
                 Console.WriteLine("Veuillez saisir un des chiffres proposés");
             } while (true);
         }
+
         public static int SaisNombre()
         {
             int nb;
@@ -195,6 +254,4 @@
             } while (true);
         }
     }
-    
-    
 }

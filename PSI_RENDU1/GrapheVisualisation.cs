@@ -9,8 +9,7 @@ namespace PSI_RENDU1
 
     public class GrapheVisualisation
     {
-        #region Methodes
-        public static void GenererImageGraphe(Graphe graphe, string outputPath = "graphe.png", int width = 800, int height = 600)
+        public static void GenererImageGraphe<T>(Graphe<T> graphe, string outputPath = "graphe.png", int width = 800, int height = 600)
         {
             try
             {
@@ -25,8 +24,8 @@ namespace PSI_RENDU1
                 int rayon = 15;
                 Random random = new Random();
 
-                // Générer aléatoire de la position des noeuds
-                Dictionary<int, Point> positionsNoeuds = new Dictionary<int, Point>();
+            // Générer positions aléatoires des nœuds
+                Dictionary<T, Point> positionsNoeuds = new Dictionary<T, Point>();
                 foreach (var noeud in graphe.Noeuds.Values)
                 {
                     int x = random.Next(rayon, width - rayon);
@@ -34,8 +33,7 @@ namespace PSI_RENDU1
                     positionsNoeuds[noeud.Id] = new Point(x, y);
                 }
 
-
-                // Dessin des liens
+            // Dessiner les liens
                 foreach (var lien in graphe.Liens)
                 {
                     Point p1 = positionsNoeuds[lien.Source.Id];
@@ -43,7 +41,7 @@ namespace PSI_RENDU1
                     g.DrawLine(lienPen, p1, p2);
                 }
 
-                // Dessiner les nœuds
+            // Dessiner les nœuds
                 foreach (var noeud in graphe.Noeuds.Values)
                 {
                     Point p = positionsNoeuds[noeud.Id];
@@ -68,6 +66,5 @@ namespace PSI_RENDU1
                 Console.WriteLine($"Erreur lors de la génération du graphe : {ex.Message}");
             }
         }
-        #endregion
     }
 }

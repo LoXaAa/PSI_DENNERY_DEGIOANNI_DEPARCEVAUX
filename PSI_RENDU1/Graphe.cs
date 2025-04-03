@@ -10,75 +10,43 @@ using System.IO;
 namespace PSI_RENDU1
 {
 
-    public class Graphe
+    public class Graphe<T>
     {
-        private Dictionary<int, Noeud> noeuds;
-        private List<Lien> liens;
+        private Dictionary<T, Noeud<T>> noeuds;
+        private List<Lien<T>> liens;
+
+        
 
         public Graphe()
         {
-            noeuds = new Dictionary<int, Noeud>();
-            liens = new List<Lien>();
+            noeuds = new Dictionary<T, Noeud<T>>();
+            liens = new List<Lien<T>>();
+        }
+        public Dictionary<T, Noeud<T>> Noeuds => noeuds;
+        public List<Lien<T>> Liens => liens;
+
+        public void AjouterNoeud(T id, string nom = "", double longitude = 0, double latitude = 0)
+        {
+            if (!noeuds.ContainsKey(id))
+                noeuds[id] = new Noeud<T>(id, nom, longitude, latitude);
         }
 
-        public void AjouterLien(int idSource, int idDestination, double poids)
+
+        public void AjouterLien(T idSource, T idDestination, double poids)
         {
             if (!noeuds.ContainsKey(idSource))
-                noeuds[idSource] = new Noeud(idSource);
+                noeuds[idSource] = new Noeud<T>(idSource);
 
             if (!noeuds.ContainsKey(idDestination))
-                noeuds[idDestination] = new Noeud(idDestination);
+                noeuds[idDestination] = new Noeud<T>(idDestination);
 
-            var lien = new Lien(noeuds[idSource], noeuds[idDestination], poids);
+            var lien = new Lien<T>(noeuds[idSource], noeuds[idDestination], poids);
             noeuds[idSource].Liens.Add(lien);
             noeuds[idDestination].Liens.Add(lien);
             liens.Add(lien);
         }
 
-        public void ChargerDepuisCSV(string cheminFichier)
-        {
-            Console.WriteLine($"Lecture du fichier CSV : {cheminFichier}");
-
-            if (!File.Exists(cheminFichier))
-            {
-                Console.WriteLine("Erreur : Fichier introuvable !");
-                return;
-            }
-
-            using (var reader = new StreamReader(cheminFichier))
-            {
-                string ligne;
-                bool premiereLigne = true;
-
-                while ((ligne = reader.ReadLine()) != null)
-                {
-                    if (premiereLigne) // Ignorer l'en-tête
-                    {
-                        premiereLigne = false;
-                        continue;
-                    }
-
-                    string[] champs = ligne.Split(';'); // Modifier si séparateur différent (ex: `,`)
-
-                    if (champs.Length < 8) continue; // Vérification du bon format
-
-                    int idStation = int.Parse(champs[0]);
-                    string nomStation = champs[2];
-                    double longitude = double.Parse(champs[3], CultureInfo.InvariantCulture);
-                    double latitude = double.Parse(champs[4], CultureInfo.InvariantCulture);
-                    int tempsTrajet = string.IsNullOrWhiteSpace(champs[7]) ? 0 : int.Parse(champs[7]);
-
-                    if (!noeuds.ContainsKey(idStation))
-                        noeuds[idStation] = new Noeud(idStation, nomStation, longitude, latitude);
-
-                    if (tempsTrajet > 0 && idStation > 1)
-                    {
-                        int idStationPrecedente = idStation - 1;
-                        AjouterLien(idStationPrecedente, idStation, tempsTrajet);
-                    }
-                }
-            }
-        }
+        
 
         public void AfficherGraphe()
         {
@@ -99,9 +67,9 @@ namespace PSI_RENDU1
         /// Lecture du fichier
         /// </summary>
         /// <param name="cheminFichier">Chemin relatif du fichier cible</param>
-        public void ChargerDepuisFichier(string cheminFichier)
+        public void ChargerDepuisCSV(string cheminFichier)
         {
-            Console.WriteLine($"Lecture du fichier : {cheminFichier}");
+            Console.WriteLine($"Lecture du fichier CSV : {cheminFichier}");
 
             if (!File.Exists(cheminFichier))
             {
@@ -109,23 +77,37 @@ namespace PSI_RENDU1
                 return;
             }
 
-            foreach (var ligne in File.ReadAllLines(cheminFichier))
+            using (var reader = new StreamReader(cheminFichier))
             {
-                string cleanLigne = ligne.Trim();
-                if (string.IsNullOrWhiteSpace(cleanLigne)) continue; 
+                string ligne;
+                bool premiereLigne = true;
 
-                var match = Regex.Match(cleanLigne, @"\((\d+),\s*(\d+)\)\s+([\d.]+)");
-                if (match.Success)
+                while ((ligne = reader.ReadLine()) != null)
                 {
-                    int idSource = int.Parse(match.Groups[1].Value);
-                    int idDestination = int.Parse(match.Groups[2].Value);
-                    double poids = double.Parse(match.Groups[3].Value, CultureInfo.InvariantCulture);
+                    if (premiereLigne)
+                    {
+                        premiereLigne = false;
+                        continue;
+                    }
 
-                    AjouterLien(idSource, idDestination, poids);
-                }
-                else
-                {
-                    Console.WriteLine($"⚠ Erreur de parsing : {cleanLigne}");
+                    string[] champs = ligne.Split(';');
+
+                    if (champs.Length < 8) continue;
+
+                        T idStation = (T)Convert.ChangeType(champs[0], typeof(T));
+                        string nomStation = champs[2];
+                        double longitude = double.Parse(champs[3], CultureInfo.InvariantCulture);
+                        double latitude = double.Parse(champs[4], CultureInfo.InvariantCulture);
+                        int tempsTrajet = string.IsNullOrWhiteSpace(champs[7]) ? 0 : int.Parse(champs[7]);
+
+                    if (!noeuds.ContainsKey(idStation))
+                        noeuds[idStation] = new Noeud<T>(idStation, nomStation, longitude, latitude);
+
+                    if (tempsTrajet > 0 && !EqualityComparer<T>.Default.Equals(idStation, default(T)))
+                    {
+                        T idStationPrecedente = (T)Convert.ChangeType((Convert.ToInt32(idStation) - 1), typeof(T));
+                        AjouterLien(idStationPrecedente, idStation, tempsTrajet);
+                    }
                 }
             }
         }
@@ -144,24 +126,29 @@ namespace PSI_RENDU1
 
             for (int i = 0; i < nombreSommets; i++)
             {
-                noeuds[i] = new Noeud(i);
+                T id = (T)Convert.ChangeType(i, typeof(T));
+                noeuds[id] = new Noeud<T>(id);
             }
 
-            HashSet<(int, int)> liensAjoutes = new HashSet<(int, int)>();
-
+            HashSet<(T, T)> liensAjoutes = new HashSet<(T, T)>();
             Random random = new Random();
-
 
             while (liensAjoutes.Count < nombreLiens)
             {
-                int source = random.Next(nombreSommets);
-                int destination = random.Next(nombreSommets);
+                int src = random.Next(nombreSommets);
+                int dst = random.Next(nombreSommets);
 
-                if (source != destination && !liensAjoutes.Contains((source, destination)) && !liensAjoutes.Contains((destination, source)))
+                if (src != dst)
                 {
-                    double poids = estPondere ? random.NextDouble() * 10 : 1.0;
-                    AjouterLien(source, destination, poids);
-                    liensAjoutes.Add((source, destination));
+                    T source = (T)Convert.ChangeType(src, typeof(T));
+                    T destination = (T)Convert.ChangeType(dst, typeof(T));
+
+                    if (!liensAjoutes.Contains((source, destination)) && !liensAjoutes.Contains((destination, source)))
+                    {
+                        double poids = estPondere ? random.NextDouble() * 10 : 1.0;
+                        AjouterLien(source, destination, poids);
+                        liensAjoutes.Add((source, destination));
+                    }
                 }
             }
         }
@@ -171,129 +158,106 @@ namespace PSI_RENDU1
         /// Construction de la matrice d'adjacence du graphe
         /// </summary>
         public void ConstruireMatriceAdjacence()
+    {
+        List<T> ids = noeuds.Keys.ToList();
+        int taille = ids.Count;
+        double[,] matrice = new double[taille, taille];
+
+        for (int k = 0; k < liens.Count; k++)
         {
-            int maxId = 0;
-            foreach (var noeud in noeuds.Keys)
+            int i = ids.IndexOf(liens[k].Source.Id);
+            int j = ids.IndexOf(liens[k].Destination.Id);
+            matrice[i, j] = liens[k].Poids;
+            matrice[j, i] = liens[k].Poids;
+        }
+
+        Console.WriteLine("\nMatrice d'Adjacence :");
+        Console.Write("    ");
+        for (int i = 0; i < taille; i++) Console.Write($"{ids[i],3} ");
+        Console.WriteLine();
+        Console.Write("   ");
+        Console.WriteLine(new string('-', 4 * taille));
+
+        for (int i = 0; i < taille; i++)
+        {
+            Console.Write($"{ids[i],2} | ");
+            for (int j = 0; j < taille; j++)
             {
-                if (noeud > maxId)
-                    maxId = noeud;
-            }
-
-            int taille = maxId + 1;
-            double[,] matrice = new double[taille, taille];
-
-            foreach (var lien in liens)
-            {
-                int i = lien.Source.Id;
-                int j = lien.Destination.Id;
-                matrice[i, j] = lien.Poids;
-                matrice[j, i] = lien.Poids;
-            }
-
-            // Affichage formaté de la matrice
-            Console.WriteLine("\nMatrice d'Adjacence :");
-
-            Console.Write("    "); 
-            for (int i = 0; i < taille; i++)
-            {
-                Console.Write($"{i,3} "); 
+                if (matrice[i, j] == 1)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.Write("  1 ");
+                    Console.ResetColor();
+                }
+                else Console.Write("  0 ");
             }
             Console.WriteLine();
-
-
-            Console.Write("   ");
-            Console.WriteLine(new string('-', 4 * taille));
-
-
-            for (int i = 0; i < taille; i++)
-            {
-                Console.Write($"{i,2} |");
-                for (int j = 0; j < taille; j++)
-                {
-                    if (matrice[i, j] == 1)
-                    {
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.Write($"  1 ");
-                        Console.ResetColor();
-                    }
-                    else
-                    {
-                        Console.Write($"  0 ");
-                    }
-                }
-                Console.WriteLine();
-            }
-
-
-
         }
+    }
         #endregion
         #region Parcours en Profondeur
         /// <summary>
         /// Parcours en profondeur du graphe
         /// </summary>
         /// <param name="depart">noeud de départ</param>
-        public void ParcoursProfondeur(int depart)
+        public void ParcoursProfondeur(T depart)
+    {
+        HashSet<T> visites = new HashSet<T>();
+        Stack<T> pile = new Stack<T>();
+
+        pile.Push(depart);
+        Console.WriteLine("Parcours en profondeur (DFS) :");
+
+        while (pile.Count > 0)
         {
-            HashSet<int> visites = new HashSet<int>();
-            Stack<int> pile = new Stack<int>();
+            T noeudActuel = pile.Pop();
 
-            pile.Push(depart);
-
-            Console.WriteLine("Parcours en profondeur (DFS) :");
-
-            while (pile.Count > 0)
+            if (!visites.Contains(noeudActuel))
             {
-                int noeudActuel = pile.Pop();
+                Console.Write(noeudActuel + " ");
+                visites.Add(noeudActuel);
 
-                if (!visites.Contains(noeudActuel))
+                foreach (var voisin in noeuds[noeudActuel].Liens.Select(l => l.Destination.Id))
                 {
-                    Console.Write(noeudActuel + " ");
-                    visites.Add(noeudActuel);
-
-                    foreach (var voisin in noeuds[noeudActuel].Liens.Select(l => l.Destination.Id))
-                    {
-                        if (!visites.Contains(voisin))
-                        {
-                            pile.Push(voisin);
-                        }
-                    }
+                    if (!visites.Contains(voisin))
+                        pile.Push(voisin);
                 }
             }
-            Console.WriteLine();
         }
+        Console.WriteLine();
+    }
         #endregion
         #region Parcorus en Largeur
         /// <summary>
         /// Parcours en largeur du graphe
         /// </summary>
         /// <param name="depart">noeud de départ</param>
-        public void ParcoursLargeur(int depart)
+        public void ParcoursLargeur(T depart)
+{
+    HashSet<T> visites = new HashSet<T>();
+    Queue<T> file = new Queue<T>();
+
+    file.Enqueue(depart);
+    visites.Add(depart);
+
+    Console.WriteLine("Parcours en largeur (BFS) :");
+
+    while (file.Count > 0)
+    {
+        T noeudActuel = file.Dequeue();
+        Console.Write(noeudActuel + " ");
+
+        foreach (var voisin in noeuds[noeudActuel].Liens.Select(l => l.Destination.Id))
         {
-            HashSet<int> visites = new HashSet<int>();
-            Queue<int> file = new Queue<int>();
-
-            file.Enqueue(depart);
-            visites.Add(depart);
-
-            Console.WriteLine("Parcours en largeur (BFS) :");
-
-            while (file.Count > 0)
+            if (!visites.Contains(voisin))
             {
-                int noeudActuel = file.Dequeue();
-                Console.Write(noeudActuel + " ");
-
-                foreach (var voisin in noeuds[noeudActuel].Liens.Select(l => l.Destination.Id))
-                {
-                    if (!visites.Contains(voisin))
-                    {
-                        visites.Add(voisin);
-                        file.Enqueue(voisin);
-                    }
-                }
+                visites.Add(voisin);
+                file.Enqueue(voisin);
             }
-            Console.WriteLine();
         }
+    }
+    Console.WriteLine();
+}
         #endregion
         #region Detection connexité
         /// <summary>
@@ -301,33 +265,32 @@ namespace PSI_RENDU1
         /// </summary>
         /// <returns>True ou False</returns>
         public bool EstConnexe()
+{
+    if (noeuds.Count == 0) return false; // Un graphe vide n'est pas connexe
+
+    HashSet<T> visites = new HashSet<T>();
+    Queue<Noeud<T>> file = new Queue<Noeud<T>>();
+
+    var premierNoeud = noeuds.Values.First();
+    file.Enqueue(premierNoeud);
+    visites.Add(premierNoeud.Id);
+
+    while (file.Count > 0)
+    {
+        Noeud<T> courant = file.Dequeue();
+        foreach (var lien in courant.Liens)
         {
-            if (noeuds.Count == 0) return false; // Un graphe vide n'est pas connexe
-
-            HashSet<int> visités = new HashSet<int>();
-            Queue<Noeud> file = new Queue<Noeud>();
-
-            // Prendre un sommet quelconque pour commencer (premier de la liste)
-            var premierNoeud = noeuds.Values.First();
-            file.Enqueue(premierNoeud);
-            visités.Add(premierNoeud.Id);
-
-            while (file.Count > 0)
+            Noeud<T> voisin = lien.Destination;
+            if (!visites.Contains(voisin.Id))
             {
-                Noeud courant = file.Dequeue();
-                foreach (var lien in courant.Liens)
-                {
-                    Noeud voisin = lien.Destination;
-                    if (!visités.Contains(voisin.Id))
-                    {
-                        visités.Add(voisin.Id);
-                        file.Enqueue(voisin);
-                    }
-                }
+                visites.Add(voisin.Id);
+                file.Enqueue(voisin);
             }
-
-            return visités.Count == noeuds.Count; // Si on a visité tous les sommets, le graphe est connexe
         }
+    }
+
+    return visites.Count == noeuds.Count; // Si on a visité tous les sommets, le graphe est connexe
+}
         #endregion
         #region Detection Cycle
         /// <summary>
@@ -335,18 +298,18 @@ namespace PSI_RENDU1
         /// </summary>
         /// <returns>True ou False</returns>
         public bool ContientUnCycle()
-        {
-            HashSet<int> visités = new HashSet<int>();
+{
+    HashSet<T> visites = new HashSet<T>();
 
-            foreach (var noeud in noeuds.Values)
-            {
-                if (!visités.Contains(noeud.Id))
-                {
-                    if (DFS_DetectCycle(noeud, visités, null)) return true;
-                }
-            }
-            return false;
+    foreach (var noeud in noeuds.Values)
+    {
+        if (!visites.Contains(noeud.Id))
+        {
+            if (DFS_DetectCycle(noeud, visites, default(T))) return true;
         }
+    }
+    return false;
+}
         /// <summary>
         /// boucle qui detecte le cycle
         /// </summary>
@@ -354,131 +317,122 @@ namespace PSI_RENDU1
         /// <param name="visités">Ensemble des identifiants des nœuds déjà visités pour éviter les boucles infinies</param>
         /// <param name="parent">Le nœud par lequel on est arrivé au nœud courant</param>
         /// <returns></returns>
-        private bool DFS_DetectCycle(Noeud courant, HashSet<int> visités, Noeud parent)
+        private bool DFS_DetectCycle(Noeud<T> courant, HashSet<T> visites, T parentId)
+{
+    visites.Add(courant.Id);
+
+    foreach (var lien in courant.Liens)
+    {
+        Noeud<T> voisin = lien.Destination;
+
+        if (!visites.Contains(voisin.Id))
         {
-            visités.Add(courant.Id);
-
-            foreach (var lien in courant.Liens)
-            {
-                Noeud voisin = lien.Destination;
-
-                // Si voisin n'a pas encore été visité, continuer le DFS
-                if (!visités.Contains(voisin.Id))
-                {
-                    if (DFS_DetectCycle(voisin, visités, courant)) return true;
-                }
-                // Si voisin a déjà été visité et n'est pas le parent immédiat -> cycle détecté
-                else if (voisin != parent)
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            if (DFS_DetectCycle(voisin, visites, courant.Id)) return true;
         }
+        else if (!voisin.Id.Equals(parentId))
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
         #endregion
 
 
         #region Dijkstra
-        public (Dictionary<int, double> distances, Dictionary<int, int?> precedent) Dijkstra(int source)
+        public (Dictionary<T, double> distances, Dictionary<T, T?> precedent) Dijkstra(T source)
+{
+    var distances = new Dictionary<T, double>();
+    var precedent = new Dictionary<T, T?>();
+    var priorityQueue = new SortedSet<(double distance, T noeud)>();
+
+    foreach (var noeud in noeuds.Keys)
+    {
+        distances[noeud] = double.PositiveInfinity;
+        precedent[noeud] = default;
+    }
+
+    distances[source] = 0;
+    priorityQueue.Add((0, source));
+
+    while (priorityQueue.Count > 0)
+    {
+        var (currentDistance, currentNode) = priorityQueue.Min;
+        priorityQueue.Remove(priorityQueue.Min);
+
+        foreach (var lien in noeuds[currentNode].Liens)
         {
-            var distances = new Dictionary<int, double>();
-            var precedent = new Dictionary<int, int?>();
-            var priorityQueue = new SortedSet<(double distance, int noeud)>();
+            T voisin = lien.Destination.Id;
+            double nouvelleDistance = currentDistance + lien.Poids;
 
-            // Initialisation des distances à l'infini
-            foreach (var noeud in noeuds.Keys)
+            if (nouvelleDistance < distances[voisin])
             {
-                distances[noeud] = double.PositiveInfinity;
-                precedent[noeud] = null;
+                priorityQueue.Remove((distances[voisin], voisin));
+                distances[voisin] = nouvelleDistance;
+                precedent[voisin] = currentNode;
+                priorityQueue.Add((nouvelleDistance, voisin));
             }
-
-            // La distance au point de départ est de 0
-            distances[source] = 0;
-            priorityQueue.Add((0, source));
-
-            while (priorityQueue.Count > 0)
-            {
-                // Extraction du nœud avec la plus petite distance
-                var (currentDistance, currentNode) = priorityQueue.Min;
-                priorityQueue.Remove(priorityQueue.Min);
-
-                foreach (var lien in noeuds[currentNode].Liens)
-                {
-                    int voisin = lien.Destination.Id;
-                    double nouvelleDistance = currentDistance + lien.Poids;
-
-                    if (nouvelleDistance < distances[voisin])
-                    {
-                        // Mise à jour de la distance minimale
-                        priorityQueue.Remove((distances[voisin], voisin));
-                        distances[voisin] = nouvelleDistance;
-                        precedent[voisin] = currentNode;
-                        priorityQueue.Add((nouvelleDistance, voisin));
-                    }
-                }
-            }
-
-            return (distances, precedent);
         }
+    }
+
+    return (distances, precedent);
+}
 
 
         #endregion
 
         #region Bellman-Ford
-        public (Dictionary<int, double> distances, Dictionary<int, int?> precedent) BellmanFord(int source)
+        public (Dictionary<T, double> distances, Dictionary<T, T?> precedent) BellmanFord(T source)
+{
+    var distances = new Dictionary<T, double>();
+    var precedent = new Dictionary<T, T?>();
+
+    foreach (var noeud in noeuds.Keys)
+    {
+        distances[noeud] = double.PositiveInfinity;
+        precedent[noeud] = default;
+    }
+    distances[source] = 0;
+
+    int nombreSommets = noeuds.Count;
+
+    for (int i = 0; i < nombreSommets - 1; i++)
+    {
+        foreach (var noeud in noeuds.Values)
         {
-            var distances = new Dictionary<int, double>();
-            var precedent = new Dictionary<int, int?>();
-
-            // Initialisation : distance infinie pour tous sauf le sommet source
-            foreach (var noeud in noeuds.Keys)
+            foreach (var lien in noeud.Liens)
             {
-                distances[noeud] = double.PositiveInfinity;
-                precedent[noeud] = null;
-            }
-            distances[source] = 0;
+                T u = noeud.Id;
+                T v = lien.Destination.Id;
+                double poids = lien.Poids;
 
-            int nombreSommets = noeuds.Count;
-
-            // Relaxation des arêtes (nombreSommets - 1) fois
-            for (int i = 0; i < nombreSommets - 1; i++)
-            {
-                foreach (var noeud in noeuds.Values)
+                if (distances[u] != double.PositiveInfinity && distances[u] + poids < distances[v])
                 {
-                    foreach (var lien in noeud.Liens)
-                    {
-                        int u = noeud.Id;
-                        int v = lien.Destination.Id;
-                        double poids = lien.Poids;
-
-                        if (distances[u] != double.PositiveInfinity && distances[u] + poids < distances[v])
-                        {
-                            distances[v] = distances[u] + poids;
-                            precedent[v] = u;
-                        }
-                    }
+                    distances[v] = distances[u] + poids;
+                    precedent[v] = u;
                 }
             }
-
-            // Vérification de la présence d'un cycle de poids négatif
-            foreach (var noeud in noeuds.Values)
-            {
-                foreach (var lien in noeud.Liens)
-                {
-                    int u = noeud.Id;
-                    int v = lien.Destination.Id;
-                    double poids = lien.Poids;
-
-                    if (distances[u] != double.PositiveInfinity && distances[u] + poids < distances[v])
-                    {
-                        throw new InvalidOperationException("Le graphe contient un cycle de poids négatif.");
-                    }
-                }
-            }
-
-            return (distances, precedent);
         }
+    }
+
+    foreach (var noeud in noeuds.Values)
+    {
+        foreach (var lien in noeud.Liens)
+        {
+            T u = noeud.Id;
+            T v = lien.Destination.Id;
+            double poids = lien.Poids;
+
+            if (distances[u] != double.PositiveInfinity && distances[u] + poids < distances[v])
+            {
+                throw new InvalidOperationException("Le graphe contient un cycle de poids négatif.");
+            }
+        }
+    }
+
+    return (distances, precedent);
+}
         #endregion
 
 

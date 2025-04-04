@@ -1,12 +1,11 @@
-﻿using MySql.Data.MySqlClient;
-using PSI_RENDU1;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PSI_RENDU1
+namespace MySqlTest
 {
     public class Database
     {
@@ -42,7 +41,7 @@ namespace PSI_RENDU1
         }
         #endregion
         #region fonction de peuplement
-        static public int CreationCompte()
+        static public int AjouterCompte()
         {
             Program.Titre();
             Database db = new Database();
@@ -84,9 +83,6 @@ namespace PSI_RENDU1
             Console.Write("Station de métro la plus proche : ");
             string stationMetro = Console.ReadLine();
 
-            Console.Write("Statut : ");
-            string statut = Console.ReadLine();
-
             Console.Write("Mot de passe : ");
             string motDePasse = Console.ReadLine(); // Il serait préférable de le hasher avant de le stocker.
 
@@ -96,7 +92,7 @@ namespace PSI_RENDU1
             {
                 db.OpenConnection();
                 string query = "INSERT INTO Compte (Prenom, Nom, Rue, Numero, Code_postal, Ville, No_tel, Email, Station_de_Métro_la_plus_Proche, Statut, Mot_Passe) " +
-                               "VALUES (@Prenom, @Nom, @Rue, @Numero, @CodePostal, @Ville, @Telephone, @Email, @StationMetro, @Statut, @MotPasse)";
+                               "VALUES (@Prenom, @Nom, @Rue, @Numero, @CodePostal, @Ville, @Telephone, @Email, @StationMetro, 'ouvert', @MotPasse)";
 
                 MySqlCommand cmd = new MySqlCommand(query, db.GetConnection());
                 cmd.Parameters.AddWithValue("@Prenom", prenom);
@@ -108,7 +104,6 @@ namespace PSI_RENDU1
                 cmd.Parameters.AddWithValue("@Telephone", telephone);
                 cmd.Parameters.AddWithValue("@Email", email);
                 cmd.Parameters.AddWithValue("@StationMetro", stationMetro);
-                cmd.Parameters.AddWithValue("@Statut", statut);
                 cmd.Parameters.AddWithValue("@MotPasse", motDePasse);
 
                 int rowsAffected = cmd.ExecuteNonQuery();
@@ -135,7 +130,7 @@ namespace PSI_RENDU1
 
             return idCompte;
         }
-        static public void CreationClient(int idCompte)
+        static public void AjouterClient(int idCompte)
         {
             Program.Titre();
             if (idCompte <= 0)
@@ -178,7 +173,7 @@ namespace PSI_RENDU1
                 db.CloseConnection();
             }
         }
-        static public void CreationCuisinier(int idCompte)
+        static public void AjouterCuisinier(int idCompte)
         {
             Program.Titre();
             if (idCompte <= 0)
@@ -221,7 +216,7 @@ namespace PSI_RENDU1
                 db.CloseConnection();
             }
         }
-        static public void CreationRecette()
+        static public void AjouterRecette()
         {
             Database db = new Database();
 
@@ -247,8 +242,31 @@ namespace PSI_RENDU1
                 Console.Write("Veuillez entrer un nombre valide : ");
             }
 
-            Console.Write("Difficulté (Facile/Moyen/Difficile) : ");
-            string difficulte = Console.ReadLine();
+            Console.Write("Difficulté (1-Facile/2-Moyen/3-Difficile) : ");
+            int diff;
+            while (!int.TryParse(Console.ReadLine(), out diff) || diff < 1 || diff > 3)
+            {
+                Console.Write("Veuillez entrer une note valide (1-3) : ");
+            }
+            string difficulte;
+            switch (diff)
+            {
+                case 1:
+                    difficulte = "Facile";
+                    break;
+                case 2:
+                    difficulte = "Moyen";
+                    break;
+                case 3:
+                    difficulte = "Difficile";
+                    break;
+                default:
+                    difficulte = "Inconnu"; 
+                    break;
+            }
+
+            Console.WriteLine("Vous avez choisi la difficulté : "+difficulte);
+
 
             try
             {
@@ -279,7 +297,7 @@ namespace PSI_RENDU1
                 db.CloseConnection();
             }
         }
-        static public void CreationIngredient()
+        static public void AjouterIngredient()
         {
             Database db = new Database();
 
@@ -316,64 +334,99 @@ namespace PSI_RENDU1
                 db.CloseConnection();
             }
         }
-        static public void CreationPlat(int idCuisinier)
+        static public void AjouterPlat(int idCuisinier)
         {
             Database db = new Database();
 
             Console.WriteLine("Ajout d'un nouveau plat\n");
 
+            // Validation stricte des entrées utilisateur
             Console.Write("Type de plat : ");
-            string typePlat = Console.ReadLine();
+            string typePlat;
+            while (string.IsNullOrWhiteSpace(typePlat = Console.ReadLine()))
+            {
+                Console.Write("Veuillez entrer un type de plat valide : ");
+            }
 
             Console.Write("Date de fabrication (YYYY-MM-DD) : ");
-            string dateFabrication = Console.ReadLine();
+            string dateFabrication;
+            while (!DateTime.TryParse(Console.ReadLine(), out _))
+            {
+                Console.Write("Veuillez entrer une date de fabrication valide (YYYY-MM-DD) : ");
+            }
+            dateFabrication = Console.ReadLine();
 
             Console.Write("Date de péremption (YYYY-MM-DD) : ");
-            string datePeremption = Console.ReadLine();
+            string datePeremption;
+            while (!DateTime.TryParse(Console.ReadLine(), out _))
+            {
+                Console.Write("Veuillez entrer une date de péremption valide (YYYY-MM-DD) : ");
+            }
+            datePeremption = Console.ReadLine();
 
             Console.Write("Type de régime (ex: Végétarien, Sans gluten) : ");
-            string typeRegime = Console.ReadLine();
+            string typeRegime;
+            while (string.IsNullOrWhiteSpace(typeRegime = Console.ReadLine()))
+            {
+                Console.Write("Veuillez entrer un type de régime valide : ");
+            }
 
             Console.Write("Photo (URL ou nom du fichier) : ");
-            string photo = Console.ReadLine();
+            string photo;
+            while (string.IsNullOrWhiteSpace(photo = Console.ReadLine()))
+            {
+                Console.Write("Veuillez entrer un nom de fichier ou une URL valide pour la photo : ");
+            }
 
             Console.Write("Description : ");
-            string description = Console.ReadLine();
+            string description;
+            while (string.IsNullOrWhiteSpace(description = Console.ReadLine()))
+            {
+                Console.Write("Veuillez entrer une description valide : ");
+            }
 
             Console.Write("Nationalité : ");
-            string nationalite = Console.ReadLine();
+            string nationalite;
+            while (string.IsNullOrWhiteSpace(nationalite = Console.ReadLine()))
+            {
+                Console.Write("Veuillez entrer une nationalité valide : ");
+            }
 
             Console.Write("Prix (€) : ");
             decimal prix;
             while (!decimal.TryParse(Console.ReadLine(), out prix) || prix < 0)
             {
-                Console.Write("Veuillez entrer un prix valide : ");
+                Console.Write("Veuillez entrer un prix valide (€) : ");
             }
 
             Console.Write("Nombre de portions : ");
             int nombrePortion;
-            while (!int.TryParse(Console.ReadLine(), out nombrePortion) || nombrePortion < 0)
+            while (!int.TryParse(Console.ReadLine(), out nombrePortion) || nombrePortion <= 0)
             {
-                Console.Write("Veuillez entrer un nombre valide : ");
+                Console.Write("Veuillez entrer un nombre de portions valide : ");
             }
 
             Console.Write("Ingrédients principaux : ");
-            string ingredientsPrincipaux = Console.ReadLine();
+            string ingredientsPrincipaux;
+            while (string.IsNullOrWhiteSpace(ingredientsPrincipaux = Console.ReadLine()))
+            {
+                Console.Write("Veuillez entrer des ingrédients principaux valides : ");
+            }
 
             Console.Write("ID de la recette (si disponible, sinon 0) : ");
             int idRecette;
             while (!int.TryParse(Console.ReadLine(), out idRecette))
             {
-                Console.Write("Veuillez entrer un ID valide : ");
+                Console.Write("Veuillez entrer un ID de recette valide (ou 0 si aucune recette) : ");
             }
 
             try
             {
                 db.OpenConnection();
                 string query = @"INSERT INTO Plat 
-        (Type_Plat, Date_Fabrication, Date_Peremption, Type_Regime, Photo, Description, Nationalité, Prix, Nombre_Portion, Ingrédients_Principaux, Id_Recette, Id_Cuisinier) 
-        VALUES 
-        (@TypePlat, @DateFabrication, @DatePeremption, @TypeRegime, @Photo, @Description, @Nationalite, @Prix, @NombrePortion, @IngredientsPrincipaux, @IdRecette, @IdCuisinier)";
+            (Type_Plat, Date_Fabrication, Date_Peremption, Type_Regime, Photo, Description, Nationalité, Prix, Nombre_Portion, Ingrédients_Principaux, Id_Recette, Id_Cuisinier) 
+            VALUES 
+            (@TypePlat, @DateFabrication, @DatePeremption, @TypeRegime, @Photo, @Description, @Nationalite, @Prix, @NombrePortion, @IngredientsPrincipaux, @IdRecette, @IdCuisinier)";
 
                 MySqlCommand cmd = new MySqlCommand(query, db.GetConnection());
                 cmd.Parameters.AddWithValue("@TypePlat", typePlat);
@@ -392,16 +445,21 @@ namespace PSI_RENDU1
                 int rowsAffected = cmd.ExecuteNonQuery();
                 Console.WriteLine(rowsAffected > 0 ? "Plat ajouté avec succès !" : "Échec de l'ajout du plat.");
             }
+            catch (MySqlException sqlEx)
+            {
+                Console.WriteLine("Erreur SQL : " + sqlEx.Message);
+            }
             catch (Exception ex)
             {
-                Console.WriteLine("Erreur : " + ex.Message);
+                Console.WriteLine("Erreur inattendue : " + ex.Message);
             }
             finally
             {
                 db.CloseConnection();
             }
-        }
-        static public int CreationCommande(int idClient, int idCuisinier)
+        }// problème d'implémentation
+
+        static public int AjouterCommande(int idClient, int idCuisinier)
         {
             Database db = new Database();
 
@@ -420,14 +478,16 @@ namespace PSI_RENDU1
             Console.Write("Mode de paiement (CB, PayPal, Espèces, etc.) : ");
             string modePaiement = Console.ReadLine();
 
+            int idCommande = -1;
+
             try
             {
                 db.OpenConnection();
 
                 string query = @"INSERT INTO Commande 
-                        (Date_Commande, Statut_Commande, Prix_Total, Statut_Transaction, Date_Paiement, Mode_Paiement, Id_Client, Id_Cuisinier) 
-                        VALUES 
-                        (@DateCommande, @StatutCommande, 0, @StatutTransaction, @DatePaiement, @ModePaiement, @IdClient, @IdCuisinier)";
+                (Date_Commande, Statut_Commande, Prix_Total, Statut_Transaction, Date_Paiement, Mode_Paiement, Id_Client, Id_Cuisinier) 
+                VALUES 
+                (@DateCommande, @StatutCommande, 0, @StatutTransaction, @DatePaiement, @ModePaiement, @IdClient, @IdCuisinier)";
 
                 MySqlCommand cmd = new MySqlCommand(query, db.GetConnection());
                 cmd.Parameters.AddWithValue("@DateCommande", DateTime.Now.ToString("yyyy-MM-dd"));
@@ -443,29 +503,73 @@ namespace PSI_RENDU1
                 {
                     // Récupérer l'ID de la commande insérée
                     cmd.CommandText = "SELECT LAST_INSERT_ID()";
-                    int idCommande = Convert.ToInt32(cmd.ExecuteScalar());
+                    idCommande = Convert.ToInt32(cmd.ExecuteScalar());
                     Console.WriteLine("Commande créée avec succès. ID de la commande : " + idCommande);
-                    return idCommande;
                 }
                 else
                 {
                     Console.WriteLine("Échec de la création de la commande.");
-                    return -1;
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine("Erreur : " + ex.Message);
-                return -1;
+            }
+            finally
+            {
+                db.CloseConnection();
+            }
+
+            return idCommande;
+        }
+
+        static public void AjouterAvis(int idClient, int idCuisinier)
+        {
+            Database db = new Database();
+            Console.WriteLine("Création d'un avis\n");
+            Console.Write("Note (1-5) : ");
+            int note;
+            while (!int.TryParse(Console.ReadLine(), out note) || note < 1 || note > 5)
+            {
+                Console.Write("Veuillez entrer une note valide (1-5) : ");
+            }
+            Console.Write("Commentaire : ");
+            string commentaire = Console.ReadLine();
+
+            DateTime dateAvis = DateTime.Now;
+
+            try
+            {
+                db.OpenConnection();
+                string query = @"INSERT INTO Avis 
+                            (Note, Date_Avis, Commentaire, Id_Client, Id_Cuisinier) 
+                            VALUES 
+                            (@Note, @DateAvis, @Commentaire, @IdClient, @IdCuisinier)";
+
+                using (MySqlCommand cmd = new MySqlCommand(query, db.GetConnection()))
+                {
+                    cmd.Parameters.AddWithValue("@Note", note);
+                    cmd.Parameters.AddWithValue("@DateAvis", dateAvis);
+                    cmd.Parameters.AddWithValue("@Commentaire", commentaire);
+                    cmd.Parameters.AddWithValue("@IdClient", idClient);
+                    cmd.Parameters.AddWithValue("@IdCuisinier", idCuisinier);
+                    int rowsAffected = cmd.ExecuteNonQuery();
+
+                    if (rowsAffected > 0)
+                        Console.WriteLine("Avis ajouté avec succès !");
+                    else
+                        Console.WriteLine("Erreur lors de l'ajout de l'avis.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Erreur : " + ex.Message);
             }
             finally
             {
                 db.CloseConnection();
             }
         }
-
-
-
         #endregion
         #region fonctions de connexion au compte
         static public void ConnexionClient(int idCompte)
@@ -475,7 +579,7 @@ namespace PSI_RENDU1
             if (reponse == "n")
             {
                 Console.WriteLine("Vous devez d'abord créer un compte client.");
-                CreationClient(idCompte);
+                AjouterClient(idCompte);
                 return;
             }
             if (idCompte <= 0)
@@ -510,7 +614,7 @@ namespace PSI_RENDU1
                     string reponse1 = RepOuiNon();
                     if (reponse1 == "o")
                     {
-                        CreationClient(idCompte);
+                        AjouterClient(idCompte);
                     }
                     return;
                 }
@@ -535,7 +639,7 @@ namespace PSI_RENDU1
             if (reponse == "n")
             {
                 Console.WriteLine("Vous devez d'abord créer un compte cuisinier.");
-                CreationCuisinier(idCompte);
+                AjouterCuisinier(idCompte);
                 return;
             }
 
@@ -572,7 +676,7 @@ namespace PSI_RENDU1
                     string reponse1 = RepOuiNon();
                     if (reponse1 == "o")
                     {
-                        CreationCuisinier(idCompte);
+                        AjouterCuisinier(idCompte);
                     }
                     return;
                 }
@@ -605,6 +709,7 @@ namespace PSI_RENDU1
                 cmd.Parameters.AddWithValue("@IdCompte", idCompte);
                 cmd.Parameters.AddWithValue("@MotDePasse", motDePasse);
                 object result = cmd.ExecuteScalar();
+                bool rep;
                 if (result != null)
                 {
                     Console.WriteLine("Connexion réussie !");
@@ -629,19 +734,19 @@ namespace PSI_RENDU1
         }
         #endregion
         #region fonction de supression
-        static public void SupprimerCuisinier()
+        static public void Supprimer(string element)
         {
             Database db = new Database();
 
-            Console.Write("Entrez l'ID du cuisinier à supprimer : ");
-            int idClient;
-            while (!int.TryParse(Console.ReadLine(), out idClient))
+            Console.Write("Entrez l'ID du(/de l') " + element + " à supprimer : ");
+            int idElement;
+            while (!int.TryParse(Console.ReadLine(), out idElement))
             {
                 Console.Write("Veuillez entrer un ID valide : ");
             }
 
-            Console.Write("Êtes-vous sûr de vouloir supprimer ce cuisinier ? (O/N) : ");
-            string confirmation = Console.ReadLine();
+            Console.Write("Êtes-vous sûr de vouloir supprimer ce/cet " + element + " ? (O/N) : ");
+            string confirmation = RepOuiNon();
             if (confirmation.ToLower() != "o")
             {
                 Console.WriteLine("Suppression annulée.");
@@ -651,15 +756,15 @@ namespace PSI_RENDU1
             try
             {
                 db.OpenConnection();
-                string query = "DELETE FROM Client WHERE Id_Client = @IdClient";
+                string query = "DELETE FROM " + element + " WHERE Id_" + element + " = @Id" + element;
                 MySqlCommand cmd = new MySqlCommand(query, db.GetConnection());
-                cmd.Parameters.AddWithValue("@IdClient", idClient);
+                cmd.Parameters.AddWithValue("@Id" + element, idElement);
 
                 int rowsAffected = cmd.ExecuteNonQuery();
                 if (rowsAffected > 0)
-                    Console.WriteLine("Cuisinier supprimé avec succès !");
+                    Console.WriteLine(element + " supprimé avec succès !");
                 else
-                    Console.WriteLine("Aucun cuisinier trouvé avec cet ID.");
+                    Console.WriteLine("Aucun " + element + " trouvé avec cet ID.");
             }
             catch (Exception ex)
             {
@@ -670,11 +775,6 @@ namespace PSI_RENDU1
                 db.CloseConnection();
             }
         }
-        static public void SupprimerCompte()
-        {
-
-        }// à faire
-
 
         #endregion
         #region fonction de saisie
@@ -688,6 +788,339 @@ namespace PSI_RENDU1
             return reponse;
         }
         #endregion
+        #region Fonctions montrer
+        static public void MontrerEssentiel(string element)
+        {
+            Database db = new Database();
+            try
+            {
+                db.OpenConnection();
+                string query = $@"
+                SELECT e.Id_{element}, c.Prenom, c.Nom
+                FROM {element} e
+                INNER JOIN Compte c ON e.Id_Compte = c.Id_Compte;";
+
+                MySqlCommand cmd = new MySqlCommand(query, db.GetConnection());
+                MySqlDataReader reader = cmd.ExecuteReader();
+                Console.WriteLine("\nListe de "+element+" :\n");
+
+                while (reader.Read())
+                {
+                    Console.WriteLine($"\tID : {reader[$"Id_{element}"]}\t Nom : {reader["Nom"]}\t Prénom : {reader["Prenom"]}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Erreur : " + ex.Message);
+            }
+            finally
+            {
+                db.CloseConnection();
+            }
+        }// valable que pour cuisinier, client et compte
+        static public void Montrer(string element)
+        {
+            Database db = new Database();
+            try
+            {
+                db.OpenConnection();
+                string query = "SELECT * FROM " + element;
+                MySqlCommand cmd = new MySqlCommand(query, db.GetConnection());
+
+                using (MySqlDataReader reader = cmd.ExecuteReader())
+                {
+                    if (reader.HasRows)
+                    {
+                        Console.WriteLine("Résultats trouvés pour l'élément " + element + " :\n");
+                        while (reader.Read())
+                        {
+                            for (int i = 0; i < reader.FieldCount; i++)
+                            {
+                                Console.Write(reader.GetName(i) + ": " + reader[i] + "\t");
+                            }
+                            Console.WriteLine();
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Aucun résultat trouvé dans " + element + ".");
+                    }
+                }
+            }
+            catch (MySqlException mySqlEx)
+            {
+                Console.WriteLine("Erreur SQL : " + mySqlEx.Message);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Erreur inattendue : " + ex.Message);
+            }
+            finally
+            {
+                db.CloseConnection();
+            }
+        }
+        static public void Montrer(string element, int id)
+        {
+            Database db = new Database();
+            try
+            {
+                db.OpenConnection();
+                string query = "SELECT * FROM " + element + " WHERE Id_" + element + " = @Id";
+                MySqlCommand cmd = new MySqlCommand(query, db.GetConnection());
+                cmd.Parameters.AddWithValue("@Id", id);
+
+                using (MySqlDataReader reader = cmd.ExecuteReader())
+                {
+                    if (reader.HasRows)
+                    {
+                        Console.WriteLine("Résultats trouvés pour l'élément " + element + " avec ID " + id + " :\n");
+                        while (reader.Read())
+                        {
+                            for (int i = 0; i < reader.FieldCount; i++)
+                            {
+                                Console.Write(reader.GetName(i) + ": " + reader[i] + "\t");
+                            }
+                            Console.WriteLine();
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Aucun résultat trouvé dans " + element + " pour l'ID spécifié : " + id);
+                    }
+                }
+            }
+            catch (MySqlException mySqlEx)
+            {
+                Console.WriteLine("Erreur SQL : " + mySqlEx.Message);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Erreur inattendue : " + ex.Message);
+            }
+            finally
+            {
+                db.CloseConnection();
+            }
+        }
+        static public void MontrerProfilCuisinier(int idCuisinier)
+        {
+            Database db = new Database();
+            try
+            {
+                db.OpenConnection();
+
+                // Requête avec JOIN pour récupérer uniquement les infos du compte associé
+                string query = @"
+            SELECT 
+                Compte.Prenom,
+                Compte.Nom,
+                Compte.Rue,
+                Compte.Numero,
+                Compte.Code_postal,
+                Compte.Ville,
+                Compte.No_tel,
+                Compte.Email,
+                Compte.Station_de_Métro_la_plus_Proche,
+                Cuisinier.Zone_Livraison
+            FROM 
+                Compte
+            INNER JOIN 
+                Cuisinier ON Compte.Id_Compte = Cuisinier.Id_Compte
+            WHERE 
+                Cuisinier.Id_Cuisinier = @IdCuisinier";
+
+                MySqlCommand cmd = new MySqlCommand(query, db.GetConnection());
+                cmd.Parameters.AddWithValue("@IdCuisinier", idCuisinier);
+
+                MySqlDataReader reader = cmd.ExecuteReader();
+
+                if (reader.HasRows)
+                {
+                    Console.WriteLine("Informations du profil cuisinier :\n");
+                    while (reader.Read())
+                    {
+                        Console.WriteLine("Prénom : " + reader["Prenom"]);
+                        Console.WriteLine("Nom : " + reader["Nom"]);
+                        Console.WriteLine("Adresse : " + reader["Rue"] + " " + reader["Numero"] + ", " + reader["Code_postal"] + " " + reader["Ville"]);
+                        Console.WriteLine("Téléphone : " + reader["No_tel"]);
+                        Console.WriteLine("Email : " + reader["Email"]);
+                        Console.WriteLine("Station de métro la plus proche : " + reader["Station_de_Métro_la_plus_Proche"]);
+                        Console.WriteLine("Zone de livraison : " + reader["Zone_Livraison"]);
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Aucun profil trouvé pour ce cuisinier.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Erreur : " + ex.Message);
+            }
+            finally
+            {
+                db.CloseConnection();
+            }
+        }
+        static public void MontrerProfilClient(int idClient)
+        {
+            Database db = new Database();
+            try
+            {
+                db.OpenConnection();
+
+                // Requête avec JOIN pour récupérer uniquement les infos du compte associé au client
+                string query = @"
+            SELECT 
+                Compte.Prenom,
+                Compte.Nom,
+                Compte.Rue,
+                Compte.Numero,
+                Compte.Code_postal,
+                Compte.Ville,
+                Compte.No_tel,
+                Compte.Email,
+                Compte.Station_de_Métro_la_plus_Proche,
+                Client.Nom_Entreprise
+            FROM 
+                Compte
+            INNER JOIN 
+                Client ON Compte.Id_Compte = Client.Id_Compte
+            WHERE 
+                Client.Id_Client = @IdClient";
+
+                MySqlCommand cmd = new MySqlCommand(query, db.GetConnection());
+                cmd.Parameters.AddWithValue("@IdClient", idClient);
+
+                MySqlDataReader reader = cmd.ExecuteReader();
+
+                if (reader.HasRows)
+                {
+                    Console.WriteLine("Informations du profil client :\n");
+                    while (reader.Read())
+                    {
+                        Console.WriteLine("Prénom : " + reader["Prenom"]);
+                        Console.WriteLine("Nom : " + reader["Nom"]);
+                        Console.WriteLine("Adresse : " + reader["Rue"] + " " + reader["Numero"] + ", " + reader["Code_postal"] + " " + reader["Ville"]);
+                        Console.WriteLine("Téléphone : " + reader["No_tel"]);
+                        Console.WriteLine("Email : " + reader["Email"]);
+                        Console.WriteLine("Station de métro la plus proche : " + reader["Station_de_Métro_la_plus_Proche"]);
+                        Console.WriteLine("Nom de l'entreprise : " + reader["Nom_Entreprise"]);
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Aucun profil trouvé pour ce client.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Erreur : " + ex.Message);
+            }
+            finally
+            {
+                db.CloseConnection();
+            }
+        }
+
+        #endregion
+
+        static void Commander(int idClient)
+        {
+            Program.Titre();
+
+            if (idClient <= 0)
+            {
+                Console.WriteLine("ID client invalide.");
+                return;
+            }
+
+            // Demander l'ID du plat
+            Console.Write("Entrez l'ID du plat que vous souhaitez commander : ");
+            int idPlat;
+            while (!int.TryParse(Console.ReadLine(), out idPlat) || idPlat <= 0)
+            {
+                Console.Write("Veuillez entrer un ID de plat valide : ");
+            }
+
+            Database db = new Database();
+            int idCuisinier = -1;
+
+            try
+            {
+                db.OpenConnection();
+
+                // Récupérer l'ID du cuisinier correspondant au plat
+                string query = @"SELECT Id_Cuisinier FROM Plat WHERE Id_Plat = @IdPlat";
+                MySqlCommand cmd = new MySqlCommand(query, db.GetConnection());
+                cmd.Parameters.AddWithValue("@IdPlat", idPlat);
+
+                object result = cmd.ExecuteScalar();
+
+                if (result != null)
+                {
+                    idCuisinier = Convert.ToInt32(result);
+                }
+                else
+                {
+                    Console.WriteLine("Aucun cuisinier associé au plat spécifié.");
+                    return;
+                }
+
+                // Ajouter la commande
+                int idCommande = AjouterCommande(idClient, idCuisinier);
+
+                if (idCommande > 0)
+                {
+                    Console.WriteLine($"La commande avec l'ID {idCommande} a été créée avec succès !");
+                }
+                else
+                {
+                    Console.WriteLine("Échec de la création de la commande.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Erreur : " + ex.Message);
+            }
+            finally
+            {
+                db.CloseConnection();
+            }
+        }
+        #region Récup id
+        static public int RecupererId(int idCompte,string element)
+        {
+            Database db = new Database();
+            int idCuisinier = -1;
+
+            try
+            {
+                db.OpenConnection();
+                string query = "SELECT Id_Cuisinier FROM "+element+" WHERE Id_Compte = @IdCompte";
+                MySqlCommand cmd = new MySqlCommand(query, db.GetConnection());
+                cmd.Parameters.AddWithValue("@IdCompte", idCompte);
+
+                object result = cmd.ExecuteScalar();
+                if (result != null)
+                {
+                    idCuisinier = Convert.ToInt32(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Erreur : " + ex.Message);
+            }
+            finally
+            {
+                db.CloseConnection();
+            }
+
+            return idCuisinier;
+        }
+
+
+        #endregion
     }
 }
-

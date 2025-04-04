@@ -1,0 +1,119 @@
+-- Créer la base de données et les tables
+DROP DATABASE IF EXISTS livparis;
+CREATE DATABASE livparis;
+USE livparis;
+
+-- Création des tables
+
+CREATE TABLE IF NOT EXISTS Compte (
+   Id_Compte INT AUTO_INCREMENT,
+   Prenom VARCHAR(50),
+   Nom VARCHAR(50),
+   Rue VARCHAR(50),
+   Numero INT,
+   Code_postal INT,
+   Ville VARCHAR(50),
+   No_tel VARCHAR(20),
+   Email VARCHAR(50),
+   Station_de_Métro_la_plus_Proche VARCHAR(50),
+   Statut VARCHAR(50),   
+   Mot_Passe VARCHAR(50),
+   PRIMARY KEY(Id_Compte)
+);
+
+CREATE TABLE IF NOT EXISTS Client(
+   Id_Client INT AUTO_INCREMENT,
+   Nom_Entreprise VARCHAR(50),
+   Id_Compte INT NOT NULL,
+   PRIMARY KEY(Id_Client),
+   UNIQUE(Id_Compte),
+   FOREIGN KEY(Id_Compte) REFERENCES Compte(Id_Compte) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS Recette(
+   Id_Recette INT AUTO_INCREMENT,
+   Nom_Recette VARCHAR(50),
+   Instructions VARCHAR(50),
+   Temps_Préparation INT,
+   Temps_Cuisson INT,
+   Difficulte VARCHAR(50),
+   PRIMARY KEY(Id_Recette)
+);
+
+CREATE TABLE IF NOT EXISTS Ingredient(
+   Id_Ingredient INT AUTO_INCREMENT,
+   Volume INT,
+   Ingredient VARCHAR(50),
+   PRIMARY KEY(Id_Ingredient)
+);
+
+CREATE TABLE IF NOT EXISTS Cuisinier(
+   Id_Cuisinier INT AUTO_INCREMENT,
+   Zone_Livraison VARCHAR(50),
+   Id_Compte INT NOT NULL,
+   PRIMARY KEY(Id_Cuisinier),
+   UNIQUE(Id_Compte),
+   FOREIGN KEY(Id_Compte) REFERENCES Compte(Id_Compte) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS Plat(
+   Id_Plat INT AUTO_INCREMENT,
+   Type_Plat VARCHAR(50),
+   Date_Peremption DATE,
+   Date_Fabrication DATE,
+   Type_Regime VARCHAR(50),
+   Photo VARCHAR(50),
+   Description VARCHAR(50),
+   Nationalité VARCHAR(50),
+   Prix DECIMAL(15,2),
+   Nombre_Portion INT,
+   Ingrédients_Principaux VARCHAR(50),
+   Id_Recette INT,
+   Id_Cuisinier INT NOT NULL,
+   PRIMARY KEY(Id_Plat),
+   FOREIGN KEY(Id_Recette) REFERENCES Recette(Id_Recette) ON DELETE SET NULL,
+   FOREIGN KEY(Id_Cuisinier) REFERENCES Cuisinier(Id_Cuisinier) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS Avis(
+   Id_Avis INT AUTO_INCREMENT,
+   Note INT,
+   Date_Avis DATE,
+   Commentaire VARCHAR(50),
+   Id_Client INT NOT NULL,
+   Id_Cuisinier INT NOT NULL,
+   PRIMARY KEY(Id_Avis),
+   FOREIGN KEY(Id_Client) REFERENCES Client(Id_Client) ON DELETE CASCADE,
+   FOREIGN KEY(Id_Cuisinier) REFERENCES Cuisinier(Id_Cuisinier) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS Commande(
+   Id_Commande INT AUTO_INCREMENT,
+   Date_Commande DATE,
+   Statut_Commande VARCHAR(50),
+   Prix_Total DECIMAL(15,2),
+   Statut_Transaction VARCHAR(50),
+   Date_Paiement DATE,
+   Mode_Paiement VARCHAR(50),
+   Id_Client INT NOT NULL,
+   Id_Cuisinier INT NOT NULL,
+   PRIMARY KEY(Id_Commande),
+   FOREIGN KEY(Id_Client) REFERENCES Client(Id_Client) ON DELETE CASCADE,
+   FOREIGN KEY(Id_Cuisinier) REFERENCES Cuisinier(Id_Cuisinier) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS contient(
+   Id_Recette INT,
+   Id_Ingredient INT,
+   PRIMARY KEY(Id_Recette, Id_Ingredient),
+   FOREIGN KEY(Id_Recette) REFERENCES Recette(Id_Recette) ON DELETE CASCADE,
+   FOREIGN KEY(Id_Ingredient) REFERENCES Ingredient(Id_Ingredient) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS comprend(
+   Id_Commande INT,
+   Id_Plat INT,
+   PRIMARY KEY(Id_Commande, Id_Plat),
+   FOREIGN KEY(Id_Commande) REFERENCES Commande(Id_Commande) ON DELETE CASCADE,
+   FOREIGN KEY(Id_Plat) REFERENCES Plat(Id_Plat) ON DELETE CASCADE
+);

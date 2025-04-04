@@ -108,13 +108,17 @@
     Console.WriteLine("\nVoulez-vous exécuter un algorithme de plus court chemin ?");
     Console.WriteLine("1. Dijkstra");
     Console.WriteLine("2. Bellman-Ford");
-    Console.Write("Entrez 1 ou 2 : ");
+    Console.WriteLine("3. Floyd-Warshall");
+    Console.Write("Entrez 1, 2 ou 3 : ");
     string choixAlgo = Console.ReadLine();
 
     if (choixAlgo == "1")
         ExecuterDijkstra(graphe);
     else if (choixAlgo == "2")
         ExecuterBellmanFord(graphe);
+    else if (choixAlgo == "3")
+    ExecuterFloydWarshall(graphe);
+
     else
         Console.WriteLine("Choix invalide");
 
@@ -160,6 +164,31 @@
                 Console.WriteLine($"\nErreur : {ex.Message}");
             }
         }
+
+        static void ExecuterFloydWarshall(Graphe<int> graphe)
+{
+    var (distances, precedents) = graphe.FloydWarshall();
+
+    Console.WriteLine("Sommet de départ : ");
+    if (!int.TryParse(Console.ReadLine(), out int depart))
+    {
+        Console.WriteLine("❌ Entrée invalide.");
+        return;
+    }
+
+    if (!graphe.Noeuds.ContainsKey(depart))
+    {
+        Console.WriteLine("❌ Ce sommet n'existe pas.");
+        return;
+    }
+
+    Console.WriteLine($"\n📍 Distances minimales depuis le sommet {depart} (Floyd-Warshall) :");
+    foreach (var destination in graphe.Noeuds.Keys.OrderBy(k => k))
+    {
+        double distance = distances[depart][destination];
+        Console.WriteLine($"Vers {destination} : {(double.IsInfinity(distance) ? "∞" : distance.ToString())}");
+    }
+}
 
         static void Interface()
 {

@@ -235,5 +235,6 @@
         "Voir",
         "voisin",
         "voit"
-    ]
+    ],
+    "dotnet.preferCSharpExtension": true
 }

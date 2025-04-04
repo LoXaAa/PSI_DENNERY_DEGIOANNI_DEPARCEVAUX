@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.IO;
 using ClosedXML.Excel;
+using System.Diagnostics;
 
 namespace PSI_RENDU1
 {
@@ -297,8 +298,15 @@ namespace PSI_RENDU1
 
 
         #region Dijkstra
+        /// <summary>
+        /// FOnction qui calcul Dijkstra
+        /// </summary>
+        /// <param name="le temps le plus court entre les stations"></param>
+        /// <returns>le Dijkstra en partant d'un certains sommet</returns>
         public (Dictionary<T, double> distances, Dictionary<T, T?> precedent) Dijkstra(T source)
 {
+    var stopwatch = Stopwatch.StartNew();
+
     var distances = new Dictionary<T, double>();
     var precedent = new Dictionary<T, T?>();
     var priorityQueue = new SortedSet<(double distance, T noeud)>();
@@ -332,13 +340,24 @@ namespace PSI_RENDU1
         }
     }
 
+    stopwatch.Stop();
+    Console.WriteLine($"⏱️ Dijkstra exécuté en {stopwatch.ElapsedMilliseconds} ms");
+
     return (distances, precedent);
 }
         #endregion
 
         #region Bellman-Ford
+        /// <summary>
+        /// Fonction qui calcul Bellman-Ford
+        /// </summary>
+        /// <param name="Un graphe"></param>
+        /// <returns>le Bellman-Ford en partant du sommet choisi</returns>
+        /// <exception cref="InvalidOperationException"></exception>
         public (Dictionary<T, double> distances, Dictionary<T, T?> precedent) BellmanFord(T source)
 {
+    var stopwatch = Stopwatch.StartNew();
+
     var distances = new Dictionary<T, double>();
     var precedent = new Dictionary<T, T?>();
 
@@ -384,6 +403,72 @@ namespace PSI_RENDU1
             }
         }
     }
+
+    stopwatch.Stop();
+    Console.WriteLine($"⏱️ Bellman-Ford exécuté en {stopwatch.ElapsedMilliseconds} ms");
+
+    return (distances, precedent);
+}
+#endregion
+
+#region Floyd-FloydWarshall
+
+/// <summary>
+/// emploi l'algorithme de Floyd-Warshall pour calculer les distances entre tous les sommets du graphe
+/// et les chemins les plus courts entre eux.
+/// </summary>
+/// <returns>distance la plus courte entre tous les sommets</returns>
+public (Dictionary<T, Dictionary<T, double>> distances, Dictionary<T, Dictionary<T, T?>> precedent) FloydWarshall()
+{
+    var stopwatch = Stopwatch.StartNew();
+
+    var distances = new Dictionary<T, Dictionary<T, double>>();
+    var precedent = new Dictionary<T, Dictionary<T, T?>>();
+
+    var sommets = noeuds.Keys.ToList();
+
+    foreach (var i in sommets)
+    {
+        distances[i] = new Dictionary<T, double>();
+        precedent[i] = new Dictionary<T, T?>();
+
+        foreach (var j in sommets)
+        {
+            distances[i][j] = i.Equals(j) ? 0 : double.PositiveInfinity;
+            precedent[i][j] = default;
+        }
+    }
+
+    foreach (var noeud in noeuds.Values)
+    {
+        foreach (var lien in noeud.Liens)
+        {
+            T u = noeud.Id;
+            T v = lien.Destination.Id;
+            double poids = lien.Poids;
+
+            distances[u][v] = poids;
+            precedent[u][v] = u;
+        }
+    }
+
+    foreach (var k in sommets)
+    {
+        foreach (var i in sommets)
+        {
+            foreach (var j in sommets)
+            {
+                if (distances[i][k] + distances[k][j] < distances[i][j])
+                {
+                    distances[i][j] = distances[i][k] + distances[k][j];
+                    precedent[i][j] = precedent[k][j];
+                }
+            }
+        }
+    }
+
+    stopwatch.Stop();
+    Console.WriteLine($"⏱️ Floyd-Warshall exécuté en {stopwatch.ElapsedMilliseconds} ms");
 
     return (distances, precedent);
 }

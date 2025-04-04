@@ -335,129 +335,129 @@ namespace PSI_RENDU1
             }
         }
         static public void AjouterPlat(int idCuisinier)
-        {
-            Database db = new Database();
+{
+    Database db = new Database();
 
-            Console.WriteLine("Ajout d'un nouveau plat\n");
+    Console.WriteLine("Ajout d'un nouveau plat\n");
 
-            // Validation stricte des entrées utilisateur
-            Console.Write("Type de plat : ");
-            string typePlat;
-            while (string.IsNullOrWhiteSpace(typePlat = Console.ReadLine()))
-            {
-                Console.Write("Veuillez entrer un type de plat valide : ");
-            }
+    // Validation stricte des entrées utilisateur
+    Console.Write("Type de plat : ");
+    string typePlat;
+    while (string.IsNullOrWhiteSpace(typePlat = Console.ReadLine()))
+    {
+        Console.Write("Veuillez entrer un type de plat valide : ");
+    }
 
-            Console.Write("Date de fabrication (YYYY-MM-DD) : ");
-            string dateFabrication;
-            while (!DateTime.TryParse(Console.ReadLine(), out _))
-            {
-                Console.Write("Veuillez entrer une date de fabrication valide (YYYY-MM-DD) : ");
-            }
-            dateFabrication = Console.ReadLine();
+    Console.Write("Date de fabrication (YYYY-MM-DD) : ");
+    string dateFabrication;
+    while (!DateTime.TryParse(Console.ReadLine(), out _))
+    {
+        Console.Write("Veuillez entrer une date de fabrication valide (YYYY-MM-DD) : ");
+    }
+    dateFabrication = Console.ReadLine();
 
-            Console.Write("Date de péremption (YYYY-MM-DD) : ");
-            string datePeremption;
-            while (!DateTime.TryParse(Console.ReadLine(), out _))
-            {
-                Console.Write("Veuillez entrer une date de péremption valide (YYYY-MM-DD) : ");
-            }
-            datePeremption = Console.ReadLine();
+    Console.Write("Date de péremption (YYYY-MM-DD) : ");
+    string datePeremption;
+    while (!DateTime.TryParse(Console.ReadLine(), out _))
+    {
+        Console.Write("Veuillez entrer une date de péremption valide (YYYY-MM-DD) : ");
+    }
+    datePeremption = Console.ReadLine();
 
-            Console.Write("Type de régime (ex: Végétarien, Sans gluten) : ");
-            string typeRegime;
-            while (string.IsNullOrWhiteSpace(typeRegime = Console.ReadLine()))
-            {
-                Console.Write("Veuillez entrer un type de régime valide : ");
-            }
+    Console.Write("Type de régime (ex: Végétarien, Sans gluten) : ");
+    string typeRegime;
+    while (string.IsNullOrWhiteSpace(typeRegime = Console.ReadLine()))
+    {
+        Console.Write("Veuillez entrer un type de régime valide : ");
+    }
 
-            Console.Write("Photo (URL ou nom du fichier) : ");
-            string photo;
-            while (string.IsNullOrWhiteSpace(photo = Console.ReadLine()))
-            {
-                Console.Write("Veuillez entrer un nom de fichier ou une URL valide pour la photo : ");
-            }
+    Console.Write("Photo (URL ou nom du fichier) : ");
+    string photo;
+    while (string.IsNullOrWhiteSpace(photo = Console.ReadLine()))
+    {
+        Console.Write("Veuillez entrer un nom de fichier ou une URL valide pour la photo : ");
+    }
 
-            Console.Write("Description : ");
-            string description;
-            while (string.IsNullOrWhiteSpace(description = Console.ReadLine()))
-            {
-                Console.Write("Veuillez entrer une description valide : ");
-            }
+    Console.Write("Description : ");
+    string description;
+    while (string.IsNullOrWhiteSpace(description = Console.ReadLine()))
+    {
+        Console.Write("Veuillez entrer une description valide : ");
+    }
 
-            Console.Write("Nationalité : ");
-            string nationalite;
-            while (string.IsNullOrWhiteSpace(nationalite = Console.ReadLine()))
-            {
-                Console.Write("Veuillez entrer une nationalité valide : ");
-            }
+    Console.Write("Nationalité : ");
+    string nationalite;
+    while (string.IsNullOrWhiteSpace(nationalite = Console.ReadLine()))
+    {
+        Console.Write("Veuillez entrer une nationalité valide : ");
+    }
 
-            Console.Write("Prix (€) : ");
-            decimal prix;
-            while (!decimal.TryParse(Console.ReadLine(), out prix) || prix < 0)
-            {
-                Console.Write("Veuillez entrer un prix valide (€) : ");
-            }
+    Console.Write("Prix (€) : ");
+    decimal prix;
+    while (!decimal.TryParse(Console.ReadLine(), out prix) || prix < 0)
+    {
+        Console.Write("Veuillez entrer un prix valide (€) : ");
+    }
 
-            Console.Write("Nombre de portions : ");
-            int nombrePortion;
-            while (!int.TryParse(Console.ReadLine(), out nombrePortion) || nombrePortion <= 0)
-            {
-                Console.Write("Veuillez entrer un nombre de portions valide : ");
-            }
+    Console.Write("Nombre de portions : ");
+    int nombrePortion;
+    while (!int.TryParse(Console.ReadLine(), out nombrePortion) || nombrePortion <= 0)
+    {
+        Console.Write("Veuillez entrer un nombre de portions valide : ");
+    }
 
-            Console.Write("Ingrédients principaux : ");
-            string ingredientsPrincipaux;
-            while (string.IsNullOrWhiteSpace(ingredientsPrincipaux = Console.ReadLine()))
-            {
-                Console.Write("Veuillez entrer des ingrédients principaux valides : ");
-            }
+    Console.Write("Ingrédients principaux : ");
+    string ingredientsPrincipaux;
+    while (string.IsNullOrWhiteSpace(ingredientsPrincipaux = Console.ReadLine()))
+    {
+        Console.Write("Veuillez entrer des ingrédients principaux valides : ");
+    }
 
-            Console.Write("ID de la recette (si disponible, sinon 0) : ");
-            int idRecette;
-            while (!int.TryParse(Console.ReadLine(), out idRecette))
-            {
-                Console.Write("Veuillez entrer un ID de recette valide (ou 0 si aucune recette) : ");
-            }
+    Console.Write("ID de la recette (si disponible, sinon 0) : ");
+    int idRecette;
+    while (!int.TryParse(Console.ReadLine(), out idRecette))
+    {
+        Console.Write("Veuillez entrer un ID de recette valide (ou 0 si aucune recette) : ");
+    }
 
-            try
-            {
-                db.OpenConnection();
-                string query = @"INSERT INTO Plat 
-            (Type_Plat, Date_Fabrication, Date_Peremption, Type_Regime, Photo, Description, Nationalité, Prix, Nombre_Portion, Ingrédients_Principaux, Id_Recette, Id_Cuisinier) 
-            VALUES 
-            (@TypePlat, @DateFabrication, @DatePeremption, @TypeRegime, @Photo, @Description, @Nationalite, @Prix, @NombrePortion, @IngredientsPrincipaux, @IdRecette, @IdCuisinier)";
+    try
+    {
+        db.OpenConnection();
+        string query = @"INSERT INTO Plat 
+    (Type_Plat, Date_Fabrication, Date_Peremption, Type_Regime, Photo, Description, Nationalité, Prix, Nombre_Portion, Ingrédients_Principaux, Id_Recette, Id_Cuisinier) 
+    VALUES 
+    (@TypePlat, @DateFabrication, @DatePeremption, @TypeRegime, @Photo, @Description, @Nationalite, @Prix, @NombrePortion, @IngredientsPrincipaux, @IdRecette, @IdCuisinier)";
 
-                MySqlCommand cmd = new MySqlCommand(query, db.GetConnection());
-                cmd.Parameters.AddWithValue("@TypePlat", typePlat);
-                cmd.Parameters.AddWithValue("@DateFabrication", dateFabrication);
-                cmd.Parameters.AddWithValue("@DatePeremption", datePeremption);
-                cmd.Parameters.AddWithValue("@TypeRegime", typeRegime);
-                cmd.Parameters.AddWithValue("@Photo", photo);
-                cmd.Parameters.AddWithValue("@Description", description);
-                cmd.Parameters.AddWithValue("@Nationalite", nationalite);
-                cmd.Parameters.AddWithValue("@Prix", prix);
-                cmd.Parameters.AddWithValue("@NombrePortion", nombrePortion);
-                cmd.Parameters.AddWithValue("@IngredientsPrincipaux", ingredientsPrincipaux);
-                cmd.Parameters.AddWithValue("@IdRecette", idRecette == 0 ? (object)DBNull.Value : idRecette);
-                cmd.Parameters.AddWithValue("@IdCuisinier", idCuisinier);
+        MySqlCommand cmd = new MySqlCommand(query, db.GetConnection());
+        cmd.Parameters.AddWithValue("@TypePlat", typePlat);
+        cmd.Parameters.AddWithValue("@DateFabrication", dateFabrication);
+        cmd.Parameters.AddWithValue("@DatePeremption", datePeremption);
+        cmd.Parameters.AddWithValue("@TypeRegime", typeRegime);
+        cmd.Parameters.AddWithValue("@Photo", photo);
+        cmd.Parameters.AddWithValue("@Description", description);
+        cmd.Parameters.AddWithValue("@Nationalite", nationalite);
+        cmd.Parameters.AddWithValue("@Prix", prix);
+        cmd.Parameters.AddWithValue("@NombrePortion", nombrePortion);
+        cmd.Parameters.AddWithValue("@IngredientsPrincipaux", ingredientsPrincipaux);
+        cmd.Parameters.AddWithValue("@IdRecette", idRecette == 0 ? (object)DBNull.Value : idRecette);
+        cmd.Parameters.AddWithValue("@IdCuisinier", idCuisinier);
 
-                int rowsAffected = cmd.ExecuteNonQuery();
-                Console.WriteLine(rowsAffected > 0 ? "Plat ajouté avec succès !" : "Échec de l'ajout du plat.");
-            }
-            catch (MySqlException sqlEx)
-            {
-                Console.WriteLine("Erreur SQL : " + sqlEx.Message);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Erreur inattendue : " + ex.Message);
-            }
-            finally
-            {
-                db.CloseConnection();
-            }
-        }// problème d'implémentation
+        int rowsAffected = cmd.ExecuteNonQuery();
+        Console.WriteLine(rowsAffected > 0 ? "Plat ajouté avec succès !" : "Échec de l'ajout du plat.");
+    }
+    catch (MySqlException sqlEx)
+    {
+        Console.WriteLine("Erreur SQL : " + sqlEx.Message);
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine("Erreur inattendue : " + ex.Message);
+    }
+    finally
+    {
+        db.CloseConnection();
+    }
+}// problème d'implémentation
 
         static public int AjouterCommande(int idClient, int idCuisinier)
         {

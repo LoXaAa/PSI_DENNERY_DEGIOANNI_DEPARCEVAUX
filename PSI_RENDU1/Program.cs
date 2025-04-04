@@ -188,6 +188,7 @@
         double distance = distances[depart][destination];
         Console.WriteLine($"Vers {destination} : {(double.IsInfinity(distance) ? "∞" : distance.ToString())}");
     }
+    // Interface();
 }
 
         static void Interface()

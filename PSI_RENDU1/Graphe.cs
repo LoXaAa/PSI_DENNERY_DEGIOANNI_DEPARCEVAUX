@@ -25,6 +25,7 @@ namespace PSI_RENDU1
         }
         public Dictionary<T, Noeud<T>> Noeuds => noeuds;
         public List<Lien<T>> Liens => liens;
+        public bool EstOriente { get; set; } = true;
 
         public void AjouterNoeud(T id, string nom = "", double longitude = 0, double latitude = 0)
         {

@@ -40,39 +40,40 @@ public static class LecteurExcel
     return resultats;
 }
 
-    public static List<(int source, int destination, double poids, bool sensUnique)> LireArcs(string cheminFichier)
+    public static List<(int, int, double, bool)> LireArcs(string cheminFichier)
+{
+    var arcs = new List<(int, int, double, bool)>();
+    using var classeur = new XLWorkbook(cheminFichier);
+    var feuille = classeur.Worksheet("Arcs");
+
+    foreach (var ligne in feuille.RowsUsed().Skip(1))
     {
-        var resultats = new List<(int, int, double, bool)>();
-
-        using (var workbook = new XLWorkbook(cheminFichier))
+        try
         {
-            var feuille = workbook.Worksheet("Arcs");
+            string sourceStr = ligne.Cell(1).GetString().Trim();
+            string destStr = ligne.Cell(4).GetString().Trim();
+            string poidsStr = ligne.Cell(5).GetString().Trim();
+            string sensStr = ligne.Cell(7).GetString().Trim().ToLower();
 
-            foreach (var ligne in feuille.RowsUsed().Skip(1))
-            {
-                try
-                {
-                    string sourceStr = ligne.Cell(1).GetString().Trim();  // colonne A
-                    string destStr = ligne.Cell(4).GetString().Trim();    // colonne D
-                    string poidsStr = ligne.Cell(5).GetString().Trim();   // colonne E
-                    string sensStr = ligne.Cell(7).GetString().Trim().ToLower(); // colonne G
+            if (string.IsNullOrEmpty(sourceStr) || string.IsNullOrEmpty(destStr) || string.IsNullOrEmpty(poidsStr))
+                continue;
 
-                    if (!int.TryParse(sourceStr, out int source)) continue;
-                    if (!int.TryParse(destStr, out int destination)) continue;
-                    if (!double.TryParse(poidsStr, NumberStyles.Float, CultureInfo.InvariantCulture, out double poids)) poids = 1;
+            int source = int.Parse(sourceStr);
+            int destination = int.Parse(destStr);
+            double poids = double.Parse(poidsStr, CultureInfo.InvariantCulture);
+            bool sensUnique = sensStr == "oui";
 
-                    bool sensUnique = sensStr == "oui";
-                    resultats.Add((source, destination, poids, sensUnique));
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"⚠️ Erreur de lecture arc : {ex.Message}");
-                }
-            }
+            arcs.Add((source, destination, poids, sensUnique));
         }
-
-        return resultats;
+        catch (Exception ex)
+        {
+            Console.WriteLine($"⚠️ Erreur de lecture arc : {ex.Message}");
+        }
     }
+
+    return arcs;
+}
+
 
     public static List<(int, int)> TrouverCorrespondances(List<(int id, string nom, double, double)> noeuds)
 {

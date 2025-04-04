@@ -1090,35 +1090,35 @@ namespace PSI_RENDU1
             }
         }
         #region Récup id
-        static public int RecupererId(int idCompte,string element)
+        static public int RecupererId(int idCompte, string element)
+{
+    Database db = new Database();
+    int idCuisinier = -1;
+
+    try
+    {
+        db.OpenConnection();
+        string query = "SELECT Id_"+element+" FROM " + element + " WHERE Id_Compte = @IdCompte";
+        MySqlCommand cmd = new MySqlCommand(query, db.GetConnection());
+        cmd.Parameters.AddWithValue("@IdCompte", idCompte);
+
+        object result = cmd.ExecuteScalar();
+        if (result != null)
         {
-            Database db = new Database();
-            int idCuisinier = -1;
-
-            try
-            {
-                db.OpenConnection();
-                string query = "SELECT Id_Cuisinier FROM "+element+" WHERE Id_Compte = @IdCompte";
-                MySqlCommand cmd = new MySqlCommand(query, db.GetConnection());
-                cmd.Parameters.AddWithValue("@IdCompte", idCompte);
-
-                object result = cmd.ExecuteScalar();
-                if (result != null)
-                {
-                    idCuisinier = Convert.ToInt32(result);
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Erreur : " + ex.Message);
-            }
-            finally
-            {
-                db.CloseConnection();
-            }
-
-            return idCuisinier;
+            idCuisinier = Convert.ToInt32(result);
         }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine("Erreur : " + ex.Message);
+    }
+    finally
+    {
+        db.CloseConnection();
+    }
+
+    return idCuisinier;
+}
 
 
         #endregion

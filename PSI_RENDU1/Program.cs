@@ -261,178 +261,178 @@ static void ChoixCuisinier(int idCompte)
         Console.WriteLine("6: Profil");// voir ses informations, peut les changer, voit cb il s'est fait, combien de plat il a préparé
         Console.WriteLine("7: Quitter");
         int option = SaisieOption();
-        switch (option)
+       switch (option)
+{
+    case 1:
+        bool continuer1 = true;
+        while (continuer1)
         {
-            case 1:
-                bool continuer1 = true;
-                while (continuer1)
-                {
-                    Titre();
-                    Console.WriteLine("Vous avez choisi de gérer vos recettes\n");
-                    Console.WriteLine("1: Ajouter une recette");
-                    Console.WriteLine("2: Supprimer une recette");
-                    Console.WriteLine("3: Modifier une recette");
-                    Console.WriteLine("4: Voir ses recettes");
-                    Console.WriteLine("5: Quitter");
-                    int option1 = SaisieOption();
+            Titre();
+            Console.WriteLine("Vous avez choisi de gérer vos recettes\n");
+            Console.WriteLine("1: Ajouter une recette");
+            Console.WriteLine("2: Supprimer une recette");
+            Console.WriteLine("3: Modifier une recette");
+            Console.WriteLine("4: Voir ses recettes");
+            Console.WriteLine("5: Quitter");
+            int option1 = SaisieOption();
 
-                    switch (option1)
-                    {
-                        case 1:
-                            Console.WriteLine("Vous avez choisi d'ajouter une recette");
-                            Database.AjouterRecette();
-                            break;
-                        case 2:
-                            Console.WriteLine("Vous avez choisi de supprimer une recette");
-                            Database.Supprimer("Recette");
-                            break;
-                        case 3:
-                            Console.WriteLine("Vous avez choisi de modifier une recette");
-                            //Database.ModifierRecette(idCompte);
-                            break;
-                        case 4:
-                            Console.WriteLine("Vous avez choisi de voir vos recettes");
-                            Database.Montrer("Recette");
-                            break;
-                        case 5:
-                            Console.WriteLine("Vous avez choisi de quitter");
-                            continuer1 = false;
-                            break;
-                        default:
-                            Console.WriteLine("Option invalide");
-                            break;
-                    }
-                }
-                break;
-            case 2:
-                bool continuer2 = true;
-                while (continuer2)
-                {
-                    Titre();
-                    Console.WriteLine("Vous avez choisi de gérer vos plats\n");
-                    Console.WriteLine("1: Ajouter un plat");
-                    Console.WriteLine("2: Supprimer un plat");
-                    Console.WriteLine("3: Modifier un plat");
-                    Console.WriteLine("4: Voir ses plats");
-                    Console.WriteLine("5: Quitter");
-                    int option2 = SaisieOption();
-                    switch (option2)
-                    {
-                        case 1:
-                            Console.WriteLine("Vous avez choisi d'ajouter un plat");
-                            Database.AjouterPlat(idCompte);
-                            break;
-                        case 2:
-                            Console.WriteLine("Vous avez choisi de supprimer un plat");
-                            Database.Supprimer("Plat");
-                            break;
-                        case 3:
-                            Console.WriteLine("Vous avez choisi de modifier un plat");
-                            //Database.ModifierPlat(idCompte);
-                            break;
-                        case 4:
-                            Console.WriteLine("Vous avez choisi de voir vos plats");
-                            Database.Montrer("Plat",idCuisinier);
-                            break;
-                        case 5:
-                            Console.WriteLine("Vous avez choisi de quitter");
-                            continuer2 = false;
-                            break;
-                        default:
-                            Console.WriteLine("Option invalide");
-                            break;
-                    }
-                }
-                break;
-            case 3:
-                bool continuer3 = true;
-                while (continuer3)
-                {
-                    Titre();
-                    Console.WriteLine("Vous avez choisi de gérer vos ingrédients\n");
-                    Console.WriteLine("1: Ajouter un ingrédient");
-                    Console.WriteLine("2: Supprimer un ingrédient");
-                    Console.WriteLine("3: Modifier un ingrédient");
-                    Console.WriteLine("4: Voir ses ingrédients");
-                    Console.WriteLine("5: Quitter");
-                    int option3 = SaisieOption();
-                    switch (option3)
-                    {
-                        case 1:
-                            Console.WriteLine("Vous avez choisi d'ajouter un ingrédient");
-                            Database.AjouterIngredient();
-                            break;
-                        case 2:
-                            Console.WriteLine("Vous avez choisi de supprimer un ingrédient");
-                            Database.Supprimer("Ingredient");
-                            break;
-                        case 3:
-                            Console.WriteLine("Vous avez choisi de modifier un ingrédient");
-                            //Database.ModifierIngredient(idCompte);
-                            break;
-                        case 4:
-                            Console.WriteLine("Vous avez choisi de voir vos ingrédients");
-                            Database.Montrer("Ingredient");
-                            break;
-                        case 5:
-                            Console.WriteLine("Vous avez choisi de quitter");
-                            continuer3 = false;
-                            break;
-                    }
-
-                }
-                break;
-            case 4:
-                bool continuer4 = true;
-                while (continuer4)
-                {
-                    Titre();
-                    Console.WriteLine("Vous avez choisi de gérer vos commandes\n");
-                    Console.WriteLine("2: Supprimer une commande");
-                    Console.WriteLine("3: Modifier une commande");
-                    Console.WriteLine("4: Voir ses commandes");
-                    Console.WriteLine("5: Quitter");
-                    int option4 = SaisieOption();
-                    switch (option4)
-                    {
-                        case 2:
-                            Console.WriteLine("Vous avez choisi de supprimer une commande");
-                            Database.Supprimer("Commande");
-                            break;
-                        case 3:
-                            Console.WriteLine("Vous avez choisi de modifier une commande");
-                            //Database.ModifierCommande(idCompte);
-                            break;
-                        case 4:
-                            Console.WriteLine("Vous avez choisi de voir vos commandes");
-                            Database.Montrer("Commande",idCuisinier);
-                            break;
-                        case 5:
-                            Console.WriteLine("Vous avez choisi de quitter");
-                            continuer4 = false;
-                            break;
-                        default:
-                            Console.WriteLine("Option invalide");
-                            break;
-                    }
-                }
-                break;// à changer
-            case 5:
-                Console.WriteLine("Vous avez choisi de voir vos avis");
-                Database.Montrer("Avis",idCuisinier); //voir si ne pas faire une fonction pour montter les avis
-                break;
-            case 6:
-                Console.WriteLine("Vous avez choisi de voir votre profil");
-                Database.MontrerProfilCuisinier(idCuisinier); 
-                break;
-            case 7:
-                Console.WriteLine("Vous avez choisi de quitter");
-                continuer = false;
-                break;
-            default:
-                Console.WriteLine("Option invalide");
-                break;
+            switch (option1)
+            {
+                case 1:
+                    Console.WriteLine("Vous avez choisi d'ajouter une recette");
+                    Database.AjouterRecette();
+                    break;
+                case 2:
+                    Console.WriteLine("Vous avez choisi de supprimer une recette");
+                    Database.Supprimer("Recette");
+                    break;
+                case 3:
+                    Console.WriteLine("Vous avez choisi de modifier une recette");
+                    Database.ModifierRecette();
+                    break;
+                case 4:
+                    Console.WriteLine("Vous avez choisi de voir vos recettes");
+                    Database.Montrer("Recette");
+                    break;
+                case 5:
+                    Console.WriteLine("Vous avez choisi de quitter");
+                    continuer1 = false;
+                    break;
+                default:
+                    Console.WriteLine("Option invalide");
+                    break;
+            }
         }
+        break;
+    case 2:
+        bool continuer2 = true;
+        while (continuer2)
+        {
+            Titre();
+            Console.WriteLine("Vous avez choisi de gérer vos plats\n");
+            Console.WriteLine("1: Ajouter un plat");
+            Console.WriteLine("2: Supprimer un plat");
+            Console.WriteLine("3: Modifier un plat");
+            Console.WriteLine("4: Voir ses plats");
+            Console.WriteLine("5: Quitter");
+            int option2 = SaisieOption();
+            switch (option2)
+            {
+                case 1:
+                    Console.WriteLine("Vous avez choisi d'ajouter un plat");
+                    Database.AjouterPlat(idCompte);
+                    break;
+                case 2:
+                    Console.WriteLine("Vous avez choisi de supprimer un plat");
+                    Database.Supprimer("Plat");
+                    break;
+                case 3:
+                    Console.WriteLine("Vous avez choisi de modifier un plat");
+                    Database.ModifierPlat(idCompte);
+                    break;
+                case 4:
+                    Console.WriteLine("Vous avez choisi de voir vos plats");
+                    Database.Montrer("Plat",idCuisinier);
+                    break;
+                case 5:
+                    Console.WriteLine("Vous avez choisi de quitter");
+                    continuer2 = false;
+                    break;
+                default:
+                    Console.WriteLine("Option invalide");
+                    break;
+            }
+        }
+        break;
+    case 3:
+        bool continuer3 = true;
+        while (continuer3)
+        {
+            Titre();
+            Console.WriteLine("Vous avez choisi de gérer vos ingrédients\n");
+            Console.WriteLine("1: Ajouter un ingrédient");
+            Console.WriteLine("2: Supprimer un ingrédient");
+            Console.WriteLine("3: Modifier un ingrédient");
+            Console.WriteLine("4: Voir ses ingrédients");
+            Console.WriteLine("5: Quitter");
+            int option3 = SaisieOption();
+            switch (option3)
+            {
+                case 1:
+                    Console.WriteLine("Vous avez choisi d'ajouter un ingrédient");
+                    Database.AjouterIngredient();
+                    break;
+                case 2:
+                    Console.WriteLine("Vous avez choisi de supprimer un ingrédient");
+                    Database.Supprimer("Ingredient");
+                    break;
+                case 3:
+                    Console.WriteLine("Vous avez choisi de modifier un ingrédient");
+                    Database.ModifierIngredient();
+                    break;
+                case 4:
+                    Console.WriteLine("Vous avez choisi de voir vos ingrédients");
+                    Database.Montrer("Ingredient");
+                    break;
+                case 5:
+                    Console.WriteLine("Vous avez choisi de quitter");
+                    continuer3 = false;
+                    break;
+            }
+
+        }
+        break;
+    case 4:
+        bool continuer4 = true;
+        while (continuer4)
+        {
+            Titre();
+            Console.WriteLine("Vous avez choisi de gérer vos commandes\n");
+            Console.WriteLine("2: Supprimer une commande");
+            Console.WriteLine("3: Modifier une commande");
+            Console.WriteLine("4: Voir ses commandes");
+            Console.WriteLine("5: Quitter");
+            int option4 = SaisieOption();
+            switch (option4)
+            {
+                case 2:
+                    Console.WriteLine("Vous avez choisi de supprimer une commande");
+                    Database.Supprimer("Commande");
+                    break;
+                case 3:
+                    Console.WriteLine("Vous avez choisi de modifier une commande");
+                    Database.ModifierCommande(idCompte);
+                    break;
+                case 4:
+                    Console.WriteLine("Vous avez choisi de voir vos commandes");
+                    Database.Montrer("Commande",idCuisinier);
+                    break;
+                case 5:
+                    Console.WriteLine("Vous avez choisi de quitter");
+                    continuer4 = false;
+                    break;
+                default:
+                    Console.WriteLine("Option invalide");
+                    break;
+            }
+        }
+        break;// à changer
+    case 5:
+        Console.WriteLine("Vous avez choisi de voir vos avis");
+        Database.Montrer("Avis",idCuisinier); //voir si ne pas faire une fonction pour montter les avis
+        break;
+    case 6:
+        Console.WriteLine("Vous avez choisi de voir votre profil");
+        Database.MontrerProfilCuisinier(idCuisinier); 
+        break;
+    case 7:
+        Console.WriteLine("Vous avez choisi de quitter");
+        continuer = false;
+        break;
+    default:
+        Console.WriteLine("Option invalide");
+        break;
+}
     }
 }
 static void ChoixClient(int idCompte)

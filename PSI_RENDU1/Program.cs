@@ -458,7 +458,7 @@ static void ChoixClient(int idCompte)
         {
             case 1:
                 Console.WriteLine("Vous avez choisi de commander");
-                //Database.AjouterCommande(idCompte);
+                Database.Commander(idClient);
                 break;
             case 2:
                 Console.WriteLine("Vous avez choisi de voir vos commandes");

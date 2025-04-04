@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.IO;
+using ClosedXML.Excel;
 
 namespace PSI_RENDU1
 {
@@ -15,7 +16,7 @@ namespace PSI_RENDU1
         private Dictionary<T, Noeud<T>> noeuds;
         private List<Lien<T>> liens;
 
-        
+
 
         public Graphe()
         {
@@ -33,20 +34,27 @@ namespace PSI_RENDU1
 
 
         public void AjouterLien(T idSource, T idDestination, double poids)
-        {
-            if (!noeuds.ContainsKey(idSource))
-                noeuds[idSource] = new Noeud<T>(idSource);
+{
+    if (!noeuds.ContainsKey(idSource) || !noeuds.ContainsKey(idDestination))
+    {
+        Console.WriteLine($"⚠️ Lien ignoré : {idSource} → {idDestination} (station manquante)");
+        return;
+    }
 
-            if (!noeuds.ContainsKey(idDestination))
-                noeuds[idDestination] = new Noeud<T>(idDestination);
+    var source = noeuds[idSource];
+    var destination = noeuds[idDestination];
 
-            var lien = new Lien<T>(noeuds[idSource], noeuds[idDestination], poids);
-            noeuds[idSource].Liens.Add(lien);
-            noeuds[idDestination].Liens.Add(lien);
-            liens.Add(lien);
-        }
+    // Vérifier si le lien existe déjà pour éviter les doublons
+    if (source.Liens.Any(l => l.Destination.Id.Equals(destination.Id)))
+        return;
 
-        
+    var lien = new Lien<T>(source, destination, poids);
+    source.Liens.Add(lien);
+    liens.Add(lien);
+}
+
+
+
 
         public void AfficherGraphe()
         {
@@ -60,58 +68,7 @@ namespace PSI_RENDU1
                 Console.WriteLine();
             }
         }
-    
 
-        #region Chargement Fichier
-        /// <summary>
-        /// Lecture du fichier
-        /// </summary>
-        /// <param name="cheminFichier">Chemin relatif du fichier cible</param>
-        public void ChargerDepuisCSV(string cheminFichier)
-        {
-            Console.WriteLine($"Lecture du fichier CSV : {cheminFichier}");
-
-            if (!File.Exists(cheminFichier))
-            {
-                Console.WriteLine("Erreur : Fichier introuvable !");
-                return;
-            }
-
-            using (var reader = new StreamReader(cheminFichier))
-            {
-                string ligne;
-                bool premiereLigne = true;
-
-                while ((ligne = reader.ReadLine()) != null)
-                {
-                    if (premiereLigne)
-                    {
-                        premiereLigne = false;
-                        continue;
-                    }
-
-                    string[] champs = ligne.Split(';');
-
-                    if (champs.Length < 8) continue;
-
-                        T idStation = (T)Convert.ChangeType(champs[0], typeof(T));
-                        string nomStation = champs[2];
-                        double longitude = double.Parse(champs[3], CultureInfo.InvariantCulture);
-                        double latitude = double.Parse(champs[4], CultureInfo.InvariantCulture);
-                        int tempsTrajet = string.IsNullOrWhiteSpace(champs[7]) ? 0 : int.Parse(champs[7]);
-
-                    if (!noeuds.ContainsKey(idStation))
-                        noeuds[idStation] = new Noeud<T>(idStation, nomStation, longitude, latitude);
-
-                    if (tempsTrajet > 0 && !EqualityComparer<T>.Default.Equals(idStation, default(T)))
-                    {
-                        T idStationPrecedente = (T)Convert.ChangeType((Convert.ToInt32(idStation) - 1), typeof(T));
-                        AjouterLien(idStationPrecedente, idStation, tempsTrajet);
-                    }
-                }
-            }
-        }
-        #endregion
         #region Génération d'un graphe aléatoire
         /// <summary>
         /// Génération aléatoire d'un graphe
@@ -120,38 +77,36 @@ namespace PSI_RENDU1
         /// <param name="nombreLiens">Nombre de liens souhaités</param>
         /// <param name="estPondere">graphe pondéré ou non (non par defaut)</param>
         public void GenererGrapheAleatoire(int nombreSommets, int nombreLiens, bool estPondere = false)
+{
+    noeuds.Clear();
+    liens.Clear();
+
+    for (int i = 0; i < nombreSommets; i++)
+    {
+        T id = (T)Convert.ChangeType(i, typeof(T));
+        AjouterNoeud(id);
+    }
+
+    var liensAjoutes = new HashSet<(T, T)>();
+    var random = new Random();
+
+    while (liens.Count < nombreLiens)
+    {
+        int src = random.Next(nombreSommets);
+        int dst = random.Next(nombreSommets);
+        if (src == dst) continue;
+
+        T source = (T)Convert.ChangeType(src, typeof(T));
+        T destination = (T)Convert.ChangeType(dst, typeof(T));
+
+        if (!liensAjoutes.Contains((source, destination)) && !liensAjoutes.Contains((destination, source)))
         {
-            noeuds.Clear();
-            liens.Clear();
-
-            for (int i = 0; i < nombreSommets; i++)
-            {
-                T id = (T)Convert.ChangeType(i, typeof(T));
-                noeuds[id] = new Noeud<T>(id);
-            }
-
-            HashSet<(T, T)> liensAjoutes = new HashSet<(T, T)>();
-            Random random = new Random();
-
-            while (liensAjoutes.Count < nombreLiens)
-            {
-                int src = random.Next(nombreSommets);
-                int dst = random.Next(nombreSommets);
-
-                if (src != dst)
-                {
-                    T source = (T)Convert.ChangeType(src, typeof(T));
-                    T destination = (T)Convert.ChangeType(dst, typeof(T));
-
-                    if (!liensAjoutes.Contains((source, destination)) && !liensAjoutes.Contains((destination, source)))
-                    {
-                        double poids = estPondere ? random.NextDouble() * 10 : 1.0;
-                        AjouterLien(source, destination, poids);
-                        liensAjoutes.Add((source, destination));
-                    }
-                }
-            }
+            double poids = estPondere ? random.NextDouble() * 10 : 1;
+            AjouterLien(source, destination, poids);
+            liensAjoutes.Add((source, destination));
         }
+    }
+}
         #endregion
         #region Construction Matrice Adjacence
         /// <summary>

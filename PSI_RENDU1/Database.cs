@@ -1026,69 +1026,351 @@ namespace PSI_RENDU1
 
         #endregion
 
-        static void Commander(int idClient)
+       #region fonction de modification
+public static void ModifierClient(int idCompte)
+{
+    try
+    {
+        OpenConnection(); // Ouvrir la connexion
+
+        Console.WriteLine("Entrez le nouveau nom :");
+        string nom = Console.ReadLine();
+        Console.WriteLine("Entrez le nouveau prénom :");
+        string prenom = Console.ReadLine();
+        Console.WriteLine("Entrez le nouvel email :");
+        string email = Console.ReadLine();
+
+        string query = "UPDATE clients SET nom = @nom, prenom = @prenom, email = @email WHERE id = @idCompte;";
+        using (MySqlCommand command = new MySqlCommand(query, connection))
         {
-            Program.Titre();
+            command.Parameters.AddWithValue("@idCompte", idCompte);
+            command.Parameters.AddWithValue("@nom", nom);
+            command.Parameters.AddWithValue("@prenom", prenom);
+            command.Parameters.AddWithValue("@email", email);
 
-            if (idClient <= 0)
-            {
-                Console.WriteLine("ID client invalide.");
-                return;
-            }
-
-            // Demander l'ID du plat
-            Console.Write("Entrez l'ID du plat que vous souhaitez commander : ");
-            int idPlat;
-            while (!int.TryParse(Console.ReadLine(), out idPlat) || idPlat <= 0)
-            {
-                Console.Write("Veuillez entrer un ID de plat valide : ");
-            }
-
-            Database db = new Database();
-            int idCuisinier = -1;
-
-            try
-            {
-                db.OpenConnection();
-
-                // Récupérer l'ID du cuisinier correspondant au plat
-                string query = @"SELECT Id_Cuisinier FROM Plat WHERE Id_Plat = @IdPlat";
-                MySqlCommand cmd = new MySqlCommand(query, db.GetConnection());
-                cmd.Parameters.AddWithValue("@IdPlat", idPlat);
-
-                object result = cmd.ExecuteScalar();
-
-                if (result != null)
-                {
-                    idCuisinier = Convert.ToInt32(result);
-                }
-                else
-                {
-                    Console.WriteLine("Aucun cuisinier associé au plat spécifié.");
-                    return;
-                }
-
-                // Ajouter la commande
-                int idCommande = AjouterCommande(idClient, idCuisinier);
-
-                if (idCommande > 0)
-                {
-                    Console.WriteLine($"La commande avec l'ID {idCommande} a été créée avec succès !");
-                }
-                else
-                {
-                    Console.WriteLine("Échec de la création de la commande.");
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Erreur : " + ex.Message);
-            }
-            finally
-            {
-                db.CloseConnection();
-            }
+            int rowsAffected = command.ExecuteNonQuery();
+            Console.WriteLine($"{rowsAffected} ligne(s) modifiée(s).");
         }
+    }
+    catch (MySqlException ex)
+    {
+        Console.WriteLine("Erreur lors de la modification : "+ex.Message);
+    }
+    finally
+    {
+        CloseConnection();
+    }
+}
+public static void ModifierCuisinier(int idCuisinier)
+{
+    try
+    {
+        OpenConnection(); // Ouvrir la connexion
+
+        Console.WriteLine("Entrez le nouveau nom :");
+        string nom = Console.ReadLine();
+        Console.WriteLine("Entrez la nouvelle spécialité :");
+        string specialite = Console.ReadLine();
+
+        string query = "UPDATE cuisiniers SET nom = @nom, specialite = @specialite WHERE id = @idCuisinier;";
+        using (MySqlCommand command = new MySqlCommand(query, connection))
+        {
+            command.Parameters.AddWithValue("@idCuisinier", idCuisinier);
+            command.Parameters.AddWithValue("@nom", nom);
+            command.Parameters.AddWithValue("@specialite", specialite);
+
+            int rowsAffected = command.ExecuteNonQuery();
+            Console.WriteLine($"{rowsAffected} ligne(s) modifiée(s).");
+        }
+    }
+    catch (MySqlException ex)
+    {
+        Console.WriteLine("Erreur lors de la modification :" +ex.Message);
+    }
+    finally
+    {
+        CloseConnection();
+    }
+}
+public static void ModifierCommande(int idCompte)
+{
+    MySqlConnection connection = null;
+
+    try
+    {
+        // Configurer et ouvrir la connexion
+        string connectionString = "Server=localhost;Database=livparis;User ID=root;Password=root;SslMode=none;AllowPublicKeyRetrieval=True;";
+        connection = new MySqlConnection(connectionString);
+        connection.Open();
+
+        Console.WriteLine("Entrez l'ID de la commande à modifier :");
+        int idCommande = int.Parse(Console.ReadLine());
+
+        Console.WriteLine("Entrez le nouveau statut de la commande :");
+        string statut = Console.ReadLine();
+        Console.WriteLine("Entrez la nouvelle date de livraison (yyyy-MM-dd) :");
+        DateTime dateLivraison = DateTime.Parse(Console.ReadLine());
+
+        string query = "UPDATE commandes SET statut = @statut, date_livraison = @dateLivraison WHERE id = @idCommande AND id_compte = @idCompte;";
+        using (MySqlCommand command = new MySqlCommand(query, connection))
+        {
+            // Ajouter les paramètres
+            command.Parameters.AddWithValue("@idCompte", idCompte);
+            command.Parameters.AddWithValue("@idCommande", idCommande);
+            command.Parameters.AddWithValue("@statut", statut);
+            command.Parameters.AddWithValue("@dateLivraison", dateLivraison);
+
+            int rowsAffected = command.ExecuteNonQuery();
+            Console.WriteLine($"{rowsAffected} ligne(s) modifiée(s).");
+        }
+    }
+    catch (MySqlException ex)
+    {
+        Console.WriteLine("Erreur lors de la modification : "+ex.Message);
+    }
+    catch (FormatException)
+    {
+        Console.WriteLine("Erreur : Format invalide. Veuillez entrer des valeurs correctes.");
+    }
+    finally
+    {
+        // Fermer la connexion
+        if (connection != null && connection.State == System.Data.ConnectionState.Open)
+        {
+            connection.Close();
+        }
+    }
+}
+
+public static void ModifierCompte(int idCompte)
+{
+    try
+    {
+        OpenConnection(); // Ouvrir la connexion
+
+        Console.WriteLine("Entrez le nouveau nom d'utilisateur :");
+        string nomUtilisateur = Console.ReadLine();
+        Console.WriteLine("Entrez le nouveau mot de passe :");
+        string motDePasse = Console.ReadLine();
+
+        string query = "UPDATE comptes SET nom_utilisateur = @nomUtilisateur, mot_de_passe = @motDePasse WHERE id = @idCompte;";
+        using (MySqlCommand command = new MySqlCommand(query, connection))
+        {
+            command.Parameters.AddWithValue("@idCompte", idCompte);
+            command.Parameters.AddWithValue("@nomUtilisateur", nomUtilisateur);
+            command.Parameters.AddWithValue("@motDePasse", motDePasse);
+
+            int rowsAffected = command.ExecuteNonQuery();
+            Console.WriteLine(rowsAffected+" ligne(s) modifiée(s).");
+        }
+    }
+    catch (MySqlException ex)
+    {
+        Console.WriteLine("Erreur lors de la modification : " +ex.Message);
+    }
+    finally
+    {
+        CloseConnection();
+    }
+}
+public static void ModifierIngredient()
+{
+    try
+    {
+        OpenConnection(); // Ouvrir la connexion
+
+        Console.WriteLine("Entrez l'ID de l'ingrédient à modifier :");
+        int idIngredient = int.Parse(Console.ReadLine());
+
+        Console.WriteLine("Entrez le nouveau nom de l'ingrédient :");
+        string nom = Console.ReadLine();
+        Console.WriteLine("Entrez la nouvelle quantité :");
+        string quantite = Console.ReadLine();
+
+        string query = "UPDATE ingredients SET nom = @nom, quantite = @quantite WHERE id = @idIngredient;";
+        using (MySqlCommand command = new MySqlCommand(query, connection))
+        {
+            command.Parameters.AddWithValue("@idIngredient", idIngredient);
+            command.Parameters.AddWithValue("@nom", nom);
+            command.Parameters.AddWithValue("@quantite", quantite);
+
+            int rowsAffected = command.ExecuteNonQuery();
+            Console.WriteLine($"{rowsAffected} ligne(s) modifiée(s).");
+        }
+    }
+    catch (MySqlException ex)
+    {
+        Console.WriteLine($"Erreur lors de la modification : {ex.Message}");
+    }
+    catch (FormatException)
+    {
+        Console.WriteLine("Erreur : Veuillez entrer un ID valide.");
+    }
+    finally
+    {
+        CloseConnection();
+    }
+}
+public static void ModifierRecette()
+{
+    try
+    {
+        OpenConnection(); // Ouvrir la connexion
+
+        Console.WriteLine("Entrez l'ID de la recette à modifier :");
+        int idRecette = int.Parse(Console.ReadLine());
+
+        Console.WriteLine("Entrez le nouveau titre de la recette :");
+        string titre = Console.ReadLine();
+        Console.WriteLine("Entrez la nouvelle description :");
+        string description = Console.ReadLine();
+
+        string query = "UPDATE recettes SET titre = @titre, description = @description WHERE id = @idRecette;";
+        using (MySqlCommand command = new MySqlCommand(query, connection))
+        {
+            command.Parameters.AddWithValue("@idRecette", idRecette);
+            command.Parameters.AddWithValue("@titre", titre);
+            command.Parameters.AddWithValue("@description", description);
+
+            int rowsAffected = command.ExecuteNonQuery();
+            Console.WriteLine($"{rowsAffected} ligne(s) modifiée(s).");
+        }
+    }
+    catch (MySqlException ex)
+    {
+        Console.WriteLine($"Erreur lors de la modification : {ex.Message}");
+    }
+    catch (FormatException)
+    {
+        Console.WriteLine("Erreur : Veuillez entrer un ID valide.");
+    }
+    finally
+    {
+        CloseConnection();
+    }
+}
+public static void ModifierPlat(int idCompte)
+{
+    MySqlConnection connection = null;
+
+    try
+    {
+        // Configuration de la connexion à la base de données
+        string connectionString = "Server=localhost;Database=livparis;User ID=root;Password=root;SslMode=none;AllowPublicKeyRetrieval=True;";
+        connection = new MySqlConnection(connectionString);
+        connection.Open(); // Ouvrir la connexion
+
+        Console.WriteLine("Entrez l'ID du plat à modifier :");
+        int idPlat = int.Parse(Console.ReadLine());
+
+        Console.WriteLine("Entrez le nouveau nom du plat :");
+        string nomPlat = Console.ReadLine();
+        Console.WriteLine("Entrez la nouvelle description du plat :");
+        string descriptionPlat = Console.ReadLine();
+        Console.WriteLine("Entrez le nouveau prix du plat :");
+        decimal prixPlat = decimal.Parse(Console.ReadLine());
+
+        // Requête SQL pour modifier le plat
+        string query = "UPDATE plats SET nom = @nomPlat, description = @descriptionPlat, prix = @prixPlat WHERE id = @idPlat;";
+        using (MySqlCommand command = new MySqlCommand(query, connection))
+        {
+            // Ajouter les paramètres à la requête
+            command.Parameters.AddWithValue("@idPlat", idPlat);
+            command.Parameters.AddWithValue("@nomPlat", nomPlat);
+            command.Parameters.AddWithValue("@descriptionPlat", descriptionPlat);
+            command.Parameters.AddWithValue("@prixPlat", prixPlat);
+
+            // Exécuter la requête
+            int rowsAffected = command.ExecuteNonQuery();
+            Console.WriteLine($"{rowsAffected} ligne(s) modifiée(s).");
+        }
+    }
+    catch (MySqlException ex)
+    {
+        Console.WriteLine($"Erreur lors de la modification : {ex.Message}");
+    }
+    catch (FormatException)
+    {
+        Console.WriteLine("Erreur : Veuillez entrer un format valide pour le prix.");
+    }
+    finally
+    {
+        // Fermer la connexion
+        if (connection != null && connection.State == System.Data.ConnectionState.Open)
+        {
+            connection.Close();
+        }
+    }
+}
+
+
+
+
+#endregion
+
+static public void Commander(int idClient)
+{
+    Program.Titre();
+
+    if (idClient <= 0)
+    {
+        Console.WriteLine("ID client invalide.");
+        return;
+    }
+
+    // Demander l'ID du plat
+    Console.Write("Entrez l'ID du plat que vous souhaitez commander : ");
+    int idPlat;
+    while (!int.TryParse(Console.ReadLine(), out idPlat) || idPlat <= 0)
+    {
+        Console.Write("Veuillez entrer un ID de plat valide : ");
+    }
+
+    Database db = new Database();
+    int idCuisinier = -1;
+
+    try
+    {
+        db.OpenConnection();
+
+        // Récupérer l'ID du cuisinier correspondant au plat
+        string query = @"SELECT Id_Cuisinier FROM Plat WHERE Id_Plat = @IdPlat";
+        MySqlCommand cmd = new MySqlCommand(query, db.GetConnection());
+        cmd.Parameters.AddWithValue("@IdPlat", idPlat);
+
+        object result = cmd.ExecuteScalar();
+
+        if (result != null)
+        {
+            idCuisinier = Convert.ToInt32(result);
+        }
+        else
+        {
+            Console.WriteLine("Aucun cuisinier associé au plat spécifié.");
+            return;
+        }
+
+        // Ajouter la commande
+        int idCommande = AjouterCommande(idClient, idCuisinier);
+
+        if (idCommande > 0)
+        {
+            Console.WriteLine($"La commande avec l'ID {idCommande} a été créée avec succès !");
+        }
+        else
+        {
+            Console.WriteLine("Échec de la création de la commande.");
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine("Erreur : " + ex.Message);
+    }
+    finally
+    {
+        db.CloseConnection();
+    }
+}
         #region Récup id
         static public int RecupererId(int idCompte, string element)
 {

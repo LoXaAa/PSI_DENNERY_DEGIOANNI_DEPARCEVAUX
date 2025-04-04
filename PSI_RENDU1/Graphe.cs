@@ -334,8 +334,6 @@ namespace PSI_RENDU1
 
     return (distances, precedent);
 }
-
-
         #endregion
 
         #region Bellman-Ford

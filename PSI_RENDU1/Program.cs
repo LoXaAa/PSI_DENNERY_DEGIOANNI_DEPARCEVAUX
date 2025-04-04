@@ -2,8 +2,6 @@
 {
     using System;
     using System.IO;
-    using PSI_RENDU1;
-    using MySql.Data.MySqlClient;
     using System.Data;
     using System.Collections.Generic;
     using System.Linq;

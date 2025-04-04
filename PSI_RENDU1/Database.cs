@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MySqlTest
+namespace PSI_RENDU1
 {
     public class Database
     {

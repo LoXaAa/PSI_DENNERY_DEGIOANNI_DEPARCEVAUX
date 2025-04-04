@@ -516,5 +516,6 @@ public static int SaisNombre()
         Console.WriteLine("Entrée invalide. Veuillez entrer un nombre strictement positif.");
     } while (true);
 }
-    
+
+}
 }

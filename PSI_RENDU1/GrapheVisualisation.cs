@@ -79,12 +79,16 @@ namespace PSI_RENDU1
             }
 
             foreach (var noeud in graphe.Noeuds.Values)
-            {
-                PointF p = positions[noeud.Id];
-                g.FillEllipse(noeudBrush, p.X - rayon, p.Y - rayon, 2 * rayon, 2 * rayon);
-                g.DrawEllipse(Pens.Black, p.X - rayon, p.Y - rayon, 2 * rayon, 2 * rayon);
-                g.DrawString(noeud.Nom, font, texteBrush, p.X + rayon, p.Y);
-            }
+{
+    PointF p = positions[noeud.Id];
+    Brush couleurNoeud = GetCouleurPourLigne(noeud.NumLigne);
+
+    Console.WriteLine($"Station: {noeud.Nom} - Ligne: {noeud.NumLigne} - Couleur: {couleurNoeud}");
+
+    g.FillEllipse(couleurNoeud, p.X - rayon, p.Y - rayon, 2 * rayon, 2 * rayon);
+    g.DrawEllipse(Pens.Black, p.X - rayon, p.Y - rayon, 2 * rayon, 2 * rayon);
+    g.DrawString(noeud.Nom, font, texteBrush, p.X + rayon, p.Y);
+}
 
             bitmap.Save(outputPath);
             bitmap.Dispose();
@@ -102,6 +106,32 @@ namespace PSI_RENDU1
             Console.WriteLine($"❌ Erreur lors de la génération du graphe : {ex.Message}");
         }
     }
+
+    private static Brush GetCouleurPourLigne(string ligne)
+{
+    switch (ligne)
+    {
+        case "1": return Brushes.Yellow;
+        case "2": return Brushes.Blue;
+        case "3": return Brushes.Green;
+        case "3bis": return Brushes.LightGreen;
+        case "4": return Brushes.Purple;
+        case "5": return Brushes.Orange;
+        case "6": return Brushes.LightSeaGreen;
+        case "7": return Brushes.Pink;
+        case "7bis": return Brushes.LightPink;
+        case "8": return Brushes.Violet;
+        case "9": return Brushes.Gold;
+        case "10": return Brushes.Goldenrod;
+        case "11": return Brushes.Brown;
+        case "12": return Brushes.DarkGreen;
+        case "13": return Brushes.SeaGreen;
+        case "14": return Brushes.Magenta;
+        default: return Brushes.Gray;
+    }
 }
+}
+
+
 
 }

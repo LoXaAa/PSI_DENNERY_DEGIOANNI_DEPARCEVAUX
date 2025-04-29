@@ -14,13 +14,16 @@ namespace PSI_RENDU1
     public double Latitude { get; }
     public List<Lien<T>> Liens { get; }
 
-    public Noeud(T id, string nom = "", double longitude = 0, double latitude = 0)
+    public string NumLigne { get; }
+
+    public Noeud(T id, string nom = "", double longitude = 0, double latitude = 0, string numLigne = "")
     {
         Id = id;
         Nom = nom;
         Longitude = longitude;
         Latitude = latitude;
         Liens = new List<Lien<T>>();
+        NumLigne = numLigne;
     }
 
     public override string ToString() => Id.ToString();

@@ -7,9 +7,9 @@ using System.Globalization;
 namespace PSI_RENDU1{
 public static class LecteurExcel
 {
-    public static List<(int id, string nom, double longitude, double latitude)> LireNoeuds(string cheminFichier)
+    public static List<(int id, string nom, double longitude, double latitude, string ligne)> LireNoeuds(string cheminFichier)
 {
-    var resultats = new List<(int, string, double, double)>();
+    var resultats = new List<(int, string, double, double, string)>();
 
     using (var workbook = new XLWorkbook(cheminFichier))
     {
@@ -20,15 +20,16 @@ public static class LecteurExcel
             try
             {
                 if (!int.TryParse(ligne.Cell(1).GetString().Trim(), out int id)) continue;
-                string nom = ligne.Cell(3).GetString().Trim();
 
+                string numLigne = ligne.Cell(2).GetString().Trim();
+                string nom = ligne.Cell(3).GetString().Trim();      
                 string longStr = ligne.Cell(4).GetString().Trim();
                 string latStr = ligne.Cell(5).GetString().Trim();
 
                 if (!double.TryParse(longStr, NumberStyles.Float, CultureInfo.InvariantCulture, out double longitude)) continue;
                 if (!double.TryParse(latStr, NumberStyles.Float, CultureInfo.InvariantCulture, out double latitude)) continue;
 
-                resultats.Add((id, nom, longitude, latitude));
+                resultats.Add((id, nom, longitude, latitude, numLigne));
             }
             catch (Exception ex)
             {
@@ -39,6 +40,7 @@ public static class LecteurExcel
 
     return resultats;
 }
+
 
     public static List<(int, int, double, bool)> LireArcs(string cheminFichier)
 {

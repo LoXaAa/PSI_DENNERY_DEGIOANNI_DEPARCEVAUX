@@ -27,9 +27,9 @@
 
         // Charger les nœuds depuis Excel
         var donneesNoeuds = LecteurExcel.LireNoeuds(cheminExcel);
-        foreach (var (id, nom, longitude, latitude) in donneesNoeuds)
+        foreach (var (id, nom, longitude, latitude,NumLigne) in donneesNoeuds)
         {
-            graphe.AjouterNoeud(id, nom, longitude, latitude);
+            graphe.AjouterNoeud(id, nom, longitude, latitude, NumLigne);
         }
 
         // Relier automatiquement les stations avec le même nom (ex : République)

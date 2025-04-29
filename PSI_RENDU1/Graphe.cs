@@ -28,14 +28,14 @@ namespace PSI_RENDU1
         public List<Lien<T>> Liens => liens;
         public bool EstOriente { get; set; } = true;
 
-        public void AjouterNoeud(T id, string nom = "", double longitude = 0, double latitude = 0)
+        public void AjouterNoeud(T id, string nom = "", double longitude = 0, double latitude = 0, string numLigne="")
         {
             if (!noeuds.ContainsKey(id))
-                noeuds[id] = new Noeud<T>(id, nom, longitude, latitude);
+                noeuds[id] = new Noeud<T>(id, nom, longitude, latitude,numLigne);
         }
 
 
-        public void AjouterLien(T idSource, T idDestination, double poids)
+        public void AjouterLien(T idSource, T idDestination, double poids)  
 {
     if (!noeuds.ContainsKey(idSource) || !noeuds.ContainsKey(idDestination))
     {
@@ -45,10 +45,6 @@ namespace PSI_RENDU1
 
     var source = noeuds[idSource];
     var destination = noeuds[idDestination];
-
-    // Vérifier si le lien existe déjà pour éviter les doublons
-    if (source.Liens.Any(l => l.Destination.Id.Equals(destination.Id)))
-        return;
 
     var lien = new Lien<T>(source, destination, poids);
     source.Liens.Add(lien);
@@ -323,7 +319,7 @@ namespace PSI_RENDU1
     while (priorityQueue.Count > 0)
     {
         var (currentDistance, currentNode) = priorityQueue.Min;
-        priorityQueue.Remove(priorityQueue.Min);
+        priorityQueue.Remove(priorityQueue.Min); 
 
         foreach (var lien in noeuds[currentNode].Liens)
         {

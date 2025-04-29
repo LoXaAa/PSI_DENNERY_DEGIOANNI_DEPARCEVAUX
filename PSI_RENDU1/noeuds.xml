@@ -1,0 +1,1331 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Noeuds>
+  <Noeud Id="0">
+    <Nom>Porte Maillot</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="1">
+    <Nom>Argentine</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="2">
+    <Nom>Charles de Gaulle - Etoile</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="3">
+    <Nom>George V</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="4">
+    <Nom>Franklin D. Roosevelt</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="5">
+    <Nom>Champs-Elysées - Clemenceau</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="6">
+    <Nom>Concorde</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="7">
+    <Nom>Tuileries</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="8">
+    <Nom>Palais Royal - Musée du Louvre</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="9">
+    <Nom>Louvre - Rivoli</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="10">
+    <Nom>Châtelet</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="11">
+    <Nom>Hôtel de Ville</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="12">
+    <Nom>Saint-Paul (Le Marais)</Nom>
+    <IndexCouleur>2</IndexCouleur>
+  </Noeud>
+  <Noeud Id="13">
+    <Nom>Bastille</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="14">
+    <Nom>Gare de Lyon</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="15">
+    <Nom>Reuilly - Diderot</Nom>
+    <IndexCouleur>2</IndexCouleur>
+  </Noeud>
+  <Noeud Id="16">
+    <Nom>Nation</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="17">
+    <Nom>Porte de Vincennes</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="18">
+    <Nom>Château de Vincennes</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="19">
+    <Nom>Porte Dauphine</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="20">
+    <Nom>Victor Hugo</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="21">
+    <Nom>Charles de Gaulle - Etoile</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="22">
+    <Nom>Ternes</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="23">
+    <Nom>Courcelles</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="24">
+    <Nom>Monceau</Nom>
+    <IndexCouleur>2</IndexCouleur>
+  </Noeud>
+  <Noeud Id="25">
+    <Nom>Villiers</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="26">
+    <Nom>Rome</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="27">
+    <Nom>Place de Clichy</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="28">
+    <Nom>Blanche</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="29">
+    <Nom>Pigalle</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="30">
+    <Nom>Anvers</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="31">
+    <Nom>Barbès - Rochechouart</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="32">
+    <Nom>La Chapelle</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="33">
+    <Nom>Stalingrad</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="34">
+    <Nom>Jaurès</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="35">
+    <Nom>Colonel Fabien</Nom>
+    <IndexCouleur>2</IndexCouleur>
+  </Noeud>
+  <Noeud Id="36">
+    <Nom>Belleville</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="37">
+    <Nom>Couronnes</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="38">
+    <Nom>Ménilmontant</Nom>
+    <IndexCouleur>2</IndexCouleur>
+  </Noeud>
+  <Noeud Id="39">
+    <Nom>Père Lachaise</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="40">
+    <Nom>Philippe Auguste</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="41">
+    <Nom>Alexandre Dumas</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="42">
+    <Nom>Avron</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="43">
+    <Nom>Nation</Nom>
+    <IndexCouleur>2</IndexCouleur>
+  </Noeud>
+  <Noeud Id="44">
+    <Nom>Porte de Champerret</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="45">
+    <Nom>Pereire</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="46">
+    <Nom>Wagram</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="47">
+    <Nom>Malesherbes</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="48">
+    <Nom>Villiers</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="49">
+    <Nom>Europe</Nom>
+    <IndexCouleur>2</IndexCouleur>
+  </Noeud>
+  <Noeud Id="50">
+    <Nom>Saint-Lazare</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="51">
+    <Nom>Havre-Caumartin</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="52">
+    <Nom>Opéra</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="53">
+    <Nom>Quatre Septembre</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="54">
+    <Nom>Bourse</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="55">
+    <Nom>Sentier</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="56">
+    <Nom>Réaumur - Sébastopol</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="57">
+    <Nom>Arts et Métiers</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="58">
+    <Nom>Temple</Nom>
+    <IndexCouleur>2</IndexCouleur>
+  </Noeud>
+  <Noeud Id="59">
+    <Nom>République</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="60">
+    <Nom>Parmentier</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="61">
+    <Nom>Rue Saint-Maur</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="62">
+    <Nom>Père Lachaise</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="63">
+    <Nom>Gambetta</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="64">
+    <Nom>Porte de Bagnolet</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="65">
+    <Nom>Porte des Lilas</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="66">
+    <Nom>Saint-Fargeau</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="67">
+    <Nom>Pelleport</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="68">
+    <Nom>Gambetta</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="69">
+    <Nom>Porte de Clignancourt</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="70">
+    <Nom>Simplon</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="71">
+    <Nom>Marcadet - Poissonniers</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="72">
+    <Nom>Château Rouge</Nom>
+    <IndexCouleur>2</IndexCouleur>
+  </Noeud>
+  <Noeud Id="73">
+    <Nom>Barbès - Rochechouart</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="74">
+    <Nom>Gare du Nord</Nom>
+    <IndexCouleur>2</IndexCouleur>
+  </Noeud>
+  <Noeud Id="75">
+    <Nom>Gare de l'Est</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="76">
+    <Nom>Château d'Eau</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="77">
+    <Nom>Strasbourg - Saint-Denis</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="78">
+    <Nom>Réaumur - Sébastopol</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="79">
+    <Nom>Etienne Marcel</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="80">
+    <Nom>Les Halles</Nom>
+    <IndexCouleur>2</IndexCouleur>
+  </Noeud>
+  <Noeud Id="81">
+    <Nom>Châtelet</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="82">
+    <Nom>Cité</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="83">
+    <Nom>Saint-Michel</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="84">
+    <Nom>Odéon</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="85">
+    <Nom>Saint-Germain-des-Prés</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="86">
+    <Nom>Saint-Sulpice</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="87">
+    <Nom>Saint-Placide</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="88">
+    <Nom>Montparnasse Bienvenue</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="89">
+    <Nom>Vavin</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="90">
+    <Nom>Raspail</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="91">
+    <Nom>Denfert-Rochereau</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="92">
+    <Nom>Mouton-Duvernet</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="93">
+    <Nom>Alésia</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="94">
+    <Nom>Porte d'Orléans</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="95">
+    <Nom>Porte de Pantin</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="96">
+    <Nom>Ourcq</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="97">
+    <Nom>Laumière</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="98">
+    <Nom>Jaurès</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="99">
+    <Nom>Stalingrad</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="100">
+    <Nom>Gare du Nord</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="101">
+    <Nom>Gare de l'Est</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="102">
+    <Nom>Jacques Bonsergent</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="103">
+    <Nom>République</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="104">
+    <Nom>Oberkampf</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="105">
+    <Nom>Richard-Lenoir</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="106">
+    <Nom>Bréguet-Sabin</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="107">
+    <Nom>Bastille</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="108">
+    <Nom>Quai de la Rapée</Nom>
+    <IndexCouleur>2</IndexCouleur>
+  </Noeud>
+  <Noeud Id="109">
+    <Nom>Gare d'Austerlitz</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="110">
+    <Nom>Saint-Marcel</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="111">
+    <Nom>Campo-Formio</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="112">
+    <Nom>Place d'Italie</Nom>
+    <IndexCouleur>2</IndexCouleur>
+  </Noeud>
+  <Noeud Id="113">
+    <Nom>Charles de Gaulle - Etoile</Nom>
+    <IndexCouleur>2</IndexCouleur>
+  </Noeud>
+  <Noeud Id="114">
+    <Nom>Kléber</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="115">
+    <Nom>Boissière</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="116">
+    <Nom>Trocadéro</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="117">
+    <Nom>Passy</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="118">
+    <Nom>Bir-Hakeim</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="119">
+    <Nom>Dupleix</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="120">
+    <Nom>La Motte-Picquet - Grenelle</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="121">
+    <Nom>Cambronne</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="122">
+    <Nom>Sèvres-Lecourbe</Nom>
+    <IndexCouleur>2</IndexCouleur>
+  </Noeud>
+  <Noeud Id="123">
+    <Nom>Pasteur</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="124">
+    <Nom>Montparnasse Bienvenue</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="125">
+    <Nom>Edgar Quinet</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="126">
+    <Nom>Raspail</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="127">
+    <Nom>Denfert-Rochereau</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="128">
+    <Nom>Saint-Jacques</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="129">
+    <Nom>Glacière</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="130">
+    <Nom>Corvisart</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="131">
+    <Nom>Place d'Italie</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="132">
+    <Nom>Nationale</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="133">
+    <Nom>Chevaleret</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="134">
+    <Nom>Quai de la Gare</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="135">
+    <Nom>Bercy</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="136">
+    <Nom>Dugommier</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="137">
+    <Nom>Daumesnil</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="138">
+    <Nom>Bel-Air</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="139">
+    <Nom>Picpus</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="140">
+    <Nom>Nation</Nom>
+    <IndexCouleur>3</IndexCouleur>
+  </Noeud>
+  <Noeud Id="141">
+    <Nom>Porte de la Villette</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="142">
+    <Nom>Corentin Cariou</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="143">
+    <Nom>Crimée</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="144">
+    <Nom>Riquet</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="145">
+    <Nom>Stalingrad</Nom>
+    <IndexCouleur>2</IndexCouleur>
+  </Noeud>
+  <Noeud Id="146">
+    <Nom>Louis Blanc</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="147">
+    <Nom>Château Landon</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="148">
+    <Nom>Gare de l'Est</Nom>
+    <IndexCouleur>2</IndexCouleur>
+  </Noeud>
+  <Noeud Id="149">
+    <Nom>Poissonnière</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="150">
+    <Nom>Cadet</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="151">
+    <Nom>Le Peletier</Nom>
+    <IndexCouleur>2</IndexCouleur>
+  </Noeud>
+  <Noeud Id="152">
+    <Nom>Chaussée d'Antin - La Fayette</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="153">
+    <Nom>Opéra</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="154">
+    <Nom>Pyramides</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="155">
+    <Nom>Palais Royal - Musée du Louvre</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="156">
+    <Nom>Pont Neuf</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="157">
+    <Nom>Châtelet</Nom>
+    <IndexCouleur>2</IndexCouleur>
+  </Noeud>
+  <Noeud Id="158">
+    <Nom>Pont Marie (Cité des Arts)</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="159">
+    <Nom>Sully - Morland</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="160">
+    <Nom>Jussieu</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="161">
+    <Nom>Place Monge</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="162">
+    <Nom>Censier - Daubenton</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="163">
+    <Nom>Les Gobelins</Nom>
+    <IndexCouleur>2</IndexCouleur>
+  </Noeud>
+  <Noeud Id="164">
+    <Nom>Place d'Italie</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="165">
+    <Nom>Tolbiac</Nom>
+    <IndexCouleur>2</IndexCouleur>
+  </Noeud>
+  <Noeud Id="166">
+    <Nom>Maison Blanche</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="167">
+    <Nom>Porte d'Italie</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="168">
+    <Nom>Porte de Choisy</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="169">
+    <Nom>Porte d'Ivry</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="170">
+    <Nom>Maison Blanche</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="171">
+    <Nom>Louis Blanc</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="172">
+    <Nom>Jaurès</Nom>
+    <IndexCouleur>2</IndexCouleur>
+  </Noeud>
+  <Noeud Id="173">
+    <Nom>Bolivar</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="174">
+    <Nom>Buttes Chaumont</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="175">
+    <Nom>Botzaris</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="176">
+    <Nom>Place des Fêtes</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="177">
+    <Nom>Pré-Saint-Gervais</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="178">
+    <Nom>Danube</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="179">
+    <Nom>Botzaris</Nom>
+    <IndexCouleur>2</IndexCouleur>
+  </Noeud>
+  <Noeud Id="180">
+    <Nom>Balard</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="181">
+    <Nom>Lourmel</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="182">
+    <Nom>Boucicaut</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="183">
+    <Nom>Félix Faure</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="184">
+    <Nom>Commerce</Nom>
+    <IndexCouleur>2</IndexCouleur>
+  </Noeud>
+  <Noeud Id="185">
+    <Nom>La Motte-Picquet - Grenelle</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="186">
+    <Nom>Ecole Militaire</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="187">
+    <Nom>La Tour-Maubourg</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="188">
+    <Nom>Invalides</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="189">
+    <Nom>Concorde</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="190">
+    <Nom>Madeleine</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="191">
+    <Nom>Opéra</Nom>
+    <IndexCouleur>2</IndexCouleur>
+  </Noeud>
+  <Noeud Id="192">
+    <Nom>Richelieu - Drouot</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="193">
+    <Nom>Grands Boulevards</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="194">
+    <Nom>Bonne Nouvelle</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="195">
+    <Nom>Strasbourg - Saint-Denis</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="196">
+    <Nom>République</Nom>
+    <IndexCouleur>2</IndexCouleur>
+  </Noeud>
+  <Noeud Id="197">
+    <Nom>Filles du Calvaire</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="198">
+    <Nom>Saint-Sébastien - Froissart</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="199">
+    <Nom>Chemin Vert</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="200">
+    <Nom>Bastille</Nom>
+    <IndexCouleur>2</IndexCouleur>
+  </Noeud>
+  <Noeud Id="201">
+    <Nom>Ledru-Rollin</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="202">
+    <Nom>Faidherbe - Chaligny</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="203">
+    <Nom>Reuilly - Diderot</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="204">
+    <Nom>Montgallet</Nom>
+    <IndexCouleur>2</IndexCouleur>
+  </Noeud>
+  <Noeud Id="205">
+    <Nom>Daumesnil</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="206">
+    <Nom>Michel Bizot</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="207">
+    <Nom>Porte Dorée</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="208">
+    <Nom>Porte de Charenton</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="209">
+    <Nom>Porte de Saint-Cloud</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="210">
+    <Nom>Exelmans</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="211">
+    <Nom>Michel-Ange - Molitor</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="212">
+    <Nom>Michel-Ange - Auteuil</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="213">
+    <Nom>Jasmin</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="214">
+    <Nom>Ranelagh</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="215">
+    <Nom>La Muette</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="216">
+    <Nom>Rue de la Pompe</Nom>
+    <IndexCouleur>2</IndexCouleur>
+  </Noeud>
+  <Noeud Id="217">
+    <Nom>Trocadéro</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="218">
+    <Nom>Iéna</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="219">
+    <Nom>Alma - Marceau</Nom>
+    <IndexCouleur>2</IndexCouleur>
+  </Noeud>
+  <Noeud Id="220">
+    <Nom>Franklin D. Roosevelt</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="221">
+    <Nom>Saint-Philippe du Roule</Nom>
+    <IndexCouleur>2</IndexCouleur>
+  </Noeud>
+  <Noeud Id="222">
+    <Nom>Miromesnil</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="223">
+    <Nom>Saint-Augustin</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="224">
+    <Nom>Havre-Caumartin</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="225">
+    <Nom>Chaussée d'Antin - La Fayette</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="226">
+    <Nom>Richelieu - Drouot</Nom>
+    <IndexCouleur>2</IndexCouleur>
+  </Noeud>
+  <Noeud Id="227">
+    <Nom>Grands Boulevards</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="228">
+    <Nom>Bonne Nouvelle</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="229">
+    <Nom>Strasbourg - Saint-Denis</Nom>
+    <IndexCouleur>2</IndexCouleur>
+  </Noeud>
+  <Noeud Id="230">
+    <Nom>République</Nom>
+    <IndexCouleur>3</IndexCouleur>
+  </Noeud>
+  <Noeud Id="231">
+    <Nom>Oberkampf</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="232">
+    <Nom>Saint-Ambroise</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="233">
+    <Nom>Voltaire</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="234">
+    <Nom>Charonne</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="235">
+    <Nom>Rue des Boulets</Nom>
+    <IndexCouleur>2</IndexCouleur>
+  </Noeud>
+  <Noeud Id="236">
+    <Nom>Nation</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="237">
+    <Nom>Buzenval</Nom>
+    <IndexCouleur>2</IndexCouleur>
+  </Noeud>
+  <Noeud Id="238">
+    <Nom>Maraîchers</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="239">
+    <Nom>Porte de Montreuil</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="240">
+    <Nom>Gare d'Austerlitz</Nom>
+    <IndexCouleur>2</IndexCouleur>
+  </Noeud>
+  <Noeud Id="241">
+    <Nom>Jussieu</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="242">
+    <Nom>Cardinal Lemoine</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="243">
+    <Nom>Maubert - Mutualité</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="244">
+    <Nom>Cluny - La Sorbonne</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="245">
+    <Nom>Odéon</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="246">
+    <Nom>Mabillon</Nom>
+    <IndexCouleur>2</IndexCouleur>
+  </Noeud>
+  <Noeud Id="247">
+    <Nom>Sèvres - Babylone</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="248">
+    <Nom>Vaneau</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="249">
+    <Nom>Duroc</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="250">
+    <Nom>Ségur</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="251">
+    <Nom>La Motte-Picquet - Grenelle</Nom>
+    <IndexCouleur>2</IndexCouleur>
+  </Noeud>
+  <Noeud Id="252">
+    <Nom>Avenue Emile Zola</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="253">
+    <Nom>Charles Michels</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="254">
+    <Nom>Javel - André Citroën</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="255">
+    <Nom>Eglise d'Auteuil</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="256">
+    <Nom>Michel-Ange - Auteuil</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="257">
+    <Nom>Porte d'Auteuil</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="258">
+    <Nom>Michel-Ange - Molitor</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="259">
+    <Nom>Chardon Lagache</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="260">
+    <Nom>Mirabeau</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="261">
+    <Nom>Châtelet</Nom>
+    <IndexCouleur>4</IndexCouleur>
+  </Noeud>
+  <Noeud Id="262">
+    <Nom>Hôtel de Ville</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="263">
+    <Nom>Rambuteau</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="264">
+    <Nom>Arts et Métiers</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="265">
+    <Nom>République</Nom>
+    <IndexCouleur>4</IndexCouleur>
+  </Noeud>
+  <Noeud Id="266">
+    <Nom>Goncourt</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="267">
+    <Nom>Belleville</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="268">
+    <Nom>Pyrénées</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="269">
+    <Nom>Jourdain</Nom>
+    <IndexCouleur>2</IndexCouleur>
+  </Noeud>
+  <Noeud Id="270">
+    <Nom>Place des Fêtes</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="271">
+    <Nom>Télégraphe</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="272">
+    <Nom>Porte des Lilas</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="273">
+    <Nom>Porte de la Chapelle</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="274">
+    <Nom>Marx Dormoy</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="275">
+    <Nom>Marcadet - Poissonniers</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="276">
+    <Nom>Jules Joffrin</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="277">
+    <Nom>Lamarck - Caulaincourt</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="278">
+    <Nom>Abbesses</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="279">
+    <Nom>Pigalle</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="280">
+    <Nom>Saint-Georges</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="281">
+    <Nom>Notre-Dame-de-Lorette</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="282">
+    <Nom>Trinité - d'Estienne d'Orves</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="283">
+    <Nom>Saint-Lazare</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="284">
+    <Nom>Madeleine</Nom>
+    <IndexCouleur>2</IndexCouleur>
+  </Noeud>
+  <Noeud Id="285">
+    <Nom>Concorde</Nom>
+    <IndexCouleur>3</IndexCouleur>
+  </Noeud>
+  <Noeud Id="286">
+    <Nom>Assemblée Nationale</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="287">
+    <Nom>Solférino</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="288">
+    <Nom>Rue du Bac</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="289">
+    <Nom>Sèvres - Babylone</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="290">
+    <Nom>Rennes</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="291">
+    <Nom>Notre-Dame des Champs</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="292">
+    <Nom>Montparnasse Bienvenue</Nom>
+    <IndexCouleur>2</IndexCouleur>
+  </Noeud>
+  <Noeud Id="293">
+    <Nom>Falguière</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="294">
+    <Nom>Pasteur</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="295">
+    <Nom>Volontaires</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="296">
+    <Nom>Vaugirard</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="297">
+    <Nom>Convention</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="298">
+    <Nom>Porte de Versailles</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="299">
+    <Nom>Porte de Vanves</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="300">
+    <Nom>Plaisance</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="301">
+    <Nom>Pernety</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="302">
+    <Nom>Gaîté</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="303">
+    <Nom>Montparnasse Bienvenue</Nom>
+    <IndexCouleur>3</IndexCouleur>
+  </Noeud>
+  <Noeud Id="304">
+    <Nom>Duroc</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="305">
+    <Nom>Saint-François-Xavier</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="306">
+    <Nom>Varenne</Nom>
+    <IndexCouleur>2</IndexCouleur>
+  </Noeud>
+  <Noeud Id="307">
+    <Nom>Invalides</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="308">
+    <Nom>Champs-Elysées - Clemenceau</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="309">
+    <Nom>Miromesnil</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="310">
+    <Nom>Saint-Lazare</Nom>
+    <IndexCouleur>2</IndexCouleur>
+  </Noeud>
+  <Noeud Id="311">
+    <Nom>Liège</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="312">
+    <Nom>Place de Clichy</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="313">
+    <Nom>La Fourche</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="314">
+    <Nom>Guy Môquet</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="315">
+    <Nom>Porte de Saint-Ouen</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="316">
+    <Nom>La Fourche</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="317">
+    <Nom>Brochant</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="318">
+    <Nom>Porte de Clichy</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="319">
+    <Nom>Porte de Clichy</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="320">
+    <Nom>Pont Cardinet</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="321">
+    <Nom>Saint-Lazare</Nom>
+    <IndexCouleur>3</IndexCouleur>
+  </Noeud>
+  <Noeud Id="322">
+    <Nom>Madeleine</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="323">
+    <Nom>Pyramides</Nom>
+    <IndexCouleur>2</IndexCouleur>
+  </Noeud>
+  <Noeud Id="324">
+    <Nom>Châtelet</Nom>
+    <IndexCouleur>3</IndexCouleur>
+  </Noeud>
+  <Noeud Id="325">
+    <Nom>Gare de Lyon</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="326">
+    <Nom>Bercy</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="327">
+    <Nom>Cour Saint-Emilion</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="328">
+    <Nom>Bibliothèque François Mitterrand</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="329">
+    <Nom>Olympiades</Nom>
+    <IndexCouleur>0</IndexCouleur>
+  </Noeud>
+  <Noeud Id="330">
+    <Nom>Olympiades</Nom>
+    <IndexCouleur>1</IndexCouleur>
+  </Noeud>
+  <Noeud Id="331">
+    <Nom>Maison Blanche</Nom>
+    <IndexCouleur>2</IndexCouleur>
+  </Noeud>
+</Noeuds>

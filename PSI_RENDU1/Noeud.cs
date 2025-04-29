@@ -13,8 +13,8 @@ namespace PSI_RENDU1
     public double Longitude { get; }
     public double Latitude { get; }
     public List<Lien<T>> Liens { get; }
-
     public string NumLigne { get; }
+    public int ColorIndex { get; set; } = -1;
 
     public Noeud(T id, string nom = "", double longitude = 0, double latitude = 0, string numLigne = "")
     {

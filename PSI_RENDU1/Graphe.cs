@@ -470,6 +470,70 @@ public (Dictionary<T, Dictionary<T, double>> distances, Dictionary<T, Dictionary
 }
         #endregion
 
+#region EstBiparti
+
+/// <summary>
+/// Vérifie si le graphe est biparti via BFS
+/// </summary>
+/// <returns>True si biparti, sinon False.</returns>
+public bool EstBiparti()
+{
+
+    var couleurs = new Dictionary<T, int>();
+    var file = new Queue<T>();
+
+    foreach (var idNoeud in noeuds.Keys)
+    {
+        if (couleurs.ContainsKey(idNoeud))
+            continue;
+
+        couleurs[idNoeud] = 0;
+        file.Enqueue(idNoeud);
+
+        while (file.Count > 0)
+        {
+            var courant = file.Dequeue();
+
+            foreach (var lien in noeuds[courant].Liens)
+            {
+                var voisin = lien.Destination.Id;
+
+                if (!couleurs.ContainsKey(voisin))
+                {
+                    couleurs[voisin] = 1 - couleurs[courant];
+                    file.Enqueue(voisin);
+                }
+                else if (couleurs[voisin] == couleurs[courant])
+                {
+                    return false;
+                }
+            }
+        }
+    }
+
+    return true;
+}
+#endregion
+
+public Dictionary<int, List<T>> ObtenirGroupesIndependants()
+        {
+            return noeuds.Values
+                .GroupBy(noeud => noeud.ColorIndex)
+                .ToDictionary(
+                    groupe => groupe.Key,
+                    groupe => groupe.Select(noeud => noeud.Id).ToList()
+                );
+        }
+
+#region EstPlanaire
+
+public bool EstPlanaire()
+{
+    int V = noeuds.Count;
+    int E = liens.Count;
+    return E <= 3 * V - 6;
+}
+#endregion
 
     }
 }

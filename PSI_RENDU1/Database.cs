@@ -42,6 +42,7 @@ namespace PSI_RENDU1
             return connection;
         }
         #endregion
+
         #region fonction de peuplement
         public static int AjouterCompte()
         {

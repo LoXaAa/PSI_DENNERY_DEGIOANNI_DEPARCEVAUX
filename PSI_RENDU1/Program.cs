@@ -102,8 +102,7 @@
         : "Le graphe est acyclique");
 
     Console.WriteLine("\nAffichage du graphe :");
-    string imagePath = "graphe.png";
-    GrapheVisualisation.GenererImageGraphe(graphe, imagePath);
+    GrapheVisualisation.GenererImageGraphe(graphe, "graphe_esthetique.png");
 
     Console.WriteLine("\nVoulez-vous exécuter un algorithme de plus court chemin ?");
     Console.WriteLine("1. Dijkstra");
@@ -124,6 +123,15 @@
 
     Console.WriteLine("\nAffichage du graphe chargé :");
     graphe.AfficherGraphe();
+
+int nbCouleurs = GraphColoring<int>.WelshPowell(graphe);
+Console.WriteLine($"\n✅ Graphe colorié avec {nbCouleurs} couleurs.");
+GrapheVisualisation.GenererImageGraphe(graphe,cheminSortie: "graphe_clusters.png",largeur: 2000,hauteur: 1400,utiliserIndexCouleur: true);
+
+GraphExporter<int>.ExporterEnJson("noeuds.json", graphe);
+GraphExporter<int>.ExporterEnXml("noeuds.xml", graphe);
+Console.WriteLine("✅ Export JSON/XML réalisés : noeuds.json, noeuds.xml");
+
 }
 
         static void ExecuterDijkstra<T>(Graphe<T> graphe)

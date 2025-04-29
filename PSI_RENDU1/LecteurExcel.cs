@@ -22,7 +22,7 @@ public static class LecteurExcel
                 if (!int.TryParse(ligne.Cell(1).GetString().Trim(), out int id)) continue;
 
                 string numLigne = ligne.Cell(2).GetString().Trim();
-                string nom = ligne.Cell(3).GetString().Trim();      
+                string nom = ligne.Cell(3).GetString().Trim();
                 string longStr = ligne.Cell(4).GetString().Trim();
                 string latStr = ligne.Cell(5).GetString().Trim();
 

@@ -14,7 +14,7 @@ namespace PSI_RENDU1
         /// <summary>
         /// Exporte la liste des nœuds au format JSON
         /// </summary>
-        /// <param name="chemin">Chemin du fichier de sortie (.json)</param>
+        /// <param name="chemin">Chemin du fichier de sortie</param>
         /// <param name="graphe">Le graphe dont on exporte les nœuds</param>
 
         public static void ExporterEnJson(string chemin, Graphe<T> graphe)

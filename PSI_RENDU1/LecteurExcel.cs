@@ -7,6 +7,14 @@ using System.Globalization;
 namespace PSI_RENDU1{
 public static class LecteurExcel
 {
+
+#region Lecture Noeuds
+    /// <summary>
+    /// Lit la feuille "Noeuds" du fichier excel et traite les infos
+    /// </summary>
+    /// <param name="cheminFichier">Chemin du fichier Excel à lire.</param>
+    /// <returns>Liste de tuple avec Id, nom, latitude, longitude, ligne <returns>
+
     public static List<(int id, string nom, double longitude, double latitude, string ligne)> LireNoeuds(string cheminFichier)
 {
     var resultats = new List<(int, string, double, double, string)>();
@@ -33,14 +41,22 @@ public static class LecteurExcel
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"⚠️ Erreur de lecture noeud : {ex.Message}");
+                Console.WriteLine($"Erreur de lecture noeud : {ex.Message}");
             }
         }
     }
 
     return resultats;
 }
+#endregion
 
+#region Lecture Arcs
+
+    /// <summary>
+    /// Lit la feuille "Arcs" du fichier excel et traite les infos
+    /// </summary>
+    /// <param name="cheminFichier">Chemin du fichier Excel à lire.</param>
+    /// <returns>Liste de tuple avec source, destination, poids, sens <returns>
 
     public static List<(int, int, double, bool)> LireArcs(string cheminFichier)
 {
@@ -69,14 +85,20 @@ public static class LecteurExcel
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"⚠️ Erreur de lecture arc : {ex.Message}");
+            Console.WriteLine($"Erreur de lecture arc : {ex.Message}");
         }
     }
 
     return arcs;
 }
+#endregion
 
-
+#region Doublons
+/// <summary>
+/// Identifie tous les couples de noeuds dont le nom est identique et renvoie leurs identifiants.
+/// </summary>
+/// <param name="noeuds"> Liste de tuple représentant les noeuds avec leurs caractéristiques </param>
+/// <returns> Liste de paires uniques pour chaque noeuds avec le même nom </returns>
     public static List<(int, int)> TrouverCorrespondances(List<(int id, string nom, double, double)> noeuds)
 {
     var groupes = noeuds
@@ -100,5 +122,6 @@ public static class LecteurExcel
 
     return correspondances;
 }
+#endregion
 }
 }

@@ -1,0 +1,48 @@
+Date : 2025-04-30 04:45:12
+Directory : c:\Users\Home\Desktop\Ecole\ESILV\Semestre 4\PSI\PSI_DENNERY_DEGIOANNI_DEPARCEVAUX
+Total : 17 files,  5815 codes, 167 comments, 443 blanks, all 6425 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| C#       |         12 |      2,530 |        165 |        412 |      3,107 |
+| JSON     |          1 |      1,662 |          0 |          0 |      1,662 |
+| XML      |          3 |      1,417 |          0 |          4 |      1,421 |
+| MS SQL   |          1 |        206 |          2 |         27 |        235 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++--------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                                           | files      | code       | comment    | blank      | total      |
++--------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                                              |         17 |      5,815 |        167 |        443 |      6,425 |
+| PSI_RENDU1                                                                                                                     |         14 |      5,689 |        163 |        432 |      6,284 |
+| UnitTestProject1                                                                                                               |          3 |        126 |          4 |         11 |        141 |
+| UnitTestProject1 (Files)                                                                                                       |          2 |        111 |          3 |          6 |        120 |
+| UnitTestProject1\Properties                                                                                                    |          1 |         15 |          1 |          5 |         21 |
++--------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++--------------------------------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                                                                                       | language | code       | comment    | blank      | total      |
++--------------------------------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| c:\Users\Home\Desktop\Ecole\ESILV\Semestre 4\PSI\PSI_DENNERY_DEGIOANNI_DEPARCEVAUX\PSI_RENDU1\BDD.sql                          | MS SQL   |        206 |          2 |         27 |        235 |
+| c:\Users\Home\Desktop\Ecole\ESILV\Semestre 4\PSI\PSI_DENNERY_DEGIOANNI_DEPARCEVAUX\PSI_RENDU1\Database.cs                      | C#       |      1,206 |         17 |        190 |      1,413 |
+| c:\Users\Home\Desktop\Ecole\ESILV\Semestre 4\PSI\PSI_DENNERY_DEGIOANNI_DEPARCEVAUX\PSI_RENDU1\GraphColoring.cs                 | C#       |         38 |          4 |         13 |         55 |
+| c:\Users\Home\Desktop\Ecole\ESILV\Semestre 4\PSI\PSI_DENNERY_DEGIOANNI_DEPARCEVAUX\PSI_RENDU1\Graphe.cs                        | C#       |        430 |         63 |         93 |        586 |
+| c:\Users\Home\Desktop\Ecole\ESILV\Semestre 4\PSI\PSI_DENNERY_DEGIOANNI_DEPARCEVAUX\PSI_RENDU1\GrapheExporter.cs                | C#       |         38 |         10 |          9 |         57 |
+| c:\Users\Home\Desktop\Ecole\ESILV\Semestre 4\PSI\PSI_DENNERY_DEGIOANNI_DEPARCEVAUX\PSI_RENDU1\GrapheRelations.cs               | C#       |         28 |          5 |          7 |         40 |
+| c:\Users\Home\Desktop\Ecole\ESILV\Semestre 4\PSI\PSI_DENNERY_DEGIOANNI_DEPARCEVAUX\PSI_RENDU1\GrapheVisualisation.cs           | C#       |        120 |         16 |         16 |        152 |
+| c:\Users\Home\Desktop\Ecole\ESILV\Semestre 4\PSI\PSI_DENNERY_DEGIOANNI_DEPARCEVAUX\PSI_RENDU1\LecteurExcel.cs                  | C#       |         91 |         15 |         22 |        128 |
+| c:\Users\Home\Desktop\Ecole\ESILV\Semestre 4\PSI\PSI_DENNERY_DEGIOANNI_DEPARCEVAUX\PSI_RENDU1\Lien.cs                          | C#       |         22 |          0 |          7 |         29 |
+| c:\Users\Home\Desktop\Ecole\ESILV\Semestre 4\PSI\PSI_DENNERY_DEGIOANNI_DEPARCEVAUX\PSI_RENDU1\Noeud.cs                         | C#       |         28 |          0 |          4 |         32 |
+| c:\Users\Home\Desktop\Ecole\ESILV\Semestre 4\PSI\PSI_DENNERY_DEGIOANNI_DEPARCEVAUX\PSI_RENDU1\PSI_RENDU1.csproj                | XML      |         12 |          0 |          4 |         16 |
+| c:\Users\Home\Desktop\Ecole\ESILV\Semestre 4\PSI\PSI_DENNERY_DEGIOANNI_DEPARCEVAUX\PSI_RENDU1\Program.cs                       | C#       |        477 |         31 |         40 |        548 |
+| c:\Users\Home\Desktop\Ecole\ESILV\Semestre 4\PSI\PSI_DENNERY_DEGIOANNI_DEPARCEVAUX\PSI_RENDU1\noeuds.json                      | JSON     |      1,662 |          0 |          0 |      1,662 |
+| c:\Users\Home\Desktop\Ecole\ESILV\Semestre 4\PSI\PSI_DENNERY_DEGIOANNI_DEPARCEVAUX\PSI_RENDU1\noeuds.xml                       | XML      |      1,331 |          0 |          0 |      1,331 |
+| c:\Users\Home\Desktop\Ecole\ESILV\Semestre 4\PSI\PSI_DENNERY_DEGIOANNI_DEPARCEVAUX\UnitTestProject1\Properties\AssemblyInfo.cs | C#       |         15 |          1 |          5 |         21 |
+| c:\Users\Home\Desktop\Ecole\ESILV\Semestre 4\PSI\PSI_DENNERY_DEGIOANNI_DEPARCEVAUX\UnitTestProject1\UnitTest1.cs               | C#       |         37 |          3 |          6 |         46 |
+| c:\Users\Home\Desktop\Ecole\ESILV\Semestre 4\PSI\PSI_DENNERY_DEGIOANNI_DEPARCEVAUX\UnitTestProject1\UnitTestProject1.csproj    | XML      |         74 |          0 |          0 |         74 |
+| Total                                                                                                                          |          |      5,815 |        167 |        443 |      6,425 |
++--------------------------------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+

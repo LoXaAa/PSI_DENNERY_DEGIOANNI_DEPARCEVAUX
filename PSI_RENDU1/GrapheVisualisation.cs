@@ -31,7 +31,7 @@ namespace PSI_RENDU1
         /// <param name="cheminSortie">Chemin du fichier de sortie</param>
         /// <param name="largeur">Largeur de l'image en pixels</param>
         /// <param name="hauteur">Hauteur de l'image en pixels</param>
-        /// <param name="utiliserIndexCouleur">Si vrai, coloration selon ColorIndex  ; sinon selon NumLigne</param>
+        /// <param name="utiliserIndexCouleur">Si vrai, coloration selon ColorIndex, sinon selon NumLigne</param>
 
         public static void GenererImageGraphe<T>(Graphe<T> graphe,string cheminSortie = "graphe.png",int largeur = 2000,int hauteur = 1400,bool utiliserIndexCouleur = false)
         {

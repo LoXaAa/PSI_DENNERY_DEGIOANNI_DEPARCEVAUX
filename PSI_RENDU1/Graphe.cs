@@ -28,18 +28,20 @@ namespace PSI_RENDU1
         public List<Lien<T>> Liens => liens;
         public bool EstOriente { get; set; } = true;
 
+#region Ajout Noeud
         public void AjouterNoeud(T id, string nom = "", double longitude = 0, double latitude = 0, string numLigne="")
         {
             if (!noeuds.ContainsKey(id))
                 noeuds[id] = new Noeud<T>(id, nom, longitude, latitude,numLigne);
         }
+#endregion
 
-
+#region Ajout Lien
         public void AjouterLien(T idSource, T idDestination, double poids)  
 {
     if (!noeuds.ContainsKey(idSource) || !noeuds.ContainsKey(idDestination))
     {
-        Console.WriteLine($"⚠️ Lien ignoré : {idSource} → {idDestination} (station manquante)");
+        Console.WriteLine($"Lien ignoré : {idSource} → {idDestination} (station manquante)");
         return;
     }
 
@@ -51,9 +53,9 @@ namespace PSI_RENDU1
     liens.Add(lien);
 }
 
+#endregion
 
-
-
+#region Affichage Graphe
         public void AfficherGraphe()
         {
             foreach (var noeud in noeuds.Values)
@@ -66,8 +68,10 @@ namespace PSI_RENDU1
                 Console.WriteLine();
             }
         }
+#endregion
 
-        #region Génération d'un graphe aléatoire
+#region Génération d'un graphe aléatoire
+
         /// <summary>
         /// Génération aléatoire d'un graphe
         /// </summary>
@@ -106,7 +110,8 @@ namespace PSI_RENDU1
     }
 }
         #endregion
-        #region Construction Matrice Adjacence
+
+#region Construction Matrice Adjacence
         /// <summary>
         /// Construction de la matrice d'adjacence du graphe
         /// </summary>
@@ -148,7 +153,8 @@ namespace PSI_RENDU1
         }
     }
         #endregion
-        #region Parcours en Profondeur
+
+#region Parcours en Profondeur
         /// <summary>
         /// Parcours en profondeur du graphe
         /// </summary>
@@ -180,7 +186,8 @@ namespace PSI_RENDU1
         Console.WriteLine();
     }
         #endregion
-        #region Parcorus en Largeur
+
+#region Parcorus en Largeur
         /// <summary>
         /// Parcours en largeur du graphe
         /// </summary>
@@ -212,14 +219,15 @@ namespace PSI_RENDU1
     Console.WriteLine();
 }
         #endregion
-        #region Detection connexité
+
+#region Detection connexité
         /// <summary>
         /// Detection de la connexité d'un graphe
         /// </summary>
         /// <returns>True ou False</returns>
         public bool EstConnexe()
 {
-    if (noeuds.Count == 0) return false; // Un graphe vide n'est pas connexe
+    if (noeuds.Count == 0) return false;
 
     HashSet<T> visites = new HashSet<T>();
     Queue<Noeud<T>> file = new Queue<Noeud<T>>();
@@ -242,10 +250,11 @@ namespace PSI_RENDU1
         }
     }
 
-    return visites.Count == noeuds.Count; // Si on a visité tous les sommets, le graphe est connexe
+    return visites.Count == noeuds.Count;
 }
         #endregion
-        #region Detection Cycle
+
+#region Detection Cycle
         /// <summary>
         /// Bolléen d'affichage si le graphe contient un cycle
         /// </summary>
@@ -292,12 +301,11 @@ namespace PSI_RENDU1
 }
         #endregion
 
-
-        #region Dijkstra
+#region Dijkstra
         /// <summary>
-        /// FOnction qui calcul Dijkstra
+        /// FOnction qui calcule Dijkstra
         /// </summary>
-        /// <param name="le temps le plus court entre les stations"></param>
+        /// <param name=source>Le noeud de départ></param>
         /// <returns>le Dijkstra en partant d'un certains sommet</returns>
         public (Dictionary<T, double> distances, Dictionary<T, T?> precedent) Dijkstra(T source)
 {
@@ -343,11 +351,11 @@ namespace PSI_RENDU1
 }
         #endregion
 
-        #region Bellman-Ford
+#region Bellman-Ford
         /// <summary>
         /// Fonction qui calcul Bellman-Ford
         /// </summary>
-        /// <param name="Un graphe"></param>
+        /// <param name=source>"Le noeud de départ"></param>
         /// <returns>le Bellman-Ford en partant du sommet choisi</returns>
         /// <exception cref="InvalidOperationException"></exception>
         public (Dictionary<T, double> distances, Dictionary<T, T?> precedent) BellmanFord(T source)
@@ -410,8 +418,7 @@ namespace PSI_RENDU1
 #region Floyd-FloydWarshall
 
 /// <summary>
-/// emploi l'algorithme de Floyd-Warshall pour calculer les distances entre tous les sommets du graphe
-/// et les chemins les plus courts entre eux.
+/// Algorithme de Floyd-Warshall pour calculer les distances entre tous les sommets du graphe et les chemins les plus courts entre eux.
 /// </summary>
 /// <returns>distance la plus courte entre tous les sommets</returns>
 public (Dictionary<T, Dictionary<T, double>> distances, Dictionary<T, Dictionary<T, T?>> precedent) FloydWarshall()
@@ -475,7 +482,7 @@ public (Dictionary<T, Dictionary<T, double>> distances, Dictionary<T, Dictionary
 /// <summary>
 /// Vérifie si le graphe est biparti via BFS
 /// </summary>
-/// <returns>True si biparti, sinon False.</returns>
+/// <returns>True si biparti, sinon False</returns>
 public bool EstBiparti()
 {
 
@@ -515,6 +522,15 @@ public bool EstBiparti()
 }
 #endregion
 
+#region Groupement
+
+/// <summary>
+/// Extrait les groupes indépendants de nœuds selon leur index de couleur
+/// </summary>
+/// <returns>
+/// Dictionnaire associant chaque index de couleur à la liste des id des nœuds qui partagent cette couleur.
+/// </returns>
+
 public Dictionary<int, List<T>> ObtenirGroupesIndependants()
         {
             return noeuds.Values
@@ -525,6 +541,8 @@ public Dictionary<int, List<T>> ObtenirGroupesIndependants()
                 );
         }
 
+#endregion
+
 #region EstPlanaire
 
 public bool EstPlanaire()
@@ -532,6 +550,34 @@ public bool EstPlanaire()
     int V = noeuds.Count;
     int E = liens.Count;
     return E <= 3 * V - 6;
+}
+#endregion
+
+#region CourtChemin entre Sommets
+/// <summary>
+/// Calcule le plus court chemin entre deux sommets via Dijkstra
+/// </summary>
+/// <param name="debut">Le sommet de départ</param>
+/// <param name="fin">Le sommet d’arrivée</param>
+/// <returns>La liste des sommets composant le chemin de du début à la fin, vide sinon</returns>
+
+
+public List<T> PlusCourtChemin(T debut, T fin)
+{
+    var (distances, precedent) = Dijkstra(debut);
+    if (!distances.ContainsKey(fin) || double.IsInfinity(distances[fin]))
+        return new List<T>();
+
+    var chemin = new List<T>();
+    T? courant = fin;
+    while (courant != null && !courant!.Equals(debut))
+    {
+        chemin.Add(courant);
+        courant = precedent[courant]!;
+    }
+    chemin.Add(debut);
+    chemin.Reverse();
+    return chemin;
 }
 #endregion
 

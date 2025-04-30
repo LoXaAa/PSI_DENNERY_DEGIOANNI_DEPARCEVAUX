@@ -2,516 +2,502 @@
 {
     using System;
     using System.IO;
-    using System.Data;
-    using System.Collections.Generic;
     using System.Linq;
+    using System.Collections.Generic;
+    using System.Threading;
 
     internal class Program
     {
-        static void Main()
-{
-    var graphe = new Graphe<int>();
-
-    Console.WriteLine("Voulez-vous :\n1. Charger le fichier métro\n2. Générer un graphe aléatoire ?");
-    Console.Write("Entrez 1 ou 2 : ");
-    string choix = Console.ReadLine();
-
-    if (choix == "1")
-    {
-        string cheminExcel = "MetroParis_A.xlsx";
-        if (!File.Exists(cheminExcel))
+#region Main
+        public static void Main(string[] args)
         {
-            Console.WriteLine("Fichier introuvable");
-            return;
-        }
-
-        // Charger les nœuds depuis Excel
-        var donneesNoeuds = LecteurExcel.LireNoeuds(cheminExcel);
-        foreach (var (id, nom, longitude, latitude,NumLigne) in donneesNoeuds)
-        {
-            graphe.AjouterNoeud(id, nom, longitude, latitude, NumLigne);
-        }
-
-        // Relier automatiquement les stations avec le même nom (ex : République)
-        var groupesDoublons = donneesNoeuds
-            .GroupBy(n => n.nom)
-            .Where(g => g.Count() > 1);
-
-        foreach (var groupe in groupesDoublons)
-        {
-            var ids = groupe.Select(n => n.id).ToList();
-            for (int i = 0; i < ids.Count; i++)
+            Database.InitDatabase();
+            bool continuer = true;
+            while (continuer)
             {
-                for (int j = i + 1; j < ids.Count; j++)
+                Titre();
+                Console.WriteLine("1. Module Graphes");
+                Console.WriteLine("2. Module Clients / Cuisiniers");
+                Console.WriteLine("3. Quitter");
+                Console.Write("Choix : ");
+                string choixModule = Console.ReadLine();
+
+                switch (choixModule)
                 {
-                    graphe.AjouterLien(ids[i], ids[j], 0.5); // temps fictif pour changement de ligne
-                    graphe.AjouterLien(ids[j], ids[i], 0.5);
+                    case "1":
+                        ModuleGraphes();
+                        break;
+                    case "2":
+                        Interface();
+                        break;
+                    case "3":
+                        continuer = false;
+                        break;
+                    default:
+                        Console.WriteLine("Choix invalide");
+                        break;
                 }
             }
         }
 
-        // Charger les arcs depuis Excel
-        var arcs = LecteurExcel.LireArcs(cheminExcel);
-        foreach (var (source, destination, poids, sensUnique) in arcs)
+        public static void ModuleGraphes()
         {
-            graphe.AjouterLien(source, destination, poids);
-            if (!sensUnique)
-                graphe.AjouterLien(destination, source, poids);
+            var graphe = new Graphe<int>();
+
+            Console.WriteLine("1 --> Charger le métro | 2 --> Graphe aléatoire");
+            Console.Write("Choix : ");
+            string choix = Console.ReadLine();
+            if (choix == "1")
+            {
+                string fichier = "MetroParis_A.xlsx";
+                if (!File.Exists(fichier))
+                {
+                    Console.WriteLine("Fichier introuvable");
+                    return;
+                }
+                var donneesNoeuds = LecteurExcel.LireNoeuds(fichier);
+                foreach (var (id, nom, lon, lat, ligne) in donneesNoeuds)
+                    graphe.AjouterNoeud(id, nom, lon, lat, ligne);
+                var doublons = donneesNoeuds.GroupBy(n => n.nom).Where(g => g.Count() > 1);
+                foreach (var g in doublons)
+                {
+                    var liste = g.Select(n => n.id).ToList();
+                    for (int i = 0; i < liste.Count; i++)
+                        for (int j = i + 1; j < liste.Count; j++)
+                        {
+                            graphe.AjouterLien(liste[i], liste[j], 0.5);
+                            graphe.AjouterLien(liste[j], liste[i], 0.5);
+                        }
+                }
+                var arcs = LecteurExcel.LireArcs(fichier);
+                foreach (var (src, dst, pds, su) in arcs)
+                {
+                    graphe.AjouterLien(src, dst, pds);
+                    if (!su)
+                        graphe.AjouterLien(dst, src, pds);
+                }
+                Console.WriteLine("Graphe chargé avec succès");
+            }
+            else if (choix == "2")
+            {
+                Console.Write("Nombre de sommets : ");
+                int n = int.Parse(Console.ReadLine());
+                Console.Write("Nombre de liens : ");
+                int m = int.Parse(Console.ReadLine());
+                graphe.GenererGrapheAleatoire(n, m);
+            }
+            else
+            {
+                Console.WriteLine("Choix invalide");
+                return;
+            }
+            Console.Write("Parcours en longueur --> 1 | Parcours en largeur --> 2 : ");
+            string cp = Console.ReadLine();
+            Console.Write("Sommet de départ : ");
+            int sd = int.Parse(Console.ReadLine());
+            if (cp == "1")
+                graphe.ParcoursProfondeur(sd);
+            else if (cp == "2")
+                graphe.ParcoursLargeur(sd);
+
+            Console.WriteLine(graphe.EstConnexe() ? "Connexité" : "Non connexe");
+            Console.WriteLine(graphe.ContientUnCycle() ? "Présence de cycle" : "Acyclique");
+            GrapheVisualisation.GenererImageGraphe(graphe, "graphe_esthetique.png");
+
+            Console.Write("Algo de plus court chemin : Dijkstra --> 1 | Bellman-Ford --> 2 | Floyd-Warshall --> 3");
+            string ca = Console.ReadLine();
+            if (ca == "1")
+                ExecuterDijkstra(graphe);
+            else if (ca == "2")
+                ExecuterBellmanFord(graphe);
+            else if (ca == "3")
+                ExecuterFloydWarshall(graphe);
+
+            Console.WriteLine("Coloration en cours...");
+            int nbC = GraphColoring<int>.WelshPowell(graphe);
+            Console.WriteLine($"Graphe colorié avec {nbC} couleurs");
+            GrapheVisualisation.GenererImageGraphe(graphe, "graphe_clusters.png", 2000, 1400, true);
+
+            var groupes = graphe.ObtenirGroupesIndependants();
+            foreach (var kv in groupes.OrderBy(kv => kv.Key))
+                Console.WriteLine($"Groupe {kv.Key} : {string.Join(", ", kv.Value)}");
+
+            Console.WriteLine($"Biparti ? --> {graphe.EstBiparti()}");
+            Console.WriteLine($"Planaire ? --> {graphe.EstPlanaire()}");
+
+            GraphExporter<int>.ExporterEnJson("noeuds.json", graphe);
+            GraphExporter<int>.ExporterEnXml("noeuds.xml", graphe);
+            Console.WriteLine("Exports JSON/XML réalisés avec succès");
+
+            var grapheRel = ConstructeurGrapheRelations.ConstruireDepuisBDD();
+
+            Console.Write("ID client : ");
+            int idClient = int.Parse(Console.ReadLine()!);
+            Console.Write("ID cuisinier : ");
+            int idCuisinier = int.Parse(Console.ReadLine()!);
+
+            var chemin = grapheRel.PlusCourtChemin($"C{idClient}", $"U{idCuisinier}");
+            if (chemin.Count == 0)
+                Console.WriteLine("Aucun chemin trouvé.");
+            else
+                Console.WriteLine("Plus court chemin : " + string.Join(" → ", chemin));
+        }
+#endregion
+
+#region Interface
+
+        /// <summary>
+        /// Menu de gestion des clients, cuisiniers et commandes.
+        /// </summary>
+
+        static void Interface()
+        {
+            bool continuer = true;
+            while (continuer)
+            {
+                Titre();
+                Console.WriteLine("1: Se connecter");
+                Console.WriteLine("2: Créer un compte");
+                Console.WriteLine("3: Voir la liste des comptes");
+                Console.WriteLine("4: Quitter");
+                int option = SaisieOption();
+                int idCompte;
+                bool acces = false;
+                switch (option)
+                {
+                    case 1:
+                        Console.Write("Identifiant : ");
+                        idCompte = SaisNombre();
+                        acces = Database.ConnexionCompte(idCompte);
+                        ChoixCuisinierClient(idCompte, acces);
+                        break;
+                    case 2:
+                        idCompte = Database.AjouterCompte();
+                        acces = true;
+                        ChoixCuisinierClient(idCompte, acces);
+                        break;
+                    case 3:
+                        Database.MontrerEssentiel("Compte");
+                        break;
+                    case 4:
+                        continuer = false;
+                        break;
+                    default:
+                        Console.WriteLine("Option invalide");
+                        break;
+                }
+            }
         }
 
-        Console.WriteLine("✅ Graphe métro chargé avec succès.");
-    }
-    else if (choix == "2")
-    {
-        Console.Write("Combien de sommets pour le graphe ? ");
-        int nombreSommets = int.Parse(Console.ReadLine());
-
-        Console.Write("Combien d'arêtes pour le graphe ? ");
-        int nombreAretes = int.Parse(Console.ReadLine());
-
-        graphe.GenererGrapheAleatoire(nombreSommets, nombreAretes);
-    }
-    else
-    {
-        Console.WriteLine("Choix invalide");
-        return;
-    }
-
-    Console.WriteLine("\nVoulez-vous afficher un parcours ?");
-    Console.WriteLine("1. Parcours en profondeur (DFS)");
-    Console.WriteLine("2. Parcours en largeur (BFS)");
-    Console.Write("Entrez 1 ou 2 : ");
-    string choixParcours = Console.ReadLine();
-
-    Console.Write("Entrez le sommet de départ : ");
-    int sommetDepart = int.Parse(Console.ReadLine());
-
-    if (choixParcours == "1")
-        graphe.ParcoursProfondeur(sommetDepart);
-    else if (choixParcours == "2")
-        graphe.ParcoursLargeur(sommetDepart);
-    else
-        Console.WriteLine("Choix invalide");
-
-    Console.WriteLine(graphe.EstConnexe()
-        ? "Le graphe est connexe"
-        : "Le graphe n'est pas connexe");
-
-    Console.WriteLine(graphe.ContientUnCycle()
-        ? "Le graphe contient un ou plusieurs cycles"
-        : "Le graphe est acyclique");
-
-    Console.WriteLine("\nAffichage du graphe :");
-    GrapheVisualisation.GenererImageGraphe(graphe, "graphe_esthetique.png");
-
-    Console.WriteLine("\nVoulez-vous exécuter un algorithme de plus court chemin ?");
-    Console.WriteLine("1. Dijkstra");
-    Console.WriteLine("2. Bellman-Ford");
-    Console.WriteLine("3. Floyd-Warshall");
-    Console.Write("Entrez 1, 2 ou 3 : ");
-    string choixAlgo = Console.ReadLine();
-
-    if (choixAlgo == "1")
-        ExecuterDijkstra(graphe);
-    else if (choixAlgo == "2")
-        ExecuterBellmanFord(graphe);
-    else if (choixAlgo == "3")
-    ExecuterFloydWarshall(graphe);
-
-    else
-        Console.WriteLine("Choix invalide");
-
-    Console.WriteLine("\nAffichage du graphe chargé :");
-    graphe.AfficherGraphe();
-
-int nbCouleurs = GraphColoring<int>.WelshPowell(graphe);
-Console.WriteLine($"\n✅ Graphe colorié avec {nbCouleurs} couleurs.");
-GrapheVisualisation.GenererImageGraphe(graphe,cheminSortie: "graphe_clusters.png",largeur: 2000,hauteur: 1400,utiliserIndexCouleur: true);
-
-GraphExporter<int>.ExporterEnJson("noeuds.json", graphe);
-GraphExporter<int>.ExporterEnXml("noeuds.xml", graphe);
-Console.WriteLine("✅ Export JSON/XML réalisés : noeuds.json, noeuds.xml");
-
-}
-
+        /// <summary>
+        /// Algorithme Dijkstra
+        /// </summary>
         static void ExecuterDijkstra<T>(Graphe<T> graphe)
         {
-            Console.Write("\nEntrez le sommet de départ pour Dijkstra : ");
+            Console.Write("ID départ : ");
             string input = Console.ReadLine();
-
-            T sommetDepart = (T)Convert.ChangeType(input, typeof(T));
-
-            (Dictionary<T, double> distances, Dictionary<T, T?> precedent) = graphe.Dijkstra(sommetDepart);
-
-            Console.WriteLine($"\nDistances minimales depuis le sommet {sommetDepart} (Dijkstra) :");
-            foreach (var kvp in distances)
-            {
-                Console.WriteLine($"Vers {kvp.Key} : {kvp.Value}");
-            }
+            T depart = (T)Convert.ChangeType(input, typeof(T));
+            var (distances, precedent) = graphe.Dijkstra(depart);
+            Console.WriteLine($"Distances depuis {depart} (Dijkstra) :");
+            foreach (var kv in distances)
+                Console.WriteLine($"Vers {kv.Key} : {kv.Value}");
         }
 
+        /// <summary>
+        /// Algorithme Bellman-Ford
+        /// </summary>
         static void ExecuterBellmanFord<T>(Graphe<T> graphe)
         {
-            Console.Write("\nEntrez le sommet de départ pour Bellman-Ford : ");
+            Console.Write("ID départ : ");
             string input = Console.ReadLine();
-
-            T sommetDepart = (T)Convert.ChangeType(input, typeof(T));
-
+            T depart = (T)Convert.ChangeType(input, typeof(T));
             try
             {
-                (Dictionary<T, double> distances, Dictionary<T, T?> precedent) = graphe.BellmanFord(sommetDepart);
-
-                Console.WriteLine($"\nDistances minimales depuis le sommet {sommetDepart} (Bellman-Ford) :");
-                foreach (var kvp in distances)
-                {
-                    Console.WriteLine($"Vers {kvp.Key} : {kvp.Value}");
-                }
+                var (distances, precedent) = graphe.BellmanFord(depart);
+                Console.WriteLine($"Distances depuis {depart} (Bellman-Ford) :");
+                foreach (var kv in distances)
+                    Console.WriteLine($"Vers {kv.Key} : {kv.Value}");
             }
             catch (InvalidOperationException ex)
             {
-                Console.WriteLine($"\nErreur : {ex.Message}");
+                Console.WriteLine($"Erreur : {ex.Message}");
             }
         }
 
+        /// <summary>
+        /// Algorithme Floyd-Warshall
+        /// </summary>
         static void ExecuterFloydWarshall(Graphe<int> graphe)
-{
-    var (distances, precedents) = graphe.FloydWarshall();
-
-    Console.WriteLine("Sommet de départ : ");
-    if (!int.TryParse(Console.ReadLine(), out int depart))
-    {
-        Console.WriteLine("❌ Entrée invalide.");
-        return;
-    }
-
-    if (!graphe.Noeuds.ContainsKey(depart))
-    {
-        Console.WriteLine("❌ Ce sommet n'existe pas.");
-        return;
-    }
-
-    Console.WriteLine($"\n📍 Distances minimales depuis le sommet {depart} (Floyd-Warshall) :");
-    foreach (var destination in graphe.Noeuds.Keys.OrderBy(k => k))
-    {
-        double distance = distances[depart][destination];
-        Console.WriteLine($"Vers {destination} : {(double.IsInfinity(distance) ? "∞" : distance.ToString())}");
-    }
-    // Interface();
-}
-
-        static void Interface()
-{
-    bool continuer = true;
-    while (continuer)
-    {
-        Titre();
-        Console.WriteLine("\tMENU");
-        Console.WriteLine("\nVeuillez vous connecter à votre compte:");
-        Console.WriteLine("1: Connecter vous à un compte existant");
-        Console.WriteLine("2: Créer un compte");
-        Console.WriteLine("3: Voir la liste de compte");
-        Console.WriteLine("4: Quitter l'application\n");
-        int idCompte;
-        bool acces = false;
-        int option = SaisieOption();
-        switch (option)
         {
-            case 1:
-                Console.WriteLine("Vous avez choisi de vous connecter à un compte existant");
-                Console.WriteLine("Veuillez entrer votre identifiant :");
-                idCompte = SaisNombre();
-                acces= Database.ConnexionCompte(idCompte);
-                ChoixCuisinierClient(idCompte, acces);
-                break;
-            case 2:
-                Console.WriteLine("Vous avez choisi de créer un compte");
-                idCompte=Database.AjouterCompte();
-                acces = true;
-                ChoixCuisinierClient(idCompte, acces);
-                break;
-            case 3:
-                Titre();
-                Database.MontrerEssentiel("Compte");
-                break;
-            case 4:
-                Console.WriteLine("Vous avez choisi de quitter l'application");
-                continuer = false;
-                break;
-            default:
-                Console.WriteLine("Option invalide");
-                break;
-        }
-    }
-}
-static void ChoixCuisinierClient(int idCompte, bool acces)
-{
-    Titre();
-    if (!acces)
-    {
-        Console.WriteLine("Vous n'avez pas accès à votre compte");
-        return;
-    }
-    while (acces)
-    {
-        Console.WriteLine("Voulez-vous consulter votre compte en tant que :\n\t1-Cuisinier \n\t2-Client \n\t3-Quitter");
-        int option = SaisieOption();
-        switch (option)
-        {
-            case 1:
-                Console.WriteLine("Vous avez choisi de consulter votre compte en tant que cuisinier");
-                Database.ConnexionCuisinier(idCompte);
-                ChoixCuisinier(idCompte);
-                break;
-            case 2:
-                Console.WriteLine("Vous avez choisi de consulter votre compte en tant que client");
-                Database.ConnexionClient(idCompte);
-                ChoixClient(idCompte);
-                break;
-            case 3:
-                Console.WriteLine("Vous avez choisi de quitter ");
-                acces = false;
-                break;
-            default:
-                Console.WriteLine("Option invalide");
-                break;
+            var (distances, precedent) = graphe.FloydWarshall();
+            Console.Write("ID départ : ");
+            if (!int.TryParse(Console.ReadLine(), out int depart) 
+                || !graphe.Noeuds.ContainsKey(depart))
+            {
+                Console.WriteLine("Entrée invalide");
+                return;
+            }
+            Console.WriteLine($"Distances depuis {depart} (Floyd-Warshall) :");
+            foreach (var dst in graphe.Noeuds.Keys.OrderBy(k => k))
+            {
+                double d = distances[depart][dst];
+                Console.WriteLine($"Vers {dst} : {(double.IsInfinity(d) ? "∞" : d.ToString())}");
+            }
         }
 
-    }
-}
-static void ChoixCuisinier(int idCompte)
+        /// <summary>
+        /// Menu Cuisinier/Client après connexion
+        /// </summary>
+        static void ChoixCuisinierClient(int idCompte, bool acces)
+        {
+            if (!acces)
+            {
+                Console.WriteLine("Accès refusé");
+                return;
+            }
+            while (true)
+            {
+                Console.WriteLine("1: Cuisinier   2: Client   3: Quitter");
+                int choix = SaisieOption();
+                switch (choix)
+                {
+                    case 1:
+                        Database.ConnexionCuisinier(idCompte);
+                        ChoixCuisinier(idCompte);
+                        break;
+                    case 2:
+                        Database.ConnexionClient(idCompte);
+                        ChoixClient(idCompte);
+                        break;
+                    case 3:
+                        return;
+                    default:
+                        Console.WriteLine("Option invalide");
+                        break;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Menu spécifique au cuisinier
+        /// </summary>
+        static void ChoixCuisinier(int idCompte)
 {
     int idCuisinier = Database.RecupererId(idCompte, "Cuisinier");
-    if (idCuisinier == -1)
+    if (idCuisinier < 1)
     {
-        Console.WriteLine("Aucun cuisinier associé à ce compte. Veuillez vérifier vos informations.");
+        Console.WriteLine("Aucun cuisinier associé");
         return;
     }
+
     bool continuer = true;
     while (continuer)
     {
         Titre();
-        Console.WriteLine("Bienvenue dans votre espace Cuisinier\n");// à faire une fonction qui récupère le prenom du compte pour dire 'Bienvenue dans le menu cuisinier {toi}'
         Console.WriteLine("1: Gestion de vos recettes");
         Console.WriteLine("2: Gestion de vos plats");
         Console.WriteLine("3: Gestion de vos ingrédients");
-        Console.WriteLine("4: Gestion de vos Commandes");//update valider la commande
-        Console.WriteLine("5: Voir vos Avis");
-        Console.WriteLine("6: Profil");// voir ses informations, peut les changer, voit cb il s'est fait, combien de plat il a préparé
+        Console.WriteLine("4: Gestion de vos commandes");
+        Console.WriteLine("5: Voir vos avis");
+        Console.WriteLine("6: Profil");
         Console.WriteLine("7: Quitter");
-        int option = SaisieOption();
-       switch (option)
-{
-    case 1:
-        bool continuer1 = true;
-        while (continuer1)
-        {
-            Titre();
-            Console.WriteLine("Vous avez choisi de gérer vos recettes\n");
-            Console.WriteLine("1: Ajouter une recette");
-            Console.WriteLine("2: Supprimer une recette");
-            Console.WriteLine("3: Modifier une recette");
-            Console.WriteLine("4: Voir ses recettes");
-            Console.WriteLine("5: Quitter");
-            int option1 = SaisieOption();
+        int choix = SaisieOption();
 
-            switch (option1)
-            {
-                case 1:
-                    Console.WriteLine("Vous avez choisi d'ajouter une recette");
-                    Database.AjouterRecette();
-                    break;
-                case 2:
-                    Console.WriteLine("Vous avez choisi de supprimer une recette");
-                    Database.Supprimer("Recette");
-                    break;
-                case 3:
-                    Console.WriteLine("Vous avez choisi de modifier une recette");
-                    Database.ModifierRecette();
-                    break;
-                case 4:
-                    Console.WriteLine("Vous avez choisi de voir vos recettes");
-                    Database.Montrer("Recette");
-                    break;
-                case 5:
-                    Console.WriteLine("Vous avez choisi de quitter");
-                    continuer1 = false;
-                    break;
-                default:
-                    Console.WriteLine("Option invalide");
-                    break;
-            }
-        }
-        break;
-    case 2:
-        bool continuer2 = true;
-        while (continuer2)
+        switch (choix)
         {
-            Titre();
-            Console.WriteLine("Vous avez choisi de gérer vos plats\n");
-            Console.WriteLine("1: Ajouter un plat");
-            Console.WriteLine("2: Supprimer un plat");
-            Console.WriteLine("3: Modifier un plat");
-            Console.WriteLine("4: Voir ses plats");
-            Console.WriteLine("5: Quitter");
-            int option2 = SaisieOption();
-            switch (option2)
-            {
-                case 1:
-                    Console.WriteLine("Vous avez choisi d'ajouter un plat");
-                    Database.AjouterPlat(idCompte);
-                    break;
-                case 2:
-                    Console.WriteLine("Vous avez choisi de supprimer un plat");
-                    Database.Supprimer("Plat");
-                    break;
-                case 3:
-                    Console.WriteLine("Vous avez choisi de modifier un plat");
-                    Database.ModifierPlat(idCompte);
-                    break;
-                case 4:
-                    Console.WriteLine("Vous avez choisi de voir vos plats");
-                    Database.Montrer("Plat",idCuisinier);
-                    break;
-                case 5:
-                    Console.WriteLine("Vous avez choisi de quitter");
-                    continuer2 = false;
-                    break;
-                default:
-                    Console.WriteLine("Option invalide");
-                    break;
-            }
-        }
-        break;
-    case 3:
-        bool continuer3 = true;
-        while (continuer3)
-        {
-            Titre();
-            Console.WriteLine("Vous avez choisi de gérer vos ingrédients\n");
-            Console.WriteLine("1: Ajouter un ingrédient");
-            Console.WriteLine("2: Supprimer un ingrédient");
-            Console.WriteLine("3: Modifier un ingrédient");
-            Console.WriteLine("4: Voir ses ingrédients");
-            Console.WriteLine("5: Quitter");
-            int option3 = SaisieOption();
-            switch (option3)
-            {
-                case 1:
-                    Console.WriteLine("Vous avez choisi d'ajouter un ingrédient");
-                    Database.AjouterIngredient();
-                    break;
-                case 2:
-                    Console.WriteLine("Vous avez choisi de supprimer un ingrédient");
-                    Database.Supprimer("Ingredient");
-                    break;
-                case 3:
-                    Console.WriteLine("Vous avez choisi de modifier un ingrédient");
-                    Database.ModifierIngredient();
-                    break;
-                case 4:
-                    Console.WriteLine("Vous avez choisi de voir vos ingrédients");
-                    Database.Montrer("Ingredient");
-                    break;
-                case 5:
-                    Console.WriteLine("Vous avez choisi de quitter");
-                    continuer3 = false;
-                    break;
-            }
+            case 1:
+                // Recettes
+                bool contRec = true;
+                while (contRec)
+                {
+                    Titre();
+                    Console.WriteLine("Recettes : 1-Ajouter 2-Supprimer 3-Modifier 4-Voir 5-Quitter");
+                    int op = SaisieOption();
+                    switch (op)
+                    {
+                        case 1:
+                            Database.AjouterRecette();
+                            break;
+                        case 2:
+                            Database.Supprimer("Recette");
+                            break;
+                        case 3:
+                            Database.ModifierRecette();
+                            break;
+                        case 4:
+                            Database.Montrer("Recette");
+                            break;
+                        case 5:
+                            contRec = false;
+                            break;
+                        default:
+                            Console.WriteLine("Option invalide");
+                            break;
+                    }
+                }
+                break;
 
+            case 2:
+                bool contPlat = true;
+                while (contPlat)
+                {
+                    Titre();
+                    Console.WriteLine("Plats : 1-Ajouter 2-Supprimer 3-Modifier 4-Voir 5-Quitter");
+                    int op2 = SaisieOption();
+                    switch (op2)
+                    {
+                        case 1:
+                            Database.AjouterPlat(idCompte);
+                            break;
+                        case 2:
+                            Database.Supprimer("Plat");
+                            break;
+                        case 3:
+                            Database.ModifierPlat(idCompte);
+                            break;
+                        case 4:
+                            Database.Montrer("Plat", Database.RecupererId(idCompte, "Cuisinier"));
+                            break;
+                        case 5:
+                            contPlat = false;
+                            break;
+                        default:
+                            Console.WriteLine("Option invalide");
+                            break;
+                    }
+                }
+                break;
+
+            case 3:
+                bool contIng = true;
+                while (contIng)
+                {
+                    Titre();
+                    Console.WriteLine("Ingrédients : 1-Ajouter 2-Supprimer 3-Modifier 4-Voir 5-Quitter");
+                    int op3 = SaisieOption();
+                    switch (op3)
+                    {
+                        case 1:
+                            Database.AjouterIngredient();
+                            break;
+                        case 2:
+                            Database.Supprimer("Ingredient");
+                            break;
+                        case 3:
+                            Database.ModifierIngredient();
+                            break;
+                        case 4:
+                            Database.Montrer("Ingredient");
+                            break;
+                        case 5:
+                            contIng = false;
+                            break;
+                        default:
+                            Console.WriteLine("Option invalide");
+                            break;
+                    }
+                }
+                break;
+
+            case 4:
+                bool contCmd = true;
+                while (contCmd)
+                {
+                    Titre();
+                    Console.WriteLine("Commandes : 1 --> Ajouter | 2 --> Supprimer | 3 --> Modifier | 4 --> Voir | 5 --> Quitter");
+                    int op4 = SaisieOption();
+                    switch (op4)
+                    {
+                        case 1:
+                            Console.WriteLine("\n🔎 Commandes en attente pour ce cuisinier :");
+                            Database.Montrer("Commande", Database.RecupererId(idCompte, "Cuisinier"));
+
+                            Console.Write("\nID de la commande à valider : ");
+                            int idCmd;
+                            while (!int.TryParse(Console.ReadLine(), out idCmd))
+                                Console.Write("Veuillez entrer un ID valide : ");
+
+                            Console.Write("Nouveau statut : ");
+                            string nouveauStatut = Console.ReadLine()?.Trim() ?? "";
+
+                            Database.ModifierStatutCommande(idCmd, nouveauStatut);
+    break;
+                        case 2:
+                            Database.Supprimer("Commande");
+                            break;
+                        case 3:
+                            Database.ModifierCommande(idCompte);
+                            break;
+                        case 4:
+                            Database.Montrer("Commande", Database.RecupererId(idCompte, "Cuisinier"));
+                            break;
+                        case 5:
+                            contCmd = false;
+                            break;
+                        default:
+                            Console.WriteLine("Option invalide");
+                            break;
+                    }
+                }
+                break;
+
+            case 5:
+                Database.Montrer("Avis", idCuisinier);
+                break;
+
+            case 6:
+                Database.MontrerProfilCuisinier(idCuisinier);
+                break;
+
+            case 7:
+                continuer = false;
+                break;
+
+            default:
+                Console.WriteLine("Option invalide");
+                break;
         }
-        break;
-    case 4:
-        bool continuer4 = true;
-        while (continuer4)
-        {
-            Titre();
-            Console.WriteLine("Vous avez choisi de gérer vos commandes\n");
-            Console.WriteLine("2: Supprimer une commande");
-            Console.WriteLine("3: Modifier une commande");
-            Console.WriteLine("4: Voir ses commandes");
-            Console.WriteLine("5: Quitter");
-            int option4 = SaisieOption();
-            switch (option4)
-            {
-                case 2:
-                    Console.WriteLine("Vous avez choisi de supprimer une commande");
-                    Database.Supprimer("Commande");
-                    break;
-                case 3:
-                    Console.WriteLine("Vous avez choisi de modifier une commande");
-                    Database.ModifierCommande(idCompte);
-                    break;
-                case 4:
-                    Console.WriteLine("Vous avez choisi de voir vos commandes");
-                    Database.Montrer("Commande",idCuisinier);
-                    break;
-                case 5:
-                    Console.WriteLine("Vous avez choisi de quitter");
-                    continuer4 = false;
-                    break;
-                default:
-                    Console.WriteLine("Option invalide");
-                    break;
-            }
-        }
-        break;// à changer
-    case 5:
-        Console.WriteLine("Vous avez choisi de voir vos avis");
-        Database.Montrer("Avis",idCuisinier); //voir si ne pas faire une fonction pour montter les avis
-        break;
-    case 6:
-        Console.WriteLine("Vous avez choisi de voir votre profil");
-        Database.MontrerProfilCuisinier(idCuisinier); 
-        break;
-    case 7:
-        Console.WriteLine("Vous avez choisi de quitter");
-        continuer = false;
-        break;
-    default:
-        Console.WriteLine("Option invalide");
-        break;
-}
     }
 }
-static void ChoixClient(int idCompte)
+
+        /// <summary>
+        /// Menu specifique au client
+        /// </summary>
+        static void ChoixClient(int idCompte)
 {
     int idClient = Database.RecupererId(idCompte, "Client");
-    if (idClient == -1)
+    if (idClient < 1)
     {
-        Console.WriteLine("Aucun cuisinier associé à ce compte. Veuillez vérifier vos informations.");
+        Console.WriteLine("Aucun client associé");
         return;
     }
+
     bool continuer = true;
     while (continuer)
     {
         Titre();
-        Console.WriteLine("Bienvenue dans votre espace Client\n");// à faire une fonction qui récupère le prenom du compte pour dire 'Bienvenue dans le menu cuisinier {toi}'
-        Console.WriteLine("1: Commander");// voir les commandes possibles
-        Console.WriteLine("2: Voir vos commandes"); //en cours/terminée
-        Console.WriteLine("3: Faites un avis sur un plat");
+        Console.WriteLine("1: Commander");
+        Console.WriteLine("2: Voir vos commandes");
+        Console.WriteLine("3: Faire un avis");
         Console.WriteLine("4: Profil");
         Console.WriteLine("5: Quitter");
-        int option = SaisieOption();
-        switch (option)
+        int choix = SaisieOption();
+
+        switch (choix)
         {
             case 1:
-                Console.WriteLine("Vous avez choisi de commander");
                 Database.Commander(idClient);
                 break;
             case 2:
-                Console.WriteLine("Vous avez choisi de voir vos commandes");
-                Database.Montrer("Commande");
+                Database.Montrer("Commande", idClient);
                 break;
             case 3:
-                Console.WriteLine("Vous avez choisi de faire un avis sur un plat");
-                Database.AjouterAvis(idClient,idCompte);//faux
+                Database.AjouterAvis(idClient, idCompte);
                 break;
             case 4:
-                Console.WriteLine("Vous avez choisi de voir votre profil");
-                Database.MontrerProfilClient(idClient); //voir si ne pas faire une fonction pour montter les avis
+                Database.MontrerProfilClient(idClient);
                 break;
             case 5:
-                Console.WriteLine("Vous avez choisi de quitter");
                 continuer = false;
                 break;
             default:
@@ -519,41 +505,43 @@ static void ChoixClient(int idCompte)
                 break;
         }
     }
-
-}
-public static void Titre()
-{
-    //Console.Clear();
-    Console.WriteLine("Liv'in Paris\n");
-}
-static int SaisieOption()
-{
-    Console.WriteLine("Veuillez choisir une des options proposées en saississant le numéro qu'il lui est associé");
-    int nb;
-    do
-    {
-        string result = Console.ReadLine();
-        if (int.TryParse(result, out nb) && nb >= 0)
-        {
-            return nb;
-        }
-        Console.WriteLine("Veuillez saisir un des chiffres proposés");
-    } while (true);
-}
-public static int SaisNombre()
-{
-    int nb;
-    do
-    {
-        Console.WriteLine("Veuillez écrire un nombre strictement positif :");
-        string result = Console.ReadLine();
-        if (int.TryParse(result, out nb) && nb >= 1)
-        {
-            return nb;
-        }
-        Console.WriteLine("Entrée invalide. Veuillez entrer un nombre strictement positif.");
-    } while (true);
 }
 
-}
+        /// <summary>
+        /// Affiche le titre de l'application
+        /// </summary>
+        public static void Titre()
+        {
+            Console.WriteLine("Liv'in Paris\n");
+        }
+
+        /// <summary>
+        /// Lit une option dans la console
+        /// </summary>
+        static int SaisieOption()
+        {
+            while (true)
+            {
+                string s = Console.ReadLine();
+                if (int.TryParse(s, out int v) && v >= 1)
+                    return v;
+                Console.WriteLine("Entrée invalide");
+            }
+        }
+
+        /// <summary>
+        /// Lecture nombre
+        /// </summary>
+        public static int SaisNombre()
+        {
+            while (true)
+            {
+                string s = Console.ReadLine();
+                if (int.TryParse(s, out int v) && v > 0)
+                    return v;
+                Console.WriteLine("Réessayez");
+            }
+        }
+#endregion
+    }
 }

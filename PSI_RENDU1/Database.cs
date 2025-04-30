@@ -141,7 +141,7 @@ namespace PSI_RENDU1
                 return;
             }
 
-            
+
 
             Console.Write("Nom de l'entreprise : ");
             string nomEntreprise = Console.ReadLine();
@@ -184,7 +184,7 @@ namespace PSI_RENDU1
                 return;
             }
 
-            
+
 
             Console.Write("Zone de livraison : ");
             string zoneLivraison = Console.ReadLine();
@@ -220,7 +220,7 @@ namespace PSI_RENDU1
         }
         public static void AjouterRecette()
         {
-            
+
 
             Console.WriteLine("Création d'une nouvelle recette\n");
 
@@ -301,7 +301,7 @@ namespace PSI_RENDU1
         }
         public static void AjouterIngredient()
         {
-            
+
 
             Console.WriteLine("Ajout d'un nouvel ingrédient\n");
 
@@ -338,7 +338,7 @@ namespace PSI_RENDU1
         }
         public static void AjouterPlat(int idCuisinier)
         {
-            
+
 
             Console.WriteLine("Ajout d'un nouveau plat\n");
 
@@ -463,7 +463,7 @@ namespace PSI_RENDU1
 
         static public int AjouterCommande(int idClient, int idCuisinier)
         {
-            
+
 
             Console.WriteLine("Création d'une nouvelle commande\n");
 
@@ -527,7 +527,7 @@ namespace PSI_RENDU1
 
         static public void AjouterAvis(int idClient, int idCuisinier)
         {
-            
+
             Console.WriteLine("Création d'un avis\n");
             Console.Write("Note (1-5) : ");
             int note;
@@ -590,7 +590,7 @@ namespace PSI_RENDU1
                 return;
             }
 
-            
+
 
             try
             {
@@ -652,7 +652,7 @@ namespace PSI_RENDU1
                 return;
             }
 
-            
+
 
             try
             {
@@ -699,7 +699,7 @@ namespace PSI_RENDU1
         static public bool ConnexionCompte(int idCompte)
         {
             Program.Titre();
-            
+
             Console.WriteLine("Connexion à votre compte\n");
             Console.Write("\nMot de passe: ");
             string motDePasse = Console.ReadLine();
@@ -738,7 +738,7 @@ namespace PSI_RENDU1
         #region fonction de supression
         static public void Supprimer(string element)
         {
-            
+
 
             Console.Write("Entrez l'ID du(/de l') " + element + " à supprimer : ");
             int idElement;
@@ -793,7 +793,7 @@ namespace PSI_RENDU1
         #region Fonctions montrer
         static public void MontrerEssentiel(string element)
         {
-            
+
             try
             {
                 OpenConnection();
@@ -822,7 +822,7 @@ namespace PSI_RENDU1
         }// valable que pour cuisinier, client et compte
         static public void Montrer(string element)
         {
-            
+
             try
             {
                 OpenConnection();
@@ -864,7 +864,7 @@ namespace PSI_RENDU1
         }
         static public void Montrer(string element, int id)
         {
-            
+
             try
             {
                 OpenConnection();
@@ -907,7 +907,7 @@ namespace PSI_RENDU1
         }
         static public void MontrerProfilCuisinier(int idCuisinier)
         {
-            
+
             try
             {
                 OpenConnection();
@@ -967,7 +967,7 @@ namespace PSI_RENDU1
         }
         static public void MontrerProfilClient(int idClient)
         {
-            
+
             try
             {
                 OpenConnection();
@@ -1031,8 +1031,8 @@ namespace PSI_RENDU1
         #region fonction de modification
         static public void ModifierClient(int idCompte)
         {
-            
-            
+
+
             try
             {
                 OpenConnection(); // Ouvrir la connexion
@@ -1138,11 +1138,7 @@ namespace PSI_RENDU1
             }
             finally
             {
-                // Fermer la connexion
-                if (connection != null && connection.State == System.Data.ConnectionState.Open)
-                {
-                    connection.Close();
-                }
+                CloseConnection();
             }
         }
 
@@ -1259,10 +1255,7 @@ namespace PSI_RENDU1
 
             try
             {
-                // Configuration de la connexion à la base de données
-                string connectionString = "Server=localhost;Database=livparis;User ID=root;Password=root;SslMode=none;AllowPublicKeyRetrieval=True;";
-                connection = new MySqlConnection(connectionString);
-                connection.Open(); // Ouvrir la connexion
+                OpenConnection();
 
                 Console.WriteLine("Entrez l'ID du plat à modifier :");
                 int idPlat = int.Parse(Console.ReadLine());
@@ -1300,10 +1293,7 @@ namespace PSI_RENDU1
             finally
             {
                 // Fermer la connexion
-                if (connection != null && connection.State == System.Data.ConnectionState.Open)
-                {
-                    connection.Close();
-                }
+                CloseConnection();
             }
         }
 
@@ -1330,7 +1320,7 @@ namespace PSI_RENDU1
                 Console.Write("Veuillez entrer un ID de plat valide : ");
             }
 
-            
+
             int idCuisinier = -1;
 
             try
@@ -1378,7 +1368,7 @@ namespace PSI_RENDU1
         #region Récup id
         static public int RecupererId(int idCompte, string element)
         {
-            
+
             int idCuisinier = -1;
 
             try

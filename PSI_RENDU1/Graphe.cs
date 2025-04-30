@@ -28,34 +28,34 @@ namespace PSI_RENDU1
         public List<Lien<T>> Liens => liens;
         public bool EstOriente { get; set; } = true;
 
-#region Ajout Noeud
-        public void AjouterNoeud(T id, string nom = "", double longitude = 0, double latitude = 0, string numLigne="")
+        #region Ajout Noeud
+        public void AjouterNoeud(T id, string nom = "", double longitude = 0, double latitude = 0, string numLigne = "")
         {
             if (!noeuds.ContainsKey(id))
-                noeuds[id] = new Noeud<T>(id, nom, longitude, latitude,numLigne);
+                noeuds[id] = new Noeud<T>(id, nom, longitude, latitude, numLigne);
         }
-#endregion
+        #endregion
 
-#region Ajout Lien
-        public void AjouterLien(T idSource, T idDestination, double poids)  
-{
-    if (!noeuds.ContainsKey(idSource) || !noeuds.ContainsKey(idDestination))
-    {
-        Console.WriteLine($"Lien ignoré : {idSource} → {idDestination} (station manquante)");
-        return;
-    }
+        #region Ajout Lien
+        public void AjouterLien(T idSource, T idDestination, double poids)
+        {
+            if (!noeuds.ContainsKey(idSource) || !noeuds.ContainsKey(idDestination))
+            {
+                Console.WriteLine($"Lien ignoré : {idSource} → {idDestination} (station manquante)");
+                return;
+            }
 
-    var source = noeuds[idSource];
-    var destination = noeuds[idDestination];
+            var source = noeuds[idSource];
+            var destination = noeuds[idDestination];
 
-    var lien = new Lien<T>(source, destination, poids);
-    source.Liens.Add(lien);
-    liens.Add(lien);
-}
+            var lien = new Lien<T>(source, destination, poids);
+            source.Liens.Add(lien);
+            liens.Add(lien);
+        }
 
-#endregion
+        #endregion
 
-#region Affichage Graphe
+        #region Affichage Graphe
         public void AfficherGraphe()
         {
             foreach (var noeud in noeuds.Values)
@@ -68,9 +68,9 @@ namespace PSI_RENDU1
                 Console.WriteLine();
             }
         }
-#endregion
+        #endregion
 
-#region Génération d'un graphe aléatoire
+        #region Génération d'un graphe aléatoire
 
         /// <summary>
         /// Génération aléatoire d'un graphe
@@ -79,199 +79,199 @@ namespace PSI_RENDU1
         /// <param name="nombreLiens">Nombre de liens souhaités</param>
         /// <param name="estPondere">graphe pondéré ou non (non par defaut)</param>
         public void GenererGrapheAleatoire(int nombreSommets, int nombreLiens, bool estPondere = false)
-{
-    noeuds.Clear();
-    liens.Clear();
-
-    for (int i = 0; i < nombreSommets; i++)
-    {
-        T id = (T)Convert.ChangeType(i, typeof(T));
-        AjouterNoeud(id);
-    }
-
-    var liensAjoutes = new HashSet<(T, T)>();
-    var random = new Random();
-
-    while (liens.Count < nombreLiens)
-    {
-        int src = random.Next(nombreSommets);
-        int dst = random.Next(nombreSommets);
-        if (src == dst) continue;
-
-        T source = (T)Convert.ChangeType(src, typeof(T));
-        T destination = (T)Convert.ChangeType(dst, typeof(T));
-
-        if (!liensAjoutes.Contains((source, destination)) && !liensAjoutes.Contains((destination, source)))
         {
-            double poids = estPondere ? random.NextDouble() * 10 : 1;
-            AjouterLien(source, destination, poids);
-            liensAjoutes.Add((source, destination));
+            noeuds.Clear();
+            liens.Clear();
+
+            for (int i = 0; i < nombreSommets; i++)
+            {
+                T id = (T)Convert.ChangeType(i, typeof(T));
+                AjouterNoeud(id);
+            }
+
+            var liensAjoutes = new HashSet<(T, T)>();
+            var random = new Random();
+
+            while (liens.Count < nombreLiens)
+            {
+                int src = random.Next(nombreSommets);
+                int dst = random.Next(nombreSommets);
+                if (src == dst) continue;
+
+                T source = (T)Convert.ChangeType(src, typeof(T));
+                T destination = (T)Convert.ChangeType(dst, typeof(T));
+
+                if (!liensAjoutes.Contains((source, destination)) && !liensAjoutes.Contains((destination, source)))
+                {
+                    double poids = estPondere ? random.NextDouble() * 10 : 1;
+                    AjouterLien(source, destination, poids);
+                    liensAjoutes.Add((source, destination));
+                }
+            }
         }
-    }
-}
         #endregion
 
-#region Construction Matrice Adjacence
+        #region Construction Matrice Adjacence
         /// <summary>
         /// Construction de la matrice d'adjacence du graphe
         /// </summary>
         public void ConstruireMatriceAdjacence()
-    {
-        List<T> ids = noeuds.Keys.ToList();
-        int taille = ids.Count;
-        double[,] matrice = new double[taille, taille];
-
-        for (int k = 0; k < liens.Count; k++)
         {
-            int i = ids.IndexOf(liens[k].Source.Id);
-            int j = ids.IndexOf(liens[k].Destination.Id);
-            matrice[i, j] = liens[k].Poids;
-            matrice[j, i] = liens[k].Poids;
-        }
+            List<T> ids = noeuds.Keys.ToList();
+            int taille = ids.Count;
+            double[,] matrice = new double[taille, taille];
 
-        Console.WriteLine("\nMatrice d'Adjacence :");
-        Console.Write("    ");
-        for (int i = 0; i < taille; i++) Console.Write($"{ids[i],3} ");
-        Console.WriteLine();
-        Console.Write("   ");
-        Console.WriteLine(new string('-', 4 * taille));
-
-        for (int i = 0; i < taille; i++)
-        {
-            Console.Write($"{ids[i],2} | ");
-            for (int j = 0; j < taille; j++)
+            for (int k = 0; k < liens.Count; k++)
             {
-                if (matrice[i, j] == 1)
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.Write("  1 ");
-                    Console.ResetColor();
-                }
-                else Console.Write("  0 ");
+                int i = ids.IndexOf(liens[k].Source.Id);
+                int j = ids.IndexOf(liens[k].Destination.Id);
+                matrice[i, j] = liens[k].Poids;
+                matrice[j, i] = liens[k].Poids;
             }
+
+            Console.WriteLine("\nMatrice d'Adjacence :");
+            Console.Write("    ");
+            for (int i = 0; i < taille; i++) Console.Write($"{ids[i],3} ");
             Console.WriteLine();
+            Console.Write("   ");
+            Console.WriteLine(new string('-', 4 * taille));
+
+            for (int i = 0; i < taille; i++)
+            {
+                Console.Write($"{ids[i],2} | ");
+                for (int j = 0; j < taille; j++)
+                {
+                    if (matrice[i, j] == 1)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.Write("  1 ");
+                        Console.ResetColor();
+                    }
+                    else Console.Write("  0 ");
+                }
+                Console.WriteLine();
+            }
         }
-    }
         #endregion
 
-#region Parcours en Profondeur
+        #region Parcours en Profondeur
         /// <summary>
         /// Parcours en profondeur du graphe
         /// </summary>
         /// <param name="depart">noeud de départ</param>
         public void ParcoursProfondeur(T depart)
-    {
-        HashSet<T> visites = new HashSet<T>();
-        Stack<T> pile = new Stack<T>();
-
-        pile.Push(depart);
-        Console.WriteLine("Parcours en profondeur (DFS) :");
-
-        while (pile.Count > 0)
         {
-            T noeudActuel = pile.Pop();
+            HashSet<T> visites = new HashSet<T>();
+            Stack<T> pile = new Stack<T>();
 
-            if (!visites.Contains(noeudActuel))
+            pile.Push(depart);
+            Console.WriteLine("Parcours en profondeur (DFS) :");
+
+            while (pile.Count > 0)
             {
-                Console.Write(noeudActuel + " ");
-                visites.Add(noeudActuel);
+                T noeudActuel = pile.Pop();
 
-                foreach (var voisin in noeuds[noeudActuel].Liens.Select(l => l.Destination.Id))
+                if (!visites.Contains(noeudActuel))
                 {
-                    if (!visites.Contains(voisin))
-                        pile.Push(voisin);
+                    Console.Write(noeudActuel + " ");
+                    visites.Add(noeudActuel);
+
+                    foreach (var voisin in noeuds[noeudActuel].Liens.Select(l => l.Destination.Id))
+                    {
+                        if (!visites.Contains(voisin))
+                            pile.Push(voisin);
+                    }
                 }
             }
+            Console.WriteLine();
         }
-        Console.WriteLine();
-    }
         #endregion
 
-#region Parcorus en Largeur
+        #region Parcorus en Largeur
         /// <summary>
         /// Parcours en largeur du graphe
         /// </summary>
         /// <param name="depart">noeud de départ</param>
         public void ParcoursLargeur(T depart)
-{
-    HashSet<T> visites = new HashSet<T>();
-    Queue<T> file = new Queue<T>();
-
-    file.Enqueue(depart);
-    visites.Add(depart);
-
-    Console.WriteLine("Parcours en largeur (BFS) :");
-
-    while (file.Count > 0)
-    {
-        T noeudActuel = file.Dequeue();
-        Console.Write(noeudActuel + " ");
-
-        foreach (var voisin in noeuds[noeudActuel].Liens.Select(l => l.Destination.Id))
         {
-            if (!visites.Contains(voisin))
+            HashSet<T> visites = new HashSet<T>();
+            Queue<T> file = new Queue<T>();
+
+            file.Enqueue(depart);
+            visites.Add(depart);
+
+            Console.WriteLine("Parcours en largeur (BFS) :");
+
+            while (file.Count > 0)
             {
-                visites.Add(voisin);
-                file.Enqueue(voisin);
+                T noeudActuel = file.Dequeue();
+                Console.Write(noeudActuel + " ");
+
+                foreach (var voisin in noeuds[noeudActuel].Liens.Select(l => l.Destination.Id))
+                {
+                    if (!visites.Contains(voisin))
+                    {
+                        visites.Add(voisin);
+                        file.Enqueue(voisin);
+                    }
+                }
             }
+            Console.WriteLine();
         }
-    }
-    Console.WriteLine();
-}
         #endregion
 
-#region Detection connexité
+        #region Detection connexité
         /// <summary>
         /// Detection de la connexité d'un graphe
         /// </summary>
         /// <returns>True ou False</returns>
         public bool EstConnexe()
-{
-    if (noeuds.Count == 0) return false;
-
-    HashSet<T> visites = new HashSet<T>();
-    Queue<Noeud<T>> file = new Queue<Noeud<T>>();
-
-    var premierNoeud = noeuds.Values.First();
-    file.Enqueue(premierNoeud);
-    visites.Add(premierNoeud.Id);
-
-    while (file.Count > 0)
-    {
-        Noeud<T> courant = file.Dequeue();
-        foreach (var lien in courant.Liens)
         {
-            Noeud<T> voisin = lien.Destination;
-            if (!visites.Contains(voisin.Id))
-            {
-                visites.Add(voisin.Id);
-                file.Enqueue(voisin);
-            }
-        }
-    }
+            if (noeuds.Count == 0) return false;
 
-    return visites.Count == noeuds.Count;
-}
+            HashSet<T> visites = new HashSet<T>();
+            Queue<Noeud<T>> file = new Queue<Noeud<T>>();
+
+            var premierNoeud = noeuds.Values.First();
+            file.Enqueue(premierNoeud);
+            visites.Add(premierNoeud.Id);
+
+            while (file.Count > 0)
+            {
+                Noeud<T> courant = file.Dequeue();
+                foreach (var lien in courant.Liens)
+                {
+                    Noeud<T> voisin = lien.Destination;
+                    if (!visites.Contains(voisin.Id))
+                    {
+                        visites.Add(voisin.Id);
+                        file.Enqueue(voisin);
+                    }
+                }
+            }
+
+            return visites.Count == noeuds.Count;
+        }
         #endregion
 
-#region Detection Cycle
+        #region Detection Cycle
         /// <summary>
         /// Bolléen d'affichage si le graphe contient un cycle
         /// </summary>
         /// <returns>True ou False</returns>
         public bool ContientUnCycle()
-{
-    HashSet<T> visites = new HashSet<T>();
-
-    foreach (var noeud in noeuds.Values)
-    {
-        if (!visites.Contains(noeud.Id))
         {
-            if (DFS_DetectCycle(noeud, visites, default(T))) return true;
+            HashSet<T> visites = new HashSet<T>();
+
+            foreach (var noeud in noeuds.Values)
+            {
+                if (!visites.Contains(noeud.Id))
+                {
+                    if (DFS_DetectCycle(noeud, visites, default(T))) return true;
+                }
+            }
+            return false;
         }
-    }
-    return false;
-}
         /// <summary>
         /// boucle qui detecte le cycle
         /// </summary>
@@ -280,78 +280,78 @@ namespace PSI_RENDU1
         /// <param name="parent">Le nœud par lequel on est arrivé au nœud courant</param>
         /// <returns></returns>
         private bool DFS_DetectCycle(Noeud<T> courant, HashSet<T> visites, T parentId)
-{
-    visites.Add(courant.Id);
-
-    foreach (var lien in courant.Liens)
-    {
-        Noeud<T> voisin = lien.Destination;
-
-        if (!visites.Contains(voisin.Id))
         {
-            if (DFS_DetectCycle(voisin, visites, courant.Id)) return true;
-        }
-        else if (!voisin.Id.Equals(parentId))
-        {
-            return true;
-        }
-    }
+            visites.Add(courant.Id);
 
-    return false;
-}
+            foreach (var lien in courant.Liens)
+            {
+                Noeud<T> voisin = lien.Destination;
+
+                if (!visites.Contains(voisin.Id))
+                {
+                    if (DFS_DetectCycle(voisin, visites, courant.Id)) return true;
+                }
+                else if (!voisin.Id.Equals(parentId))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
         #endregion
 
-#region Dijkstra
+        #region Dijkstra
         /// <summary>
         /// FOnction qui calcule Dijkstra
         /// </summary>
         /// <param name=source>Le noeud de départ></param>
         /// <returns>le Dijkstra en partant d'un certains sommet</returns>
         public (Dictionary<T, double> distances, Dictionary<T, T?> precedent) Dijkstra(T source)
-{
-    var stopwatch = Stopwatch.StartNew();
-
-    var distances = new Dictionary<T, double>();
-    var precedent = new Dictionary<T, T?>();
-    var priorityQueue = new SortedSet<(double distance, T noeud)>();
-
-    foreach (var noeud in noeuds.Keys)
-    {
-        distances[noeud] = double.PositiveInfinity;
-        precedent[noeud] = default;
-    }
-
-    distances[source] = 0;
-    priorityQueue.Add((0, source));
-
-    while (priorityQueue.Count > 0)
-    {
-        var (currentDistance, currentNode) = priorityQueue.Min;
-        priorityQueue.Remove(priorityQueue.Min); 
-
-        foreach (var lien in noeuds[currentNode].Liens)
         {
-            T voisin = lien.Destination.Id;
-            double nouvelleDistance = currentDistance + lien.Poids;
+            var stopwatch = Stopwatch.StartNew();
 
-            if (nouvelleDistance < distances[voisin])
+            var distances = new Dictionary<T, double>();
+            var precedent = new Dictionary<T, T?>();
+            var priorityQueue = new SortedSet<(double distance, T noeud)>();
+
+            foreach (var noeud in noeuds.Keys)
             {
-                priorityQueue.Remove((distances[voisin], voisin));
-                distances[voisin] = nouvelleDistance;
-                precedent[voisin] = currentNode;
-                priorityQueue.Add((nouvelleDistance, voisin));
+                distances[noeud] = double.PositiveInfinity;
+                precedent[noeud] = default;
             }
+
+            distances[source] = 0;
+            priorityQueue.Add((0, source));
+
+            while (priorityQueue.Count > 0)
+            {
+                var (currentDistance, currentNode) = priorityQueue.Min;
+                priorityQueue.Remove(priorityQueue.Min);
+
+                foreach (var lien in noeuds[currentNode].Liens)
+                {
+                    T voisin = lien.Destination.Id;
+                    double nouvelleDistance = currentDistance + lien.Poids;
+
+                    if (nouvelleDistance < distances[voisin])
+                    {
+                        priorityQueue.Remove((distances[voisin], voisin));
+                        distances[voisin] = nouvelleDistance;
+                        precedent[voisin] = currentNode;
+                        priorityQueue.Add((nouvelleDistance, voisin));
+                    }
+                }
+            }
+
+            stopwatch.Stop();
+            Console.WriteLine($"⏱️ Dijkstra exécuté en {stopwatch.ElapsedMilliseconds} ms");
+
+            return (distances, precedent);
         }
-    }
-
-    stopwatch.Stop();
-    Console.WriteLine($"⏱️ Dijkstra exécuté en {stopwatch.ElapsedMilliseconds} ms");
-
-    return (distances, precedent);
-}
         #endregion
 
-#region Bellman-Ford
+        #region Bellman-Ford
         /// <summary>
         /// Fonction qui calcul Bellman-Ford
         /// </summary>
@@ -359,179 +359,179 @@ namespace PSI_RENDU1
         /// <returns>le Bellman-Ford en partant du sommet choisi</returns>
         /// <exception cref="InvalidOperationException"></exception>
         public (Dictionary<T, double> distances, Dictionary<T, T?> precedent) BellmanFord(T source)
-{
-    var stopwatch = Stopwatch.StartNew();
-
-    var distances = new Dictionary<T, double>();
-    var precedent = new Dictionary<T, T?>();
-
-    foreach (var noeud in noeuds.Keys)
-    {
-        distances[noeud] = double.PositiveInfinity;
-        precedent[noeud] = default;
-    }
-    distances[source] = 0;
-
-    int nombreSommets = noeuds.Count;
-
-    for (int i = 0; i < nombreSommets - 1; i++)
-    {
-        foreach (var noeud in noeuds.Values)
         {
-            foreach (var lien in noeud.Liens)
-            {
-                T u = noeud.Id;
-                T v = lien.Destination.Id;
-                double poids = lien.Poids;
+            var stopwatch = Stopwatch.StartNew();
 
-                if (distances[u] != double.PositiveInfinity && distances[u] + poids < distances[v])
+            var distances = new Dictionary<T, double>();
+            var precedent = new Dictionary<T, T?>();
+
+            foreach (var noeud in noeuds.Keys)
+            {
+                distances[noeud] = double.PositiveInfinity;
+                precedent[noeud] = default;
+            }
+            distances[source] = 0;
+
+            int nombreSommets = noeuds.Count;
+
+            for (int i = 0; i < nombreSommets - 1; i++)
+            {
+                foreach (var noeud in noeuds.Values)
                 {
-                    distances[v] = distances[u] + poids;
-                    precedent[v] = u;
+                    foreach (var lien in noeud.Liens)
+                    {
+                        T u = noeud.Id;
+                        T v = lien.Destination.Id;
+                        double poids = lien.Poids;
+
+                        if (distances[u] != double.PositiveInfinity && distances[u] + poids < distances[v])
+                        {
+                            distances[v] = distances[u] + poids;
+                            precedent[v] = u;
+                        }
+                    }
                 }
             }
-        }
-    }
 
-    foreach (var noeud in noeuds.Values)
-    {
-        foreach (var lien in noeud.Liens)
-        {
-            T u = noeud.Id;
-            T v = lien.Destination.Id;
-            double poids = lien.Poids;
-
-            if (distances[u] != double.PositiveInfinity && distances[u] + poids < distances[v])
+            foreach (var noeud in noeuds.Values)
             {
-                throw new InvalidOperationException("Le graphe contient un cycle de poids négatif.");
-            }
-        }
-    }
-
-    stopwatch.Stop();
-    Console.WriteLine($"⏱️ Bellman-Ford exécuté en {stopwatch.ElapsedMilliseconds} ms");
-
-    return (distances, precedent);
-}
-#endregion
-
-#region Floyd-FloydWarshall
-
-/// <summary>
-/// Algorithme de Floyd-Warshall pour calculer les distances entre tous les sommets du graphe et les chemins les plus courts entre eux.
-/// </summary>
-/// <returns>distance la plus courte entre tous les sommets</returns>
-public (Dictionary<T, Dictionary<T, double>> distances, Dictionary<T, Dictionary<T, T?>> precedent) FloydWarshall()
-{
-    var stopwatch = Stopwatch.StartNew();
-
-    var distances = new Dictionary<T, Dictionary<T, double>>();
-    var precedent = new Dictionary<T, Dictionary<T, T?>>();
-
-    var sommets = noeuds.Keys.ToList();
-
-    foreach (var i in sommets)
-    {
-        distances[i] = new Dictionary<T, double>();
-        precedent[i] = new Dictionary<T, T?>();
-
-        foreach (var j in sommets)
-        {
-            distances[i][j] = i.Equals(j) ? 0 : double.PositiveInfinity;
-            precedent[i][j] = default;
-        }
-    }
-
-    foreach (var noeud in noeuds.Values)
-    {
-        foreach (var lien in noeud.Liens)
-        {
-            T u = noeud.Id;
-            T v = lien.Destination.Id;
-            double poids = lien.Poids;
-
-            distances[u][v] = poids;
-            precedent[u][v] = u;
-        }
-    }
-
-    foreach (var k in sommets)
-    {
-        foreach (var i in sommets)
-        {
-            foreach (var j in sommets)
-            {
-                if (distances[i][k] + distances[k][j] < distances[i][j])
+                foreach (var lien in noeud.Liens)
                 {
-                    distances[i][j] = distances[i][k] + distances[k][j];
-                    precedent[i][j] = precedent[k][j];
+                    T u = noeud.Id;
+                    T v = lien.Destination.Id;
+                    double poids = lien.Poids;
+
+                    if (distances[u] != double.PositiveInfinity && distances[u] + poids < distances[v])
+                    {
+                        throw new InvalidOperationException("Le graphe contient un cycle de poids négatif.");
+                    }
                 }
             }
+
+            stopwatch.Stop();
+            Console.WriteLine($"⏱️ Bellman-Ford exécuté en {stopwatch.ElapsedMilliseconds} ms");
+
+            return (distances, precedent);
         }
-    }
-
-    stopwatch.Stop();
-    Console.WriteLine($"⏱️ Floyd-Warshall exécuté en {stopwatch.ElapsedMilliseconds} ms");
-
-    return (distances, precedent);
-}
         #endregion
 
-#region EstBiparti
+        #region FloydWarshall
 
-/// <summary>
-/// Vérifie si le graphe est biparti via BFS
-/// </summary>
-/// <returns>True si biparti, sinon False</returns>
-public bool EstBiparti()
-{
-
-    var couleurs = new Dictionary<T, int>();
-    var file = new Queue<T>();
-
-    foreach (var idNoeud in noeuds.Keys)
-    {
-        if (couleurs.ContainsKey(idNoeud))
-            continue;
-
-        couleurs[idNoeud] = 0;
-        file.Enqueue(idNoeud);
-
-        while (file.Count > 0)
+        /// <summary>
+        /// Algorithme de Floyd-Warshall pour calculer les distances entre tous les sommets du graphe et les chemins les plus courts entre eux.
+        /// </summary>
+        /// <returns>distance la plus courte entre tous les sommets</returns>
+        public (Dictionary<T, Dictionary<T, double>> distances, Dictionary<T, Dictionary<T, T?>> precedent) FloydWarshall()
         {
-            var courant = file.Dequeue();
+            var stopwatch = Stopwatch.StartNew();
 
-            foreach (var lien in noeuds[courant].Liens)
+            var distances = new Dictionary<T, Dictionary<T, double>>();
+            var precedent = new Dictionary<T, Dictionary<T, T?>>();
+
+            var sommets = noeuds.Keys.ToList();
+
+            foreach (var i in sommets)
             {
-                var voisin = lien.Destination.Id;
+                distances[i] = new Dictionary<T, double>();
+                precedent[i] = new Dictionary<T, T?>();
 
-                if (!couleurs.ContainsKey(voisin))
+                foreach (var j in sommets)
                 {
-                    couleurs[voisin] = 1 - couleurs[courant];
-                    file.Enqueue(voisin);
-                }
-                else if (couleurs[voisin] == couleurs[courant])
-                {
-                    return false;
+                    distances[i][j] = i.Equals(j) ? 0 : double.PositiveInfinity;
+                    precedent[i][j] = default;
                 }
             }
+
+            foreach (var noeud in noeuds.Values)
+            {
+                foreach (var lien in noeud.Liens)
+                {
+                    T u = noeud.Id;
+                    T v = lien.Destination.Id;
+                    double poids = lien.Poids;
+
+                    distances[u][v] = poids;
+                    precedent[u][v] = u;
+                }
+            }
+
+            foreach (var k in sommets)
+            {
+                foreach (var i in sommets)
+                {
+                    foreach (var j in sommets)
+                    {
+                        if (distances[i][k] + distances[k][j] < distances[i][j])
+                        {
+                            distances[i][j] = distances[i][k] + distances[k][j];
+                            precedent[i][j] = precedent[k][j];
+                        }
+                    }
+                }
+            }
+
+            stopwatch.Stop();
+            Console.WriteLine($"⏱️ Floyd-Warshall exécuté en {stopwatch.ElapsedMilliseconds} ms");
+
+            return (distances, precedent);
         }
-    }
+        #endregion
 
-    return true;
-}
-#endregion
+        #region EstBiparti
 
-#region Groupement
+        /// <summary>
+        /// Vérifie si le graphe est biparti via BFS
+        /// </summary>
+        /// <returns>True si biparti, sinon False</returns>
+        public bool EstBiparti()
+        {
 
-/// <summary>
-/// Extrait les groupes indépendants de nœuds selon leur index de couleur
-/// </summary>
-/// <returns>
-/// Dictionnaire associant chaque index de couleur à la liste des id des nœuds qui partagent cette couleur.
-/// </returns>
+            var couleurs = new Dictionary<T, int>();
+            var file = new Queue<T>();
 
-public Dictionary<int, List<T>> ObtenirGroupesIndependants()
+            foreach (var idNoeud in noeuds.Keys)
+            {
+                if (couleurs.ContainsKey(idNoeud))
+                    continue;
+
+                couleurs[idNoeud] = 0;
+                file.Enqueue(idNoeud);
+
+                while (file.Count > 0)
+                {
+                    var courant = file.Dequeue();
+
+                    foreach (var lien in noeuds[courant].Liens)
+                    {
+                        var voisin = lien.Destination.Id;
+
+                        if (!couleurs.ContainsKey(voisin))
+                        {
+                            couleurs[voisin] = 1 - couleurs[courant];
+                            file.Enqueue(voisin);
+                        }
+                        else if (couleurs[voisin] == couleurs[courant])
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+
+            return true;
+        }
+        #endregion
+
+        #region Groupement
+
+        /// <summary>
+        /// Extrait les groupes indépendants de nœuds selon leur index de couleur
+        /// </summary>
+        /// <returns>
+        /// Dictionnaire associant chaque index de couleur à la liste des id des nœuds qui partagent cette couleur.
+        /// </returns>
+
+        public Dictionary<int, List<T>> ObtenirGroupesIndependants()
         {
             return noeuds.Values
                 .GroupBy(noeud => noeud.ColorIndex)
@@ -541,45 +541,45 @@ public Dictionary<int, List<T>> ObtenirGroupesIndependants()
                 );
         }
 
-#endregion
+        #endregion
 
-#region EstPlanaire
+        #region EstPlanaire
 
-public bool EstPlanaire()
-{
-    int V = noeuds.Count;
-    int E = liens.Count;
-    return E <= 3 * V - 6;
-}
-#endregion
+        public bool EstPlanaire()
+        {
+            int V = noeuds.Count;
+            int E = liens.Count;
+            return E <= 3 * V - 6;
+        }
+        #endregion
 
-#region CourtChemin entre Sommets
-/// <summary>
-/// Calcule le plus court chemin entre deux sommets via Dijkstra
-/// </summary>
-/// <param name="debut">Le sommet de départ</param>
-/// <param name="fin">Le sommet d’arrivée</param>
-/// <returns>La liste des sommets composant le chemin de du début à la fin, vide sinon</returns>
+        #region CourtChemin entre Sommets
+        /// <summary>
+        /// Calcule le plus court chemin entre deux sommets via Dijkstra
+        /// </summary>
+        /// <param name="debut">Le sommet de départ</param>
+        /// <param name="fin">Le sommet d’arrivée</param>
+        /// <returns>La liste des sommets composant le chemin de du début à la fin, vide sinon</returns>
 
 
-public List<T> PlusCourtChemin(T debut, T fin)
-{
-    var (distances, precedent) = Dijkstra(debut);
-    if (!distances.ContainsKey(fin) || double.IsInfinity(distances[fin]))
-        return new List<T>();
+        public List<T> PlusCourtChemin(T debut, T fin)
+        {
+            var (distances, precedent) = Dijkstra(debut);
+            if (!distances.ContainsKey(fin) || double.IsInfinity(distances[fin]))
+                return new List<T>();
 
-    var chemin = new List<T>();
-    T? courant = fin;
-    while (courant != null && !courant!.Equals(debut))
-    {
-        chemin.Add(courant);
-        courant = precedent[courant]!;
-    }
-    chemin.Add(debut);
-    chemin.Reverse();
-    return chemin;
-}
-#endregion
+            var chemin = new List<T>();
+            T? courant = fin;
+            while (courant != null && !courant!.Equals(debut))
+            {
+                chemin.Add(courant);
+                courant = precedent[courant]!;
+            }
+            chemin.Add(debut);
+            chemin.Reverse();
+            return chemin;
+        }
+        #endregion
 
     }
 }

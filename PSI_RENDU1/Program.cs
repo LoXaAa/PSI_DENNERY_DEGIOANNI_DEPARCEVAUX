@@ -5,6 +5,7 @@
     using System.Linq;
     using System.Collections.Generic;
     using System.Threading;
+    using PSI_RENDU1;
 
     internal class Program
     {
@@ -104,7 +105,7 @@
             Console.WriteLine(graphe.ContientUnCycle() ? "Présence de cycle" : "Acyclique");
             GrapheVisualisation.GenererImageGraphe(graphe, "graphe_esthetique.png");
 
-            Console.Write("Algo de plus court chemin : Dijkstra --> 1 | Bellman-Ford --> 2 | Floyd-Warshall --> 3");
+            Console.Write("Algo de plus court chemin : Dijkstra --> 1 | Bellman-Ford --> 2 | Floyd-Warshall --> 3:");
             string ca = Console.ReadLine();
             if (ca == "1")
                 ExecuterDijkstra(graphe);
@@ -131,11 +132,11 @@
 
             var grapheRel = ConstructeurGrapheRelations.ConstruireDepuisBDD();
 
+
             Console.Write("ID client : ");
             int idClient = int.Parse(Console.ReadLine()!);
             Console.Write("ID cuisinier : ");
             int idCuisinier = int.Parse(Console.ReadLine()!);
-
             var chemin = grapheRel.PlusCourtChemin($"C{idClient}", $"U{idCuisinier}");
             if (chemin.Count == 0)
                 Console.WriteLine("Aucun chemin trouvé.");
@@ -420,8 +421,8 @@
                             Console.Write("Nouveau statut : ");
                             string nouveauStatut = Console.ReadLine()?.Trim() ?? "";
 
-                            Database.ModifierStatutCommande(idCmd, nouveauStatut);
-    break;
+                            Database.ModifierCommande(idCompte);
+                            break;
                         case 2:
                             Database.Supprimer("Commande");
                             break;

@@ -12,7 +12,11 @@ namespace PSI_RENDU1
         /// </summary>
         /// <param name="relations"> Liste de tuples (idClient, idCuisinier) représentant chaque commande</param>
         /// <returns>Le graphe biparti clients–cuisiniers</returns>
-
+         public static Graphe<string> ConstruireDepuisBDD()
+        {
+            var relations = DatabaseExtensions.LireRelationsCommande();
+            return Construire(relations);
+        }
         public static Graphe<string> Construire(IEnumerable<(int idClient, int idCuisinier)> relations)
         {
             var graphe = new Graphe<string>();
